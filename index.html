@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta name=viewport content="width=device-width, initial-scale=1.0">
+	<title>Architype</title>
+	<style>
+	</style>
+</head>
+
+<body>
+<ul id="definition">
+</ul>
+<script>
+document.addEventListener('keydown', e => {
+	console.log(e.key, e.shiftKey);
+	switch (e.key) {
+		case 'n':
+			let node = document.createElement('li');
+			node.innerText = 'foo';
+			document.getElementById('definition').appendChild(node);
+			break;
+	}
+});
+</script>
+</body>
