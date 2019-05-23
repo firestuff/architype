@@ -11,23 +11,46 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
+
   margin: 0;
+
+  font-family: 'Courier', monospace;
 }
 
 #definition {
   list-style: none;
+
   margin: 0;
   padding: 0;
+
   height: 100%;
+  width: 400px;
+
   overflow-y: scroll;
 }
 
 #definition li {
-  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  white-space: pre;
+
+  padding: 3px;
+  border: 5px dotted rgba(0,0,0,0.0);
 }
 
-.selected {
-  background: red;
+#definition li.node {
+  background-color: #daf0db;
+}
+
+#definition li.selected {
+  border-color: red;
+}
+
+#definition li input {
+  background-color: rgba(255,255,255,0.8);
+  border: 1px solid black;
 }
 	</style>
 </head>
@@ -38,88 +61,135 @@ body {
 <script>
 
 let def = document.getElementById('definition');
-let sel = 0;
 
 document.addEventListener('keydown', e => {
   console.log(e.key);
 
-  let selNode = def.children[sel] || null;
-
-  if (selNode) {
-    selNode.classList.remove('selected');
-  }
+  let sel = def.getElementsByClassName('selected').item(0);
 
   switch (e.key) {
     case 'd':
-      if (selNode) {
-        selNode.remove();
-        sel = Math.max(Math.min(sel, def.children.length - 1), 0);
+      if (sel) {
+        let newSel = sel.nextElementSibling || sel.previousElementSibling;
+        if (newSel) {
+          newSel.classList.add('selected');
+        }
+        sel.remove();
       }
       break;
 
     case 'D':
-      for (let i = def.children.length - 1; i >= sel; --i) {
-        def.children[i].remove();
+      while (sel.nextElementSibling) {
+        sel.nextElementSibling.remove();
       }
-      sel = Math.max(Math.min(sel, def.children.length - 1), 0);
+      if (sel.previousElementSibling) {
+        sel.previousElementSiblist.classList.add('selected');
+      }
+      sel.remove();
       break;
 
     case 'j':
     case 'ArrowDown':
-      sel = ((sel + 1) % def.children.length) || 0;
+      if (sel) {
+        let newSel = sel.nextElementSibling || def.firstElementChild;
+        sel.classList.remove('selected');
+        newSel.classList.add('selected');
+      }
       break;
 
     case 'k':
     case 'ArrowUp':
-      // JavaScript is strange
-      sel = (((sel - 1) + def.children.length) % def.children.length) || 0;
+      if (sel) {
+        let newSel = sel.previousElementSibling || def.lastElementChild;
+        sel.classList.remove('selected');
+        newSel.classList.add('selected');
+      }
       break;
 
     case 'PageUp':
-      if (selNode) {
-        let pageCount = Math.floor(def.clientHeight / selNode.clientHeight) - 1;
-        sel = Math.max(sel - pageCount, 0);
+      if (sel) {
+        let pageCount = Math.floor(def.clientHeight / sel.clientHeight) - 1;
+        let newSel = sel;
+        for (let i = 0; i < pageCount; ++i) {
+          newSel = newSel.previousElementSibling || def.firstElementChild;
+        }
+        sel.classList.remove('selected');
+        newSel.classList.add('selected');
       }
       break;
 
     case 'PageDown':
-      if (selNode) {
-        let pageCount = Math.floor(def.clientHeight / selNode.clientHeight) - 1;
-        sel = Math.max(Math.min(sel + pageCount, def.children.length - 1), 0);
+      if (sel) {
+        let pageCount = Math.floor(def.clientHeight / sel.clientHeight) - 1;
+        let newSel = sel;
+        for (let i = 0; i < pageCount; ++i) {
+          newSel = newSel.nextElementSibling || def.lastElementChild;
+        }
+        sel.classList.remove('selected');
+        newSel.classList.add('selected');
       }
       break;
 
     case 'Home':
-      sel = 0;
+      if (sel) {
+        sel.classList.remove('selected');
+        def.firstElementChild.classList.add('selected');
+      }
       break;
 
     case 'G': // vi compat
     case 'End':
-      sel = def.children.length - 1;
+      if (sel) {
+        sel.classList.remove('selected');
+        def.lastElementChild.classList.add('selected');
+      }
       break;
 
     case 'n':
       {
         let node = document.createElement('li');
-        node.innerText = Math.random()
-        def.insertBefore(node, selNode ? selNode.nextSibling : null);
-        sel = Math.min(sel + 1, def.children.length - 1);
+        node.innerText = 'Node: ';
+
+        let input = document.createElement('input');
+        input.type = 'text';
+        node.appendChild(input);
+
+        node.classList.add('node');
+        def.insertBefore(node, sel ? sel.nextSibling : null);
+
+        if (sel) {
+          sel.classList.remove('selected');
+        }
+        node.classList.add('selected');
       }
       break;
 
     case 'N':
       {
         let node = document.createElement('li');
-        node.innerText = Math.random()
-        def.insertBefore(node, selNode);
+        node.innerText = 'Node: ';
+
+        let input = document.createElement('input');
+        input.type = 'text';
+        node.appendChild(input);
+
+        node.classList.add('node');
+        def.insertBefore(node, sel);
+
+        if (sel) {
+          sel.classList.remove('selected');
+        }
+        node.classList.add('selected');
       }
       break;
   }
 
-  selNode = def.children[sel] || null;
-  if (selNode) {
-    selNode.classList.add('selected');
-    selNode.scrollIntoView();
+  sel = def.getElementsByClassName('selected').item(0);
+
+  if (sel) {
+    sel.scrollIntoView({
+      block: 'center',
+    });
   }
 });
 </script>
