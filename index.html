@@ -5,6 +5,30 @@
 	<meta name=viewport content="width=device-width, initial-scale=1.0">
 	<title>Architype</title>
 	<style>
+body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+#definition {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+#definition li {
+  padding: 5px;
+}
+
+.selected {
+  background: red;
+}
 	</style>
 </head>
 
@@ -12,15 +36,91 @@
 <ul id="definition">
 </ul>
 <script>
+
+let def = document.getElementById('definition');
+let sel = 0;
+
 document.addEventListener('keydown', e => {
-	console.log(e.key, e.shiftKey);
-	switch (e.key) {
-		case 'n':
-			let node = document.createElement('li');
-			node.innerText = 'foo';
-			document.getElementById('definition').appendChild(node);
-			break;
-	}
+  console.log(e.key);
+
+  let selNode = def.children[sel] || null;
+
+  if (selNode) {
+    selNode.classList.remove('selected');
+  }
+
+  switch (e.key) {
+    case 'd':
+      if (selNode) {
+        selNode.remove();
+        sel = Math.max(Math.min(sel, def.children.length - 1), 0);
+      }
+      break;
+
+    case 'D':
+      for (let i = def.children.length - 1; i >= sel; --i) {
+        def.children[i].remove();
+      }
+      sel = Math.max(Math.min(sel, def.children.length - 1), 0);
+      break;
+
+    case 'j':
+    case 'ArrowDown':
+      sel = ((sel + 1) % def.children.length) || 0;
+      break;
+
+    case 'k':
+    case 'ArrowUp':
+      // JavaScript is strange
+      sel = (((sel - 1) + def.children.length) % def.children.length) || 0;
+      break;
+
+    case 'PageUp':
+      if (selNode) {
+        let pageCount = Math.floor(def.clientHeight / selNode.clientHeight) - 1;
+        sel = Math.max(sel - pageCount, 0);
+      }
+      break;
+
+    case 'PageDown':
+      if (selNode) {
+        let pageCount = Math.floor(def.clientHeight / selNode.clientHeight) - 1;
+        sel = Math.max(Math.min(sel + pageCount, def.children.length - 1), 0);
+      }
+      break;
+
+    case 'Home':
+      sel = 0;
+      break;
+
+    case 'G': // vi compat
+    case 'End':
+      sel = def.children.length - 1;
+      break;
+
+    case 'n':
+      {
+        let node = document.createElement('li');
+        node.innerText = Math.random()
+        def.insertBefore(node, selNode ? selNode.nextSibling : null);
+        sel = Math.min(sel + 1, def.children.length - 1);
+      }
+      break;
+
+    case 'N':
+      {
+        let node = document.createElement('li');
+        node.innerText = Math.random()
+        def.insertBefore(node, selNode);
+      }
+      break;
+  }
+
+  selNode = def.children[sel] || null;
+  if (selNode) {
+    selNode.classList.add('selected');
+    selNode.scrollIntoView();
+  }
 });
 </script>
 </body>
