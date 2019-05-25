@@ -96,11 +96,13 @@ class Editor {
   addNodeAfter() {
     let node = Node.addAfter(this.container_, this.getSelected());
     this.select(node);
+    this.startEdit();
   }
 
   addNodeBefore() {
     let node = Node.addBefore(this.container_, this.getSelected());
     this.select(node);
+    this.startEdit();
   }
 
   onKeyDown(e) {
@@ -130,10 +132,12 @@ class Editor {
     switch (e.key) {
       case 'n':
         this.addNodeAfter();
+        e.preventDefault();
         break;
 
       case 'N':
         this.addNodeBefore();
+        e.preventDefault();
         break;
     }
 
@@ -180,10 +184,6 @@ class Editor {
       case 'Enter':
         this.startEdit();
         break;
-
-      default:
-        console.log(e);
-        break;
     }
   }
 }
@@ -195,6 +195,7 @@ class Node {
 
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
+    this.input_.placeholder = 'node name';
     this.elem_.appendChild(this.input_);
 
     this.elem_.classList.add('node');
@@ -209,6 +210,9 @@ class Node {
 
   stopEdit() {
     this.input_.blur();
+    if (this.input_.value.length == 0) {
+      this.elem_.remove();
+    }
   }
 
   isEditing() {

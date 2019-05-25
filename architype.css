@@ -44,4 +44,6 @@ body {
 #definition li input {
   background-color: rgba(255,255,255,0.8);
   border: 1px solid black;
+  padding: 4px;
+  font-family: 'Courier', monospace;
 }
