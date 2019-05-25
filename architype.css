@@ -1,0 +1,47 @@
+body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  margin: 0;
+
+  font-family: 'Courier', monospace;
+}
+
+#definition {
+  list-style: none;
+
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  width: 400px;
+
+  overflow-y: scroll;
+}
+
+#definition li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  white-space: pre;
+
+  padding: 3px;
+  border: 5px dotted rgba(0,0,0,0.0);
+}
+
+#definition li.node {
+  background-color: #daf0db;
+}
+
+#definition li.selected {
+  border-color: red;
+}
+
+#definition li input {
+  background-color: rgba(255,255,255,0.8);
+  border: 1px solid black;
+}
