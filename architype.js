@@ -80,6 +80,19 @@ class Editor {
     });
   }
 
+  startEdit() {
+    this.getSelected().xArchObj.startEdit();
+  }
+
+  stopEdit() {
+    this.getSelected().xArchObj.stopEdit();
+  }
+
+  isEditing() {
+    let sel = this.getSelected();
+    return sel && sel.xArchObj.isEditing();
+  }
+
   addNodeAfter() {
     let node = Node.addAfter(this.container_, this.getSelected());
     this.select(node);
@@ -91,6 +104,28 @@ class Editor {
   }
 
   onKeyDown(e) {
+    if (this.isEditing()) {
+      switch (e.key) {
+        case 'Enter':
+        case 'Escape':
+          this.stopEdit();
+          // Do not allow other actions below to run
+          return;
+
+        case 'ArrowUp':
+        case 'ArrowDown':
+        case 'PageUp':
+        case 'PageDown':
+          this.stopEdit();
+          // Allow other actions below to run
+          break;
+
+        default:
+          // Most keystrokes just go into the input field
+          return;
+      }
+    }
+
     // Keys that work with an empty list
     switch (e.key) {
       case 'n':
@@ -138,9 +173,16 @@ class Editor {
         this.selectFirst();
         break;
 
-      case 'G': // vi compat
       case 'End':
         this.selectLast();
+        break;
+
+      case 'Enter':
+        this.startEdit();
+        break;
+
+      default:
+        console.log(e);
         break;
     }
   }
@@ -151,14 +193,26 @@ class Node {
     this.elem_ = document.createElement('li');
     this.elem_.innerText = 'Node: ';
 
-    let input = document.createElement('input');
-    input.type = 'text';
-    this.elem_.appendChild(input);
+    this.input_ = document.createElement('input');
+    this.input_.type = 'text';
+    this.elem_.appendChild(this.input_);
 
     this.elem_.classList.add('node');
 
     // TODO: fix reference loop
     this.elem_.xArchObj = this;
+  }
+
+  startEdit() {
+    this.input_.focus();
+  }
+
+  stopEdit() {
+    this.input_.blur();
+  }
+
+  isEditing() {
+    return document.activeElement == this.input_;
   }
 
   static addBefore(container, elem) {
