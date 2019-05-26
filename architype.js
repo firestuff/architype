@@ -114,7 +114,7 @@ class Editor {
   addGroupBefore() {
     let group = Group.addBefore(this.container_, this.getSelected());
     this.select(group);
-    this.sartEdit();
+    this.startEdit();
   }
 
   onKeyDown(e) {
@@ -218,6 +218,7 @@ class Node {
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
     this.input_.placeholder = 'node name';
+    this.input_.addEventListener('blur', () => { this.onInputBlur(); });
     this.elem_.appendChild(this.input_);
 
     this.elem_.classList.add('node');
@@ -232,13 +233,16 @@ class Node {
 
   stopEdit() {
     this.input_.blur();
-    if (this.input_.value.length == 0) {
-      this.elem_.remove();
-    }
   }
 
   isEditing() {
     return document.activeElement == this.input_;
+  }
+
+  onInputBlur() {
+    if (this.input_.value.length == 0) {
+      this.elem_.remove();
+    }
   }
 
   static addBefore(container, elem) {
@@ -262,12 +266,14 @@ class Group {
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
     this.input_.placeholder = 'group name';
+    this.input_.addEventListener('blur', () => { this.onInputBlur(); });
     this.elem_.appendChild(this.input_);
 
     this.elem_.classList.add('group');
 
     // TODO: fix reference loop
     this.elem_.xArchObj = this;
+
   }
 
   startEdit() {
@@ -276,13 +282,16 @@ class Group {
 
   stopEdit() {
     this.input_.blur();
-    if (this.input_.value.length == 0) {
-      this.elem_.remove();
-    }
   }
 
   isEditing() {
     return document.activeElement == this.input_;
+  }
+
+  onInputBlur() {
+    if (this.input_.value.length == 0) {
+      this.elem_.remove();
+    }
   }
 
   static addBefore(container, elem) {
@@ -294,7 +303,7 @@ class Group {
   static addAfter(container, elem) {
     let group = new Group();
     container.insertBefore(group.elem_, elem ? elem.nextSibling : null);
-    return Group.elem_;
+    return group.elem_;
   }
 }
 
