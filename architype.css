@@ -37,6 +37,10 @@ body {
   background-color: #daf0db;
 }
 
+#definition li.group {
+  background-color: #d8e6f4;
+}
+
 #definition li.selected {
   border-color: red;
 }

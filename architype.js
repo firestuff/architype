@@ -105,6 +105,18 @@ class Editor {
     this.startEdit();
   }
 
+  addGroupAfter() {
+    let group = Group.addAfter(this.container_, this.getSelected());
+    this.select(group);
+    this.startEdit();
+  }
+
+  addGroupBefore() {
+    let group = Group.addBefore(this.container_, this.getSelected());
+    this.select(group);
+    this.sartEdit();
+  }
+
   onKeyDown(e) {
     if (this.isEditing()) {
       switch (e.key) {
@@ -130,6 +142,16 @@ class Editor {
 
     // Keys that work with an empty list
     switch (e.key) {
+      case'g':
+        this.addGroupAfter();
+        e.preventDefault();
+        break;
+
+      case'g':
+        this.addGroupBefore();
+        e.preventDefault();
+        break;
+
       case 'n':
         this.addNodeAfter();
         e.preventDefault();
@@ -229,6 +251,50 @@ class Node {
     let node = new Node();
     container.insertBefore(node.elem_, elem ? elem.nextSibling : null);
     return node.elem_;
+  }
+}
+
+class Group {
+  constructor() {
+    this.elem_ = document.createElement('li');
+    this.elem_.innerText = 'Group: ';
+
+    this.input_ = document.createElement('input');
+    this.input_.type = 'text';
+    this.input_.placeholder = 'group name';
+    this.elem_.appendChild(this.input_);
+
+    this.elem_.classList.add('group');
+
+    // TODO: fix reference loop
+    this.elem_.xArchObj = this;
+  }
+
+  startEdit() {
+    this.input_.focus();
+  }
+
+  stopEdit() {
+    this.input_.blur();
+    if (this.input_.value.length == 0) {
+      this.elem_.remove();
+    }
+  }
+
+  isEditing() {
+    return document.activeElement == this.input_;
+  }
+
+  static addBefore(container, elem) {
+    let group = new Group();
+    container.insertBefore(group.elem_, elem);
+    return group.elem_;
+  }
+
+  static addAfter(container, elem) {
+    let group = new Group();
+    container.insertBefore(group.elem_, elem ? elem.nextSibling : null);
+    return Group.elem_;
   }
 }
 
