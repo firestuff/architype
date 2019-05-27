@@ -1,5 +1,23 @@
 'use strict';
 
+class ListenUtils {
+  constructor() {
+    this.listeners_ = [];
+  }
+
+  listen(source, type, callback) {
+    source.addEventListener(type, callback);
+    this.listeners_.push([source, type, callback]);
+  }
+
+  clearListeners() {
+    for (let [source, type, callback] of this.listeners_) {
+      source.removeEventListener(type, callback);
+    }
+    this.listeners_ = [];
+  }
+}
+
 class Editor {
   constructor(container) {
     this.container_ = container;
@@ -19,24 +37,17 @@ class Editor {
   deleteSelected() {
     let sel = this.getSelected();
     if (sel) {
-      let newSel = sel.nextElementSibling || sel.previousElementSibling;
-      sel.remove();
-      this.select(newSel);
+      sel.xArchObj.remove();
     }
   }
 
   deleteSelectedAndAfter() {
     let sel = this.getSelected();
     if (sel) {
-      while (sel.nextElementSibling) {
-        sel.nextElementSibling.remove();
+      while (this.container_.lastElementChild != sel) {
+        this.container_.lastElementChild.xArchObj.remove();
       }
-      let newSel = null;
-      if (sel.previousElementSibling) {
-        newSel = sel.previousElementSibling;
-      }
-      sel.remove();
-      this.select(newSel);
+      sel.xArchObj.remove();
     }
   }
 
@@ -94,72 +105,23 @@ class Editor {
     elem.focus();
   }
 
-  startEdit() {
-    let sel = this.getSelected();
-    if (sel) {
-      sel.xArchObj.startEdit();
-    }
-  }
-
-  stopEdit() {
-    let sel = this.getSelected();
-    if (sel) {
-      sel.xArchObj.stopEdit();
-    }
-  }
-
-  isEditing() {
-    let sel = this.getSelected();
-    return sel && sel.xArchObj.isEditing();
-  }
-
   addNodeAfter() {
-    let node = Node.addAfter(this.container_, this.getSelected());
-    this.select(node);
-    this.startEdit();
+    Node.addAfter(this.container_, this.getSelected());
   }
 
   addNodeBefore() {
-    let node = Node.addBefore(this.container_, this.getSelected());
-    this.select(node);
-    this.startEdit();
+    Node.addBefore(this.container_, this.getSelected());
   }
 
   addGroupAfter() {
-    let group = Group.addAfter(this.container_, this.getSelected());
-    this.select(group);
-    this.startEdit();
+    Group.addAfter(this.container_, this.getSelected());
   }
 
   addGroupBefore() {
-    let group = Group.addBefore(this.container_, this.getSelected());
-    this.select(group);
-    this.startEdit();
+    Group.addBefore(this.container_, this.getSelected());
   }
 
   onKeyDown(e) {
-    if (this.isEditing()) {
-      switch (e.key) {
-        case 'Enter':
-        case 'Escape':
-          this.stopEdit();
-          // Do not allow other actions below to run
-          return;
-
-        case 'ArrowUp':
-        case 'ArrowDown':
-        case 'PageUp':
-        case 'PageDown':
-          this.stopEdit();
-          // Allow other actions below to run
-          break;
-
-        default:
-          // Most keystrokes just go into the input field
-          return;
-      }
-    }
-
     switch (e.key) {
       case 'd':
         this.deleteSelected();
@@ -169,12 +131,12 @@ class Editor {
         this.deleteSelectedAndAfter();
         break;
 
-      case'g':
+      case 'g':
         this.addGroupAfter();
         e.preventDefault();
         break;
 
-      case'g':
+      case 'G':
         this.addGroupBefore();
         e.preventDefault();
         break;
@@ -220,32 +182,113 @@ class Editor {
         this.selectLast();
         e.preventDefault();
         break;
-
-      case 'Enter':
-        this.startEdit();
-        e.preventDefault();
-        break;
     }
   }
 }
 
-class Node {
+class EditorEntryBase extends ListenUtils {
   constructor() {
+    super();
+
     this.elem_ = document.createElement('li');
-    this.elem_.innerText = 'Node: ';
     this.elem_.tabIndex = 0;
-    this.elem_.addEventListener('focus', () => { this.onElemFocus(); });
+    this.listen(this.elem_, 'focus', () => this.onElemFocus());
+    this.listen(this.elem_, 'keydown', (e) => this.onKeyDown(e));
+
+    this.elem_.xArchObj = this;
+  }
+
+  remove() {
+    if (document.activeElement == this.elem_ ||
+        document.activeElement == document.body) {
+      if (this.elem_.nextElementSibling) {
+        this.elem_.nextElementSibling.focus();
+      } else if (this.elem_.previousElementSibling) {
+        this.elem_.previousElementSibling.focus();
+      }
+    }
+
+    this.elem_.remove();
+    this.clearListeners();
+    this.elem_.xArchObj = null;
+  }
+
+  onElemFocus() {
+    this.elem_.scrollIntoView({block: 'center'});
+  }
+
+  onKeyDown(e) {
+  }
+
+  afterDomAdd() {
+  }
+
+  static addBefore(container, elem) {
+    let entry = new this();
+    container.insertBefore(entry.elem_, elem);
+    entry.afterDomAdd();
+    return entry.elem_;
+  }
+
+  static addAfter(container, elem) {
+    let entry = new this();
+    container.insertBefore(entry.elem_, elem ? elem.nextSibling : null);
+    entry.afterDomAdd();
+    return entry.elem_;
+  }
+}
+
+class Node extends EditorEntryBase {
+  constructor() {
+    super();
+
+    this.elem_.innerText = 'Node: ';
+    this.elem_.classList.add('node');
 
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
     this.input_.placeholder = 'node name';
-    this.input_.addEventListener('blur', () => { this.onInputBlur(); });
+    this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
+    this.listen(this.input_, 'blur', () => this.onInputBlur());
     this.elem_.appendChild(this.input_);
+  }
 
-    this.elem_.classList.add('node');
+  afterDomAdd() {
+    this.input_.focus();
+  }
 
-    // TODO: fix reference loop
-    this.elem_.xArchObj = this;
+  onInputKeyDown(e) {
+    switch (e.key) {
+      case 'Enter':
+      case 'Escape':
+        e.stopPropagation();
+        e.preventDefault();
+        this.stopEdit();
+        break;
+
+      case 'ArrowUp':
+      case 'ArrowDown':
+      case 'PageUp':
+      case 'PageDown':
+        this.stopEdit();
+        break;
+
+      default:
+        e.stopPropagation();
+        break;
+    }
+  }
+
+  onKeyDown(e) {
+    super.onKeyDown(e);
+
+    switch (e.key) {
+      case 'Enter':
+        this.startEdit();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+    }
   }
 
   startEdit() {
@@ -256,51 +299,64 @@ class Node {
     this.elem_.focus();
   }
 
-  isEditing() {
-    return document.activeElement == this.input_;
-  }
-
   onInputBlur() {
     if (this.input_.value.length == 0) {
-      this.elem_.remove();
+      this.remove();
     }
-  }
-
-  onElemFocus() {
-    this.elem_.scrollIntoView({block: 'center'});
-  }
-
-  static addBefore(container, elem) {
-    let node = new Node();
-    container.insertBefore(node.elem_, elem);
-    return node.elem_;
-  }
-
-  static addAfter(container, elem) {
-    let node = new Node();
-    container.insertBefore(node.elem_, elem ? elem.nextSibling : null);
-    return node.elem_;
   }
 }
 
-class Group {
+class Group extends EditorEntryBase {
   constructor() {
-    this.elem_ = document.createElement('li');
+    super();
+
     this.elem_.innerText = 'Group: ';
-    this.elem_.tabIndex = 0;
-    this.elem_.addEventListener('focus', () => { this.onElemFocus(); });
+    this.elem_.classList.add('group');
 
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
     this.input_.placeholder = 'group name';
-    this.input_.addEventListener('blur', () => { this.onInputBlur(); });
+    this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
+    this.listen(this.input_, 'blur', () => this.onInputBlur());
     this.elem_.appendChild(this.input_);
+  }
 
-    this.elem_.classList.add('group');
+  afterDomAdd() {
+    this.input_.focus();
+  }
 
-    // TODO: fix reference loop
-    this.elem_.xArchObj = this;
+  onInputKeyDown(e) {
+    switch (e.key) {
+      case 'Enter':
+      case 'Escape':
+        e.stopPropagation();
+        e.preventDefault();
+        this.stopEdit();
+        break;
 
+      case 'ArrowUp':
+      case 'ArrowDown':
+      case 'PageUp':
+      case 'PageDown':
+        this.stopEdit();
+        break;
+
+      default:
+        e.stopPropagation();
+        break;
+    }
+  }
+
+  onKeyDown(e) {
+    super.onKeyDown(e);
+
+    switch (e.key) {
+      case 'Enter':
+        this.startEdit();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+    }
   }
 
   startEdit() {
@@ -311,30 +367,10 @@ class Group {
     this.elem_.focus();
   }
 
-  isEditing() {
-    return document.activeElement == this.input_;
-  }
-
   onInputBlur() {
     if (this.input_.value.length == 0) {
-      this.elem_.remove();
+      this.remove();
     }
-  }
-
-  onElemFocus() {
-    this.elem_.scrollIntoView({block: 'center'});
-  }
-
-  static addBefore(container, elem) {
-    let group = new Group();
-    container.insertBefore(group.elem_, elem);
-    return group.elem_;
-  }
-
-  static addAfter(container, elem) {
-    let group = new Group();
-    container.insertBefore(group.elem_, elem ? elem.nextSibling : null);
-    return group.elem_;
   }
 }
 
