@@ -30,7 +30,7 @@ body {
   white-space: pre;
 
   padding: 3px;
-  border: 5px dotted rgba(0,0,0,0.0);
+  border: 5px solid rgba(0,0,0,0.0);
 }
 
 #definition li.node {
@@ -41,13 +41,19 @@ body {
   background-color: #d8e6f4;
 }
 
-#definition li.selected {
+#definition li:focus {
   border-color: red;
+  outline: none;
 }
 
 #definition li input {
   background-color: rgba(255,255,255,0.8);
-  border: 1px solid black;
+  border: 3px solid black;
   padding: 4px;
   font-family: 'Courier', monospace;
+}
+
+#definition li input:focus {
+  border-color: red;
+  outline: none;
 }

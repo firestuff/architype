@@ -6,55 +6,76 @@ class Editor {
   }
 
   getSelected() {
-    return this.container_.getElementsByClassName('selected').item(0);
+    let iter = document.activeElement;
+    while (iter) {
+      if (iter.parentElement == this.container_) {
+        return iter;
+      }
+      iter = iter.parentElement;
+    }
+    return null;
   }
 
   deleteSelected() {
     let sel = this.getSelected();
-    let newSel = sel.nextElementSibling || sel.previousElementSibling;
-    sel.remove();
-    this.select(newSel);
+    if (sel) {
+      let newSel = sel.nextElementSibling || sel.previousElementSibling;
+      sel.remove();
+      this.select(newSel);
+    }
   }
 
   deleteSelectedAndAfter() {
     let sel = this.getSelected();
-    while (sel.nextElementSibling) {
-      sel.nextElementSibling.remove();
+    if (sel) {
+      while (sel.nextElementSibling) {
+        sel.nextElementSibling.remove();
+      }
+      let newSel = null;
+      if (sel.previousElementSibling) {
+        newSel = sel.previousElementSibling;
+      }
+      sel.remove();
+      this.select(newSel);
     }
-    let newSel = null;
-    if (sel.previousElementSibling) {
-      newSel = sel.previousElementSibling;
-    }
-    sel.remove();
-    this.select(newSel);
   }
 
   selectNext() {
-    this.select(this.getSelected().nextElementSibling ||
-                this.container_.firstElementChild);
+    let sel = this.getSelected() || this.container_.lastElementChild;
+    if (sel) {
+      this.select(sel.nextElementSibling ||
+                  this.container_.firstElementChild);
+    }
   }
 
   selectPrev() {
-    this.select(this.getSelected().previousElementSibling ||
-                this.container_.lastElementChild);
+    let sel = this.getSelected() || this.container_.firstElementChild;
+    if (sel) {
+      this.select(sel.previousElementSibling ||
+                  this.container_.lastElementChild);
+    }
   }
 
   selectPrevPage() {
     let targetTop = this.container_.scrollTop - this.container_.clientHeight;
-    let newSel = this.getSelected();
-    while (newSel.previousElementSibling &&
-           this.container_.scrollTop > targetTop) {
-      newSel = newSel.previousElementSibling;
-      this.select(newSel);
+    let sel = this.getSelected() || this.container_.lastElementSibling;
+    if (sel) {
+      while (sel.previousElementSibling &&
+             this.container_.scrollTop > targetTop) {
+        sel = sel.previousElementSibling;
+        this.select(sel);
+      }
     }
   }
 
   selectNextPage() {
     let targetTop = this.container_.scrollTop + this.container_.clientHeight;
-    let newSel = this.getSelected();
-    while (newSel.nextElementSibling && this.container_.scrollTop < targetTop) {
-      newSel = newSel.nextElementSibling;
-      this.select(newSel);
+    let sel = this.getSelected() || this.container_.firstElementSibling;
+    if (sel) {
+      while (sel.nextElementSibling && this.container_.scrollTop < targetTop) {
+        sel = sel.nextElementSibling;
+        this.select(sel);
+      }
     }
   }
 
@@ -70,22 +91,24 @@ class Editor {
     if (!elem) {
       return;
     }
-    let sel = this.getSelected();
-    if (sel) {
-      sel.classList.remove('selected');
-    }
-    elem.classList.add('selected');
+    elem.focus();
     elem.scrollIntoView({
       block: 'center',
     });
   }
 
   startEdit() {
-    this.getSelected().xArchObj.startEdit();
+    let sel = this.getSelected();
+    if (sel) {
+      sel.xArchObj.startEdit();
+    }
   }
 
   stopEdit() {
-    this.getSelected().xArchObj.stopEdit();
+    let sel = this.getSelected();
+    if (sel) {
+      sel.xArchObj.stopEdit();
+    }
   }
 
   isEditing() {
@@ -140,8 +163,15 @@ class Editor {
       }
     }
 
-    // Keys that work with an empty list
     switch (e.key) {
+      case 'd':
+        this.deleteSelected();
+        break;
+
+      case 'D':
+        this.deleteSelectedAndAfter();
+        break;
+
       case'g':
         this.addGroupAfter();
         e.preventDefault();
@@ -149,6 +179,18 @@ class Editor {
 
       case'g':
         this.addGroupBefore();
+        e.preventDefault();
+        break;
+
+      case 'j':
+      case 'ArrowDown':
+        this.selectNext();
+        e.preventDefault();
+        break;
+
+      case 'k':
+      case 'ArrowUp':
+        this.selectPrev();
         e.preventDefault();
         break;
 
@@ -161,50 +203,30 @@ class Editor {
         this.addNodeBefore();
         e.preventDefault();
         break;
-    }
-
-    if (!this.container_.firstElementChild) {
-      return;
-    }
-
-    // Keys that require a current selection
-    switch (e.key) {
-      case 'd':
-        this.deleteSelected();
-        break;
-
-      case 'D':
-        this.deleteSelectedAndAfter();
-        break;
-
-      case 'j':
-      case 'ArrowDown':
-        this.selectNext();
-        break;
-
-      case 'k':
-      case 'ArrowUp':
-        this.selectPrev();
-        break;
 
       case 'PageUp':
         this.selectPrevPage();
+        e.preventDefault();
         break;
 
       case 'PageDown':
         this.selectNextPage();
+        e.preventDefault();
         break;
 
       case 'Home':
         this.selectFirst();
+        e.preventDefault();
         break;
 
       case 'End':
         this.selectLast();
+        e.preventDefault();
         break;
 
       case 'Enter':
         this.startEdit();
+        e.preventDefault();
         break;
     }
   }
@@ -214,6 +236,7 @@ class Node {
   constructor() {
     this.elem_ = document.createElement('li');
     this.elem_.innerText = 'Node: ';
+    this.elem_.tabIndex = 0;
 
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
@@ -232,7 +255,7 @@ class Node {
   }
 
   stopEdit() {
-    this.input_.blur();
+    this.elem_.focus();
   }
 
   isEditing() {
@@ -241,7 +264,7 @@ class Node {
 
   onInputBlur() {
     if (this.input_.value.length == 0) {
-      this.elem_.remove();
+  //    this.elem_.remove();
     }
   }
 
@@ -262,6 +285,7 @@ class Group {
   constructor() {
     this.elem_ = document.createElement('li');
     this.elem_.innerText = 'Group: ';
+    this.elem_.tabIndex = 0;
 
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
@@ -281,7 +305,7 @@ class Group {
   }
 
   stopEdit() {
-    this.input_.blur();
+    this.elem_.focus();
   }
 
   isEditing() {
