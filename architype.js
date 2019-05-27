@@ -92,9 +92,6 @@ class Editor {
       return;
     }
     elem.focus();
-    elem.scrollIntoView({
-      block: 'center',
-    });
   }
 
   startEdit() {
@@ -237,6 +234,7 @@ class Node {
     this.elem_ = document.createElement('li');
     this.elem_.innerText = 'Node: ';
     this.elem_.tabIndex = 0;
+    this.elem_.addEventListener('focus', () => { this.onElemFocus(); });
 
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
@@ -264,8 +262,12 @@ class Node {
 
   onInputBlur() {
     if (this.input_.value.length == 0) {
-  //    this.elem_.remove();
+      this.elem_.remove();
     }
+  }
+
+  onElemFocus() {
+    this.elem_.scrollIntoView({block: 'center'});
   }
 
   static addBefore(container, elem) {
@@ -286,6 +288,7 @@ class Group {
     this.elem_ = document.createElement('li');
     this.elem_.innerText = 'Group: ';
     this.elem_.tabIndex = 0;
+    this.elem_.addEventListener('focus', () => { this.onElemFocus(); });
 
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
@@ -316,6 +319,10 @@ class Group {
     if (this.input_.value.length == 0) {
       this.elem_.remove();
     }
+  }
+
+  onElemFocus() {
+    this.elem_.scrollIntoView({block: 'center'});
   }
 
   static addBefore(container, elem) {
