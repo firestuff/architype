@@ -171,9 +171,10 @@ class List {
 class NodeList extends List {
   constructor(container) {
     super(container);
-    this.container_.tabIndex = 0;
+    // Needs to accept focus to receive keydown, but shouldn't be in the normal
+    // tab flow.
+    this.container_.tabIndex = 99999;
     this.container_.addEventListener('keydown', e => { this.onKeyDown(e); });
-    this.container_.addEventListener('focus', e => { this.onFocus(); });
   }
 
   addNodeAfter() {
@@ -200,10 +201,6 @@ class NodeList extends List {
     }
 
     super.onKeyDown(e);
-  }
-
-  onFocus() {
-    this.selectNext();
   }
 }
 
