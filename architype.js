@@ -23,6 +23,14 @@ class List {
     this.container_ = container;
   }
 
+  getEntries() {
+    let ret = [];
+    for (let elem of this.container_.children) {
+      ret.push(elem.xArchObj);
+    }
+    return ret;
+  }
+
   getSelected() {
     let iter = document.activeElement;
     while (iter) {
@@ -366,9 +374,14 @@ class Node extends EditorEntryBase {
   }
 
   onInputBlur() {
-    if (this.input_.value.length == 0) {
+    if (this.input_.value.length == 0 && (this.elem_.previousElementSibling ||
+                                          this.elem_.nextElementSibling)) {
       this.remove();
     }
+  }
+
+  getValue() {
+    return this.input_.value;
   }
 }
 
@@ -404,6 +417,12 @@ class Group extends EditorEntryBase {
         e.stopPropagation();
         e.preventDefault();
         this.stopEdit();
+        {
+          let nodes = this.nodes_.getEntries();
+          if (nodes.length == 1 && nodes[0].getValue() == '') {
+            nodes[0].startEdit();
+          }
+        }
         break;
 
       case 'ArrowUp':
