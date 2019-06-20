@@ -109,48 +109,102 @@ class List {
     switch (e.key) {
       case 'd':
         this.deleteSelected();
+        e.stopPropagation();
+        e.preventDefault();
         return;
 
       case 'D':
         this.deleteSelectedAndAfter();
+        e.stopPropagation();
+        e.preventDefault();
         return;
 
       case 'j':
       case 'ArrowDown':
         this.selectNext();
+        e.stopPropagation();
         e.preventDefault();
         return;
 
       case 'k':
       case 'ArrowUp':
         this.selectPrev();
+        e.stopPropagation();
         e.preventDefault();
         return;
 
       case 'PageUp':
         this.selectPrevPage();
+        e.stopPropagation();
         e.preventDefault();
         return;
 
       case 'PageDown':
         this.selectNextPage();
+        e.stopPropagation();
         e.preventDefault();
         return;
 
       case 'Home':
         this.selectFirst();
+        e.stopPropagation();
         e.preventDefault();
         return;
 
       case 'End':
         this.selectLast();
+        e.stopPropagation();
         e.preventDefault();
         return;
     }
   }
 }
 
+class NodeList extends List {
+  constructor(container) {
+    super(container);
+    this.container_.tabIndex = 0;
+    this.container_.addEventListener('keydown', e => { this.onKeyDown(e); });
+    this.container_.addEventListener('focus', e => { this.onFocus(); });
+  }
+
+  addNodeAfter() {
+    Node.addAfter(this.container_, this.getSelected());
+  }
+
+  addNodeBefore() {
+    Node.addBefore(this.container_, this.getSelected());
+  }
+
+  onKeyDown(e) {
+    switch (e.key) {
+      case 'n':
+        this.addNodeAfter();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
+      case 'N':
+        this.addNodeBefore();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+    }
+
+    super.onKeyDown(e);
+  }
+
+  onFocus() {
+    this.selectNext();
+  }
+}
+
 class Editor extends List {
+  constructor(container) {
+    super(container);
+    document.addEventListener('keydown', e => { this.onKeyDown(e); });
+  }
+
   addNodeAfter() {
     Node.addAfter(this.container_, this.getSelected());
   }
@@ -171,21 +225,25 @@ class Editor extends List {
     switch (e.key) {
       case 'g':
         this.addGroupAfter();
+        e.stopPropagation();
         e.preventDefault();
         return;
         
       case 'G':
         this.addGroupBefore();
+        e.stopPropagation();
         e.preventDefault();
         return;
 
       case 'n':
         this.addNodeAfter();
+        e.stopPropagation();
         e.preventDefault();
         return;
 
       case 'N':
         this.addNodeBefore();
+        e.stopPropagation();
         e.preventDefault();
         return;
     }
@@ -327,6 +385,12 @@ class Group extends EditorEntryBase {
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
     this.listen(this.input_, 'blur', () => this.onInputBlur());
     this.elem_.appendChild(this.input_);
+
+    let nodeList = document.createElement('div');
+    nodeList.classList.add('nodelist');
+    this.nodes_ = new NodeList(nodeList);
+    this.nodes_.addNodeAfter();
+    this.elem_.appendChild(nodeList);
   }
 
   afterDomAdd() {
@@ -382,5 +446,4 @@ class Group extends EditorEntryBase {
   }
 }
 
-let editor = new Editor(document.getElementById('definition'));
-document.addEventListener('keydown', e => { editor.onKeyDown(e); });
+new Editor(document.getElementById('definition'));
