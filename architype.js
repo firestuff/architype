@@ -18,7 +18,7 @@ class ListenUtils {
   }
 }
 
-class Editor {
+class List {
   constructor(container) {
     this.container_ = container;
   }
@@ -105,6 +105,52 @@ class Editor {
     elem.focus();
   }
 
+  onKeyDown(e) {
+    switch (e.key) {
+      case 'd':
+        this.deleteSelected();
+        return;
+
+      case 'D':
+        this.deleteSelectedAndAfter();
+        return;
+
+      case 'j':
+      case 'ArrowDown':
+        this.selectNext();
+        e.preventDefault();
+        return;
+
+      case 'k':
+      case 'ArrowUp':
+        this.selectPrev();
+        e.preventDefault();
+        return;
+
+      case 'PageUp':
+        this.selectPrevPage();
+        e.preventDefault();
+        return;
+
+      case 'PageDown':
+        this.selectNextPage();
+        e.preventDefault();
+        return;
+
+      case 'Home':
+        this.selectFirst();
+        e.preventDefault();
+        return;
+
+      case 'End':
+        this.selectLast();
+        e.preventDefault();
+        return;
+    }
+  }
+}
+
+class Editor extends List {
   addNodeAfter() {
     Node.addAfter(this.container_, this.getSelected());
   }
@@ -120,69 +166,31 @@ class Editor {
   addGroupBefore() {
     Group.addBefore(this.container_, this.getSelected());
   }
-
+  
   onKeyDown(e) {
     switch (e.key) {
-      case 'd':
-        this.deleteSelected();
-        break;
-
-      case 'D':
-        this.deleteSelectedAndAfter();
-        break;
-
       case 'g':
         this.addGroupAfter();
         e.preventDefault();
-        break;
-
+        return;
+        
       case 'G':
         this.addGroupBefore();
         e.preventDefault();
-        break;
-
-      case 'j':
-      case 'ArrowDown':
-        this.selectNext();
-        e.preventDefault();
-        break;
-
-      case 'k':
-      case 'ArrowUp':
-        this.selectPrev();
-        e.preventDefault();
-        break;
+        return;
 
       case 'n':
         this.addNodeAfter();
         e.preventDefault();
-        break;
+        return;
 
       case 'N':
         this.addNodeBefore();
         e.preventDefault();
-        break;
-
-      case 'PageUp':
-        this.selectPrevPage();
-        e.preventDefault();
-        break;
-
-      case 'PageDown':
-        this.selectNextPage();
-        e.preventDefault();
-        break;
-
-      case 'Home':
-        this.selectFirst();
-        e.preventDefault();
-        break;
-
-      case 'End':
-        this.selectLast();
-        e.preventDefault();
-        break;
+        return;
     }
+    
+    super.onKeyDown(e);
   }
 }
 
