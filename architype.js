@@ -115,55 +115,62 @@ class List {
 
   onKeyDown(e) {
     switch (e.key) {
+      case 'Escape':
+      case 'ArrowLeft':
+        if (this.container_.parentElement.xArchObj) {
+          this.container_.parentElement.focus();
+        }
+        break;
+
       case 'd':
         this.deleteSelected();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
 
       case 'D':
         this.deleteSelectedAndAfter();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
 
       case 'j':
       case 'ArrowDown':
         this.selectNext();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
 
       case 'k':
       case 'ArrowUp':
         this.selectPrev();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
 
       case 'PageUp':
         this.selectPrevPage();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
 
       case 'PageDown':
         this.selectNextPage();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
 
       case 'Home':
         this.selectFirst();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
 
       case 'End':
         this.selectLast();
         e.stopPropagation();
         e.preventDefault();
-        return;
+        break;
     }
   }
 }
@@ -344,6 +351,14 @@ class Node extends EditorEntryBase {
         this.stopEdit();
         break;
 
+      case 'ArrowLeft':
+        e.stopPropagation();
+        if (this.input_.selectionEnd == 0) {
+          e.preventDefault();
+          this.stopEdit();
+        }
+        break;
+
       default:
         e.stopPropagation();
         break;
@@ -356,6 +371,13 @@ class Node extends EditorEntryBase {
     switch (e.key) {
       case 'Enter':
         this.startEdit();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+
+      case 'ArrowRight':
+        this.startEdit();
+        this.input_.selectionEnd = 0;
         e.stopPropagation();
         e.preventDefault();
         break;
@@ -448,6 +470,10 @@ class Group extends EditorEntryBase {
         this.startEdit();
         e.stopPropagation();
         e.preventDefault();
+        break;
+
+      case 'ArrowRight':
+        this.nodes_.selectNext();
         break;
     }
   }
