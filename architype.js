@@ -410,7 +410,6 @@ class Group extends EditorEntryBase {
   onInputKeyDown(e) {
     switch (e.key) {
       case 'Enter':
-      case 'Escape':
         e.stopPropagation();
         e.preventDefault();
         this.stopEdit();
@@ -420,6 +419,12 @@ class Group extends EditorEntryBase {
             nodes[0].startEdit();
           }
         }
+        break;
+
+      case 'Escape':
+        e.stopPropagation();
+        e.preventDefault();
+        this.stopEdit();
         break;
 
       case 'ArrowUp':
