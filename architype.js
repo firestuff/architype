@@ -21,6 +21,11 @@ class ListenUtils {
 class List {
   constructor(container) {
     this.container_ = container;
+    this.allowDeleteLast_ = true;
+  }
+
+  banDeleteLast() {
+    this.allowDeleteLast_ = false;
   }
 
   getEntries() {
@@ -43,6 +48,9 @@ class List {
   }
 
   deleteSelected() {
+    if (!this.allowDeleteLast_ && this.container_.children.length == 1) {
+      return;
+    }
     let sel = this.getSelected();
     if (sel) {
       sel.xArchObj.remove();
@@ -50,6 +58,9 @@ class List {
   }
 
   deleteSelectedAndAfter() {
+    if (!this.allowDeleteLast_ && this.container_.children.length == 1) {
+      return;
+    }
     let sel = this.getSelected();
     if (sel) {
       while (this.container_.lastElementChild != sel) {
@@ -421,6 +432,7 @@ class Group extends EditorEntryBase {
     let nodeList = document.createElement('div');
     nodeList.classList.add('nodelist');
     this.nodes_ = new NodeList(nodeList);
+    this.nodes_.banDeleteLast();
     this.nodes_.addNodeAfter();
     this.elem_.appendChild(nodeList);
   }
