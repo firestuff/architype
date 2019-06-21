@@ -2,9 +2,10 @@
   --focus: #ff0000;
   --node: #4285f4;
   --group: #0f9d58;
-  --link: #f4b400;
+  --link: #dba100;
   --text: #ffffff;
-  --border: #f5f5f5;
+  --border: #e3e3e3;
+  --placeholder: #bbbbbb;
 }
 
 body {
@@ -79,7 +80,7 @@ body {
 }
 
 .editor li input::-webkit-input-placeholder {
-  color: var(--border);
+  color: var(--placeholder);
 }
 
 .editor li input:focus {

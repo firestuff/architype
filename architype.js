@@ -381,14 +381,6 @@ class Node extends EditorEntryBase {
         this.stopEdit();
         break;
 
-      case 'ArrowLeft':
-        e.stopPropagation();
-        if (this.input_.selectionEnd == 0) {
-          e.preventDefault();
-          this.stopEdit();
-        }
-        break;
-
       default:
         e.stopPropagation();
         break;
@@ -401,13 +393,6 @@ class Node extends EditorEntryBase {
     switch (e.key) {
       case 'Enter':
         this.startEdit();
-        e.stopPropagation();
-        e.preventDefault();
-        break;
-
-      case 'ArrowRight':
-        this.startEdit();
-        this.input_.selectionEnd = 0;
         e.stopPropagation();
         e.preventDefault();
         break;
@@ -476,14 +461,6 @@ class Group extends EditorEntryBase {
       case 'PageUp':
       case 'PageDown':
         this.stopEdit();
-        break;
-
-      case 'ArrowLeft':
-        e.stopPropagation();
-        if (this.input_.selectionEnd == 0) {
-          e.preventDefault();
-          this.stopEdit();
-        }
         break;
 
       default:
@@ -570,14 +547,6 @@ class Link extends EditorEntryBase {
       case 'PageUp':
       case 'PageDown':
         this.stopEdit();
-        break;
-
-      case 'ArrowLeft':
-        e.stopPropagation();
-        if (this.input_.selectionEnd == 0) {
-          e.preventDefault();
-          this.stopEdit();
-        }
         break;
 
       default:
