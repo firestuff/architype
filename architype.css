@@ -1,3 +1,12 @@
+.google {
+  --focus: #ff0000;
+  --node: #4285f4;
+  --group: #0f9d58;
+  --link: #f4b400;
+  --text: #ffffff;
+  --border: #f5f5f5;
+}
+
 body {
   position: fixed;
   top: 0;
@@ -11,6 +20,8 @@ body {
 }
 
 .editor {
+  color: var(--text);
+
   list-style: none;
 
   margin: 0;
@@ -43,27 +54,36 @@ body {
 }
 
 .editor li.node {
-  background-color: #daf0db;
+  background-color: var(--node);
 }
 
 .editor li.group {
-  background-color: #d8e6f4;
+  background-color: var(--group);
 }
 
+.editor li.link {
+  background-color: var(--link);
+}
 .editor li:focus {
-  border-color: red;
+  border-color: var(--focus);
   outline: none;
 }
 
 .editor li input {
-  background-color: rgba(255,255,255,0.8);
-  border: 3px solid black;
+  background-color: rgba(255,255,255,0.2);
+  border: 3px solid var(--border);
   padding: 4px;
   font-family: 'Courier', monospace;
+  color: var(--text);
+  width: 200px;
+}
+
+.editor li input::-webkit-input-placeholder {
+  color: var(--border);
 }
 
 .editor li input:focus {
-  border-color: red;
+  border-color: var(--focus);
   outline: none;
 }
 

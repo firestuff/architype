@@ -351,7 +351,7 @@ class Node extends EditorEntryBase {
   constructor() {
     super();
 
-    this.elem_.innerText = 'Node: ';
+    this.elem_.innerText = 'Node:  ';
     this.elem_.classList.add('node');
 
     this.input_ = document.createElement('input');
@@ -478,6 +478,14 @@ class Group extends EditorEntryBase {
         this.stopEdit();
         break;
 
+      case 'ArrowLeft':
+        e.stopPropagation();
+        if (this.input_.selectionEnd == 0) {
+          e.preventDefault();
+          this.stopEdit();
+        }
+        break;
+
       default:
         e.stopPropagation();
         break;
@@ -513,7 +521,7 @@ class Link extends EditorEntryBase {
   constructor() {
     super();
 
-    this.elem_.innerText = 'Link: ';
+    this.elem_.innerText = 'Link:  ';
     this.elem_.classList.add('link');
 
     this.input_ = document.createElement('input');
@@ -562,6 +570,14 @@ class Link extends EditorEntryBase {
       case 'PageUp':
       case 'PageDown':
         this.stopEdit();
+        break;
+
+      case 'ArrowLeft':
+        e.stopPropagation();
+        if (this.input_.selectionEnd == 0) {
+          e.preventDefault();
+          this.stopEdit();
+        }
         break;
 
       default:
