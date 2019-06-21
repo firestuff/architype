@@ -22,10 +22,15 @@ class List {
   constructor(container) {
     this.container_ = container;
     this.minEntries_ = 0;
+    this.maxEntries_ = Number.MAX_SAFE_INTEGER;
   }
 
   setMinEntries(min) {
     this.minEntries_ = min;
+  }
+
+  setMaxEntries(max) {
+    this.maxEntries_ = max;
   }
 
   getEntries() {
@@ -34,6 +39,10 @@ class List {
       ret.push(elem.xArchObj);
     }
     return ret;
+  }
+
+  mayAdd() {
+    return this.container_.children.length < this.maxEntries_;
   }
 
   getSelected() {
@@ -184,62 +193,63 @@ class List {
   }
 }
 
-class NodeList extends List {
-  constructor(container) {
+class Editor extends List {
+  static NODE = 1;
+  static GROUP = 2;
+  static LINK = 3;
+
+  constructor(container, allowedTypes) {
     super(container);
+
+    this.allowedTypes_ = new Set(allowedTypes ||
+                                 [Editor.NODE, Editor.GROUP, Editor.LINK]);
+
+    this.container_.classList.add('editor');
     // Needs to accept focus to receive keydown, but shouldn't be in the normal
     // tab flow.
     this.container_.tabIndex = 99999;
     this.container_.addEventListener('keydown', e => { this.onKeyDown(e); });
+    this.container_.focus();
+  }
+
+  isAllowed(type) {
+    return this.mayAdd() && this.allowedTypes_.has(type);
   }
 
   addNodeAfter() {
-    Node.addAfter(this.container_, this.getSelected());
-  }
-
-  addNodeBefore() {
-    Node.addBefore(this.container_, this.getSelected());
-  }
-
-  onKeyDown(e) {
-    switch (e.key) {
-      case 'n':
-        this.addNodeAfter();
-        e.stopPropagation();
-        e.preventDefault();
-        return;
-
-      case 'N':
-        this.addNodeBefore();
-        e.stopPropagation();
-        e.preventDefault();
-        return;
+    if (this.isAllowed(Editor.NODE)) {
+      Node.addAfter(this.container_, this.getSelected());
     }
-
-    super.onKeyDown(e);
-  }
-}
-
-class Editor extends List {
-  constructor(container) {
-    super(container);
-    document.addEventListener('keydown', e => { this.onKeyDown(e); });
-  }
-
-  addNodeAfter() {
-    Node.addAfter(this.container_, this.getSelected());
   }
 
   addNodeBefore() {
-    Node.addBefore(this.container_, this.getSelected());
+    if (this.isAllowed(Editor.NODE)) {
+      Node.addBefore(this.container_, this.getSelected());
+    }
+  }
+
+  addLinkAfter() {
+    if (this.isAllowed(Editor.LINK)) {
+      Link.addAfter(this.container_, this.getSelected());
+    }
+  }
+
+  addLinkBefore() {
+    if (this.isAllowed(Editor.LINK)) {
+      Link.addBefore(this.container_, this.getSelected());
+    }
   }
 
   addGroupAfter() {
-    Group.addAfter(this.container_, this.getSelected());
+    if (this.isAllowed(Editor.GROUP)) {
+      Group.addAfter(this.container_, this.getSelected());
+    }
   }
 
   addGroupBefore() {
-    Group.addBefore(this.container_, this.getSelected());
+    if (this.isAllowed(Editor.GROUP)) {
+      Group.addBefore(this.container_, this.getSelected());
+    }
   }
   
   onKeyDown(e) {
@@ -252,6 +262,18 @@ class Editor extends List {
         
       case 'G':
         this.addGroupBefore();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
+      case 'l':
+        this.addLinkAfter();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
+      case 'L':
+        this.addLinkBefore();
         e.stopPropagation();
         e.preventDefault();
         return;
@@ -336,7 +358,6 @@ class Node extends EditorEntryBase {
     this.input_.type = 'text';
     this.input_.placeholder = 'node name';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
-    this.listen(this.input_, 'blur', () => this.onInputBlur());
     this.elem_.appendChild(this.input_);
   }
 
@@ -401,13 +422,6 @@ class Node extends EditorEntryBase {
     this.elem_.focus();
   }
 
-  onInputBlur() {
-    if (this.input_.value.length == 0 && (this.elem_.previousElementSibling ||
-                                          this.elem_.nextElementSibling)) {
-      this.remove();
-    }
-  }
-
   getValue() {
     return this.input_.value;
   }
@@ -424,12 +438,10 @@ class Group extends EditorEntryBase {
     this.input_.type = 'text';
     this.input_.placeholder = 'group name';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
-    this.listen(this.input_, 'blur', () => this.onInputBlur());
     this.elem_.appendChild(this.input_);
 
     let nodeList = document.createElement('div');
-    nodeList.classList.add('nodelist');
-    this.nodes_ = new NodeList(nodeList);
+    this.nodes_ = new Editor(nodeList, [Editor.NODE]);
     this.nodes_.setMinEntries(1);
     this.nodes_.addNodeAfter();
     this.elem_.appendChild(nodeList);
@@ -495,11 +507,91 @@ class Group extends EditorEntryBase {
   stopEdit() {
     this.elem_.focus();
   }
+}
 
-  onInputBlur() {
-    if (this.input_.value.length == 0) {
-      this.remove();
+class Link extends EditorEntryBase {
+  constructor() {
+    super();
+
+    this.elem_.innerText = 'Link: ';
+    this.elem_.classList.add('link');
+
+    this.input_ = document.createElement('input');
+    this.input_.type = 'text';
+    this.input_.placeholder = 'label';
+    this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
+    this.elem_.appendChild(this.input_);
+
+    let nodeList = document.createElement('div');
+    this.nodes_ = new Editor(nodeList, [Editor.NODE]);
+    this.nodes_.setMinEntries(2);
+    this.nodes_.setMaxEntries(2);
+    this.nodes_.addNodeAfter();
+    this.nodes_.addNodeAfter();
+    this.elem_.appendChild(nodeList);
+  }
+
+  afterDomAdd() {
+    this.input_.focus();
+  }
+
+  onInputKeyDown(e) {
+    switch (e.key) {
+      case 'Enter':
+        e.stopPropagation();
+        e.preventDefault();
+        this.stopEdit();
+        {
+          let nodes = this.nodes_.getEntries();
+          if (nodes[0].getValue() == '') {
+            nodes[0].startEdit();
+          } else if (nodes[1].getValue() == '') {
+            nodes[1].startEdit();
+          }
+        }
+        break;
+
+      case 'Escape':
+        e.stopPropagation();
+        e.preventDefault();
+        this.stopEdit();
+        break;
+
+      case 'ArrowUp':
+      case 'ArrowDown':
+      case 'PageUp':
+      case 'PageDown':
+        this.stopEdit();
+        break;
+
+      default:
+        e.stopPropagation();
+        break;
     }
+  }
+
+  onKeyDown(e) {
+    super.onKeyDown(e);
+
+    switch (e.key) {
+      case 'Enter':
+        this.startEdit();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+
+      case 'ArrowRight':
+        this.nodes_.selectNext();
+        break;
+    }
+  }
+
+  startEdit() {
+    this.input_.focus();
+  }
+
+  stopEdit() {
+    this.elem_.focus();
   }
 }
 

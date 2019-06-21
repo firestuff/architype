@@ -10,7 +10,7 @@ body {
   font-family: 'Courier', monospace;
 }
 
-#definition {
+.editor {
   list-style: none;
 
   margin: 0;
@@ -22,7 +22,11 @@ body {
   overflow-y: scroll;
 }
 
-#definition li {
+.editor:focus {
+  outline: none;
+}
+
+.editor li {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -38,32 +42,31 @@ body {
   cursor: default;
 }
 
-#definition li.node {
+.editor li.node {
   background-color: #daf0db;
 }
 
-#definition li.group {
+.editor li.group {
   background-color: #d8e6f4;
 }
 
-#definition li:focus {
+.editor li:focus {
   border-color: red;
   outline: none;
 }
 
-#definition li input {
+.editor li input {
   background-color: rgba(255,255,255,0.8);
   border: 3px solid black;
   padding: 4px;
   font-family: 'Courier', monospace;
 }
 
-#definition li input:focus {
+.editor li input:focus {
   border-color: red;
   outline: none;
 }
 
-#definition .nodelist {
-  width: 100%;
+.editor .editor {
   margin: 5px;
 }
