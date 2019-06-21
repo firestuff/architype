@@ -1,5 +1,19 @@
 'use strict';
 
+class Architype {
+  constructor(container) {
+    this.container_ = container;
+
+    this.container_.classList.add('architype');
+    // TODO: make theme selectable
+    this.container_.classList.add('google');
+
+    let editorElem = document.createElement('ul');
+    this.container_.appendChild(editorElem);
+    this.editor_ = new Editor(editorElem);
+  }
+}
+
 class ListenUtils {
   constructor() {
     this.listeners_ = [];
@@ -580,4 +594,4 @@ class Link extends EditorEntryBase {
   }
 }
 
-new Editor(document.getElementById('definition'));
+new Architype(document.getElementById('architype'));
