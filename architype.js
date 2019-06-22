@@ -41,6 +41,8 @@ class Architype {
         this.buildTreeNode(tree, entry);
       } else if (entry instanceof Group) {
         this.buildTreeGroup(tree, entry);
+      } else if (entry instanceof Link) {
+        this.buildTreeLink(tree, entry);
       }
     }
   }
@@ -63,6 +65,14 @@ class Architype {
     group.clear();
     tree.groups.push(group);
     this.buildTreeTarget(tree, group.getLabel(), group);
+    this.buildTreeInt(tree, group.getNodes());
+  }
+
+  buildTreeLink(tree, link) {
+    link.clear();
+    this.buildTreeTarget(tree, link.getLabel(), link);
+    this.buildTreeInt(tree, [link.getFrom(), link.getTo()]);
+    // TODO: record link information on source node
   }
 }
 
@@ -440,6 +450,10 @@ class Node extends EditorEntryBase {
     this.elem_.classList.add('error');
   }
 
+  getLabel() {
+    return this.input_.value;
+  }
+
   onInput() {
     this.input_.setAttribute('data-arch-value', this.input_.value);
   }
@@ -485,10 +499,6 @@ class Node extends EditorEntryBase {
   stopEdit() {
     this.elem_.focus();
   }
-
-  getLabel() {
-    return this.input_.value;
-  }
 }
 
 class Group extends EditorEntryBase {
@@ -522,6 +532,14 @@ class Group extends EditorEntryBase {
 
   setError() {
     this.elem_.classList.add('error');
+  }
+
+  getNodes() {
+    return this.nodes_.getEntries();
+  }
+
+  getLabel() {
+    return this.input_.value;
   }
 
   onInputKeyDown(e) {
@@ -584,10 +602,6 @@ class Group extends EditorEntryBase {
   stopEdit() {
     this.elem_.focus();
   }
-
-  getLabel() {
-    return this.input_.value;
-  }
 }
 
 class Link extends EditorEntryBase {
@@ -601,6 +615,7 @@ class Link extends EditorEntryBase {
     this.input_.type = 'text';
     this.input_.placeholder = 'label';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
+    this.listen(this.input_, 'input', (e) => this.onInput());
     this.elem_.appendChild(this.input_);
 
     let nodeList = document.createElement('div');
@@ -614,6 +629,30 @@ class Link extends EditorEntryBase {
 
   afterDomAdd() {
     this.input_.focus();
+  }
+
+  clear() {
+    this.elem_.classList.remove('error');
+  }
+
+  setError() {
+    this.elem_.classList.add('error');
+  }
+
+  getFrom() {
+    return this.nodes_.getEntries()[0];
+  }
+
+  getTo() {
+    return this.nodes_.getEntries()[1];
+  }
+
+  getLabel() {
+    return this.input_.value;
+  }
+
+  onInput() {
+    this.input_.setAttribute('data-arch-value', this.input_.value);
   }
 
   onInputKeyDown(e) {
