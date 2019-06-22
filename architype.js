@@ -22,56 +22,56 @@ class Architype {
   }
 
   onEdit(e) {
-    this.tree_ = this.buildTree();
-    console.log(this.tree_);
+    this.graph_ = this.buildGraph();
+    console.log(this.graph_);
   }
 
-  buildTree() {
-    let tree = {
+  buildGraph() {
+    let graph = {
       targetsByLabel: new Map(),
       groups: [],
     };
-    this.buildTreeInt(tree, this.editor_.getEntries());
-    return tree;
+    this.buildGraphInt(graph, this.editor_.getEntries());
+    return graph;
   }
 
-  buildTreeInt(tree, entries) {
+  buildGraphInt(graph, entries) {
     for (let entry of entries) {
       if (entry instanceof Node) {
-        this.buildTreeNode(tree, entry);
+        this.buildGraphNode(graph, entry);
       } else if (entry instanceof Group) {
-        this.buildTreeGroup(tree, entry);
+        this.buildGraphGroup(graph, entry);
       } else if (entry instanceof Link) {
-        this.buildTreeLink(tree, entry);
+        this.buildGraphLink(graph, entry);
       }
     }
   }
 
-  buildTreeTarget(tree, label, target) {
+  buildGraphTarget(graph, label, target) {
     if (label == '') {
       return;
     }
-    let targets = tree.targetsByLabel.get(label) || [];
+    let targets = graph.targetsByLabel.get(label) || [];
     targets.push(target);
-    tree.targetsByLabel.set(label, targets);
+    graph.targetsByLabel.set(label, targets);
   }
 
-  buildTreeNode(tree, node) {
+  buildGraphNode(graph, node) {
     node.clear();
-    this.buildTreeTarget(tree, node.getLabel(), node);
+    this.buildGraphTarget(graph, node.getLabel(), node);
   }
 
-  buildTreeGroup(tree, group) {
+  buildGraphGroup(graph, group) {
     group.clear();
-    tree.groups.push(group);
-    this.buildTreeTarget(tree, group.getLabel(), group);
-    this.buildTreeInt(tree, group.getNodes());
+    graph.groups.push(group);
+    this.buildGraphTarget(graph, group.getLabel(), group);
+    this.buildGraphInt(graph, group.getNodes());
   }
 
-  buildTreeLink(tree, link) {
+  buildGraphLink(graph, link) {
     link.clear();
-    this.buildTreeTarget(tree, link.getLabel(), link);
-    this.buildTreeInt(tree, [link.getFrom(), link.getTo()]);
+    this.buildGraphTarget(graph, link.getLabel(), link);
+    this.buildGraphInt(graph, [link.getFrom(), link.getTo()]);
     // TODO: record link information on source node
   }
 }
