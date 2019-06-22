@@ -11,6 +11,58 @@ class Architype {
     let editorElem = document.createElement('ul');
     this.container_.appendChild(editorElem);
     this.editor_ = new Editor(editorElem);
+
+    this.observer_ = new MutationObserver(e => { this.onEdit(e); });
+    this.observer_.observe(editorElem, {
+      attributes: true,
+      attributeFilter: ['data-arch-value'],
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  onEdit(e) {
+    this.tree_ = this.buildTree();
+    console.log(this.tree_);
+  }
+
+  buildTree() {
+    let tree = {
+      targetsByLabel: new Map(),
+      groups: [],
+    };
+    this.buildTreeInt(tree, this.editor_.getEntries());
+    return tree;
+  }
+
+  buildTreeInt(tree, entries) {
+    for (let entry of entries) {
+      if (entry instanceof Node) {
+        this.buildTreeNode(tree, entry);
+      } else if (entry instanceof Group) {
+        this.buildTreeGroup(tree, entry);
+      }
+    }
+  }
+
+  buildTreeTarget(tree, label, target) {
+    if (label == '') {
+      return;
+    }
+    let targets = tree.targetsByLabel.get(label) || [];
+    targets.push(target);
+    tree.targetsByLabel.set(label, targets);
+  }
+
+  buildTreeNode(tree, node) {
+    node.clear();
+    this.buildTreeTarget(tree, node.getLabel(), node);
+  }
+
+  buildTreeGroup(tree, group) {
+    group.clear();
+    tree.groups.push(group);
+    this.buildTreeTarget(tree, group.getLabel(), group);
   }
 }
 
@@ -372,11 +424,24 @@ class Node extends EditorEntryBase {
     this.input_.type = 'text';
     this.input_.placeholder = 'node name';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
+    this.listen(this.input_, 'input', (e) => this.onInput());
     this.elem_.appendChild(this.input_);
   }
 
   afterDomAdd() {
     this.input_.focus();
+  }
+
+  clear() {
+    this.elem_.classList.remove('error');
+  }
+
+  setError() {
+    this.elem_.classList.add('error');
+  }
+
+  onInput() {
+    this.input_.setAttribute('data-arch-value', this.input_.value);
   }
 
   onInputKeyDown(e) {
@@ -421,7 +486,7 @@ class Node extends EditorEntryBase {
     this.elem_.focus();
   }
 
-  getValue() {
+  getLabel() {
     return this.input_.value;
   }
 }
@@ -437,6 +502,7 @@ class Group extends EditorEntryBase {
     this.input_.type = 'text';
     this.input_.placeholder = 'group name';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
+    this.listen(this.input_, 'input', (e) => this.onInput());
     this.elem_.appendChild(this.input_);
 
     let nodeList = document.createElement('div');
@@ -450,6 +516,14 @@ class Group extends EditorEntryBase {
     this.input_.focus();
   }
 
+  clear() {
+    this.elem_.classList.remove('error');
+  }
+
+  setError() {
+    this.elem_.classList.add('error');
+  }
+
   onInputKeyDown(e) {
     switch (e.key) {
       case 'Enter':
@@ -458,7 +532,7 @@ class Group extends EditorEntryBase {
         this.stopEdit();
         {
           let nodes = this.nodes_.getEntries();
-          if (nodes.length == 1 && nodes[0].getValue() == '') {
+          if (nodes.length == 1 && nodes[0].getLabel() == '') {
             nodes[0].startEdit();
           }
         }
@@ -499,12 +573,20 @@ class Group extends EditorEntryBase {
     }
   }
 
+  onInput() {
+    this.input_.setAttribute('data-arch-value', this.input_.value);
+  }
+
   startEdit() {
     this.input_.focus();
   }
 
   stopEdit() {
     this.elem_.focus();
+  }
+
+  getLabel() {
+    return this.input_.value;
   }
 }
 
@@ -542,9 +624,9 @@ class Link extends EditorEntryBase {
         this.stopEdit();
         {
           let nodes = this.nodes_.getEntries();
-          if (nodes[0].getValue() == '') {
+          if (nodes[0].getLabel() == '') {
             nodes[0].startEdit();
-          } else if (nodes[1].getValue() == '') {
+          } else if (nodes[1].getLabel() == '') {
             nodes[1].startEdit();
           }
         }

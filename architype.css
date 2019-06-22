@@ -52,24 +52,35 @@ body {
   box-sizing: border-box;
   width: 100%;
   padding: 3px;
-  border: 5px solid rgba(0,0,0,0.0);
+  border: 5px solid;
 
   cursor: default;
 }
 
 .editor li.node {
   background-color: var(--node);
+  border-color: var(--node);
+}
+
+.editor li.node.error {
+  background: repeating-linear-gradient(
+                  -45deg,
+                  rgba(255,255,255,0.15) 0 10px,
+                  rgba(0,0,0,0.15) 10px 20px),
+              var(--node);
 }
 
 .editor li.group {
   background-color: var(--group);
+  border-color: var(--group);
 }
 
 .editor li.link {
   background-color: var(--link);
+  border-color: var(--link);
 }
 .editor li:focus {
-  border-color: var(--focus);
+  border-color: var(--focus) !important;
   outline: none;
 }
 
