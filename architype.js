@@ -559,7 +559,13 @@ class Node extends EditorEntryBase {
   }
 
   stopEdit() {
-    this.elem_.focus();
+    if (this.elem_.nextElementSibling &&
+        this.elem_.nextElementSibling.xArchObj &&
+        this.elem_.nextElementSibling.xArchObj.getLabel() == '') {
+      this.elem_.nextElementSibling.xArchObj.startEdit();
+    } else {
+      this.elem_.focus();
+    }
   }
 }
 
