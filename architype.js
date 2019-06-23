@@ -109,7 +109,7 @@ class Architype {
     link.clear();
     this.buildGraphTarget(graph, link.getLabel(), link);
     this.buildGraphInt(graph, [link.getFrom(), link.getTo()]);
-    // TODO: record link information on source node
+    link.getFrom().addLink(link.getTo(), link);
   }
 
   trimSoftNodes(graph) {
@@ -422,6 +422,8 @@ class EditorEntryBase extends ListenUtils {
   constructor() {
     super();
 
+    this.links_ = [];
+
     this.elem_ = document.createElement('li');
     this.elem_.tabIndex = 0;
     this.listen(this.elem_, 'focus', () => this.onElemFocus());
@@ -445,6 +447,17 @@ class EditorEntryBase extends ListenUtils {
     this.elem_.remove();
     this.clearListeners();
     this.elem_.xArchObj = null;
+  }
+
+  clear() {
+    this.links_.length = 0;
+  }
+
+  addLink(target, link) {
+    this.links_.push({
+      target: target,
+      link: link,
+    });
   }
 
   onElemFocus() {
@@ -494,6 +507,7 @@ class Node extends EditorEntryBase {
   }
 
   clear() {
+    super.clear();
     this.elem_.classList.remove('error');
   }
 
@@ -596,6 +610,7 @@ class Group extends EditorEntryBase {
   }
 
   clear() {
+    super.clear();
     this.elem_.classList.remove('error');
   }
 
@@ -702,6 +717,7 @@ class Link extends EditorEntryBase {
   }
 
   clear() {
+    super.clear();
     this.elem_.classList.remove('error');
   }
 
