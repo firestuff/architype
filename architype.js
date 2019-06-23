@@ -12,6 +12,10 @@ class Architype {
     this.container_.appendChild(editorElem);
     this.editor_ = new Editor(editorElem);
 
+    this.targets_ = document.createElement('datalist');
+    this.targets_.id = 'arch-targets';
+    this.container_.appendChild(this.targets_);
+
     this.observer_ = new MutationObserver(e => { this.onEdit(e); });
     this.observer_.observe(editorElem, {
       attributes: true,
@@ -23,7 +27,38 @@ class Architype {
 
   onEdit(e) {
     this.graph_ = this.buildGraph();
-    console.log(this.graph_);
+    this.updateTargets();
+  }
+
+  updateTargets() {
+    // Lots of effort to avoid churning the datalist
+
+    let curTargets = new Map();
+    for (let option of this.targets_.options) {
+      curTargets.set(option.value, option);
+    }
+
+    for (let [label, entries] of this.graph_.targetsByLabel.entries()) {
+      if (curTargets.has(label)) {
+        continue;
+      }
+      if (entries.length == 1 &&
+          document.activeElement.parentElement.xArchObj &&
+          document.activeElement.parentElement.xArchObj == entries[0]) {
+        // Skip an element currently being edited
+        continue;
+      }
+      let option = document.createElement('option');
+      option.value = label;
+      this.targets_.appendChild(option);
+    }
+
+    for (let [label, option] of curTargets.entries()) {
+      if (this.graph_.targetsByLabel.has(label)) {
+        continue;
+      }
+      option.remove();
+    }
   }
 
   buildGraph() {
@@ -433,8 +468,10 @@ class Node extends EditorEntryBase {
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
     this.input_.placeholder = 'node name';
+    this.input_.setAttribute('list', 'arch-targets');
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
     this.listen(this.input_, 'input', (e) => this.onInput());
+    this.listen(this.input_, 'blur', (e) => this.onInput());
     this.elem_.appendChild(this.input_);
   }
 
@@ -513,6 +550,7 @@ class Group extends EditorEntryBase {
     this.input_.placeholder = 'group name';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
     this.listen(this.input_, 'input', (e) => this.onInput());
+    this.listen(this.input_, 'blur', (e) => this.onInput());
     this.elem_.appendChild(this.input_);
 
     let nodeList = document.createElement('div');
@@ -616,6 +654,7 @@ class Link extends EditorEntryBase {
     this.input_.placeholder = 'label';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
     this.listen(this.input_, 'input', (e) => this.onInput());
+    this.listen(this.input_, 'blur', (e) => this.onInput());
     this.elem_.appendChild(this.input_);
 
     let nodeList = document.createElement('div');
