@@ -107,14 +107,12 @@ class Architype {
   buildGraphGroup(graph, group) {
     group.clear();
     graph.groups.push(group);
-    this.buildGraphTarget(graph, group.getLabel(), group);
     this.buildGraphInt(graph, group.getNodes());
   }
 
   buildGraphLink(graph, link) {
     link.clear();
     graph.links.push(link);
-    this.buildGraphTarget(graph, link.getLabel(), link);
     this.buildGraphInt(graph, [link.getFrom(), link.getTo()]);
   }
 
