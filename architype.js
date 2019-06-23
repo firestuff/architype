@@ -66,9 +66,15 @@ class Architype {
     let graph = {
       targetsByLabel: new Map(),
       groups: [],
+      links: [],
+      nodes: [],
     };
+    // Order here is important, as each step carefully builds on data
+    // constructed by the previous
     this.buildGraphInt(graph, this.editor_.getEntries());
     this.trimSoftNodes(graph);
+    this.processLinks(graph);
+    this.manifestNodes(graph);
     return graph;
   }
 
@@ -107,9 +113,9 @@ class Architype {
 
   buildGraphLink(graph, link) {
     link.clear();
+    graph.links.push(link);
     this.buildGraphTarget(graph, link.getLabel(), link);
     this.buildGraphInt(graph, [link.getFrom(), link.getTo()]);
-    link.getFrom().addLink(link.getTo(), link);
   }
 
   trimSoftNodes(graph) {
@@ -120,6 +126,34 @@ class Architype {
         }
       }
     }
+  }
+
+  processLinks(graph) {
+    for (let link of graph.links) {
+      // Re-resolve each from/to reference by label, so we skip soft nodes and
+      // handle multiple objects with the same label
+      let froms = graph.targetsByLabel.get(link.getFrom().getLabel()) || [];
+      let tos = graph.targetsByLabel.get(link.getTo().getLabel()) || [];
+      for (let from of froms) {
+        for (let to of tos) {
+          from.addLink(to, link);
+        }
+      }
+    }
+  }
+
+  manifestNodes(graph) {
+    for (let entries of graph.targetsByLabel.values()) {
+      for (let entry of entries) {
+        if (entry instanceof Node) {
+          graph.nodes.push(entry);
+        }
+      }
+    }
+    graph.nodes.sort(
+        (a, b) => {
+          return b.getLinks().length - a.getLinks().length;
+        });
   }
 }
 
@@ -458,6 +492,10 @@ class EditorEntryBase extends ListenUtils {
       target: target,
       link: link,
     });
+  }
+
+  getLinks() {
+    return this.links_;
   }
 
   onElemFocus() {
