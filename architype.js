@@ -437,6 +437,8 @@ class EditorEntryBase extends ListenUtils {
         this.elem_.nextElementSibling.focus();
       } else if (this.elem_.previousElementSibling) {
         this.elem_.previousElementSibling.focus();
+      } else if (this.elem_.parentElement) {
+        this.elem_.parentElement.focus();
       }
     }
 
