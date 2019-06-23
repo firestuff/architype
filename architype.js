@@ -27,6 +27,7 @@ class Architype {
 
   onEdit(e) {
     this.graph_ = this.buildGraph();
+    console.log(this.graph_);
     this.updateTargets();
   }
 
@@ -67,6 +68,7 @@ class Architype {
       groups: [],
     };
     this.buildGraphInt(graph, this.editor_.getEntries());
+    this.trimSoftNodes(graph);
     return graph;
   }
 
@@ -108,6 +110,16 @@ class Architype {
     this.buildGraphTarget(graph, link.getLabel(), link);
     this.buildGraphInt(graph, [link.getFrom(), link.getTo()]);
     // TODO: record link information on source node
+  }
+
+  trimSoftNodes(graph) {
+    for (let entries of graph.targetsByLabel.values()) {
+      for (let i = entries.length - 1; i >= 0 && entries.length > 1; --i) {
+        if (entries[i] instanceof Node && entries[i].isSoft()) {
+          entries.splice(i, 1);
+        }
+      }
+    }
   }
 }
 
@@ -489,6 +501,17 @@ class Node extends EditorEntryBase {
 
   getLabel() {
     return this.input_.value;
+  }
+
+  isSoft() {
+    // Nested nodes are presumed to be references to other nodes if they exist
+    let iter = this.elem_.parentElement;
+    for (let iter = this.elem_.parentElement; iter; iter = iter.parentElement) {
+      if (iter.xArchObj) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onInput() {
