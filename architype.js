@@ -134,7 +134,7 @@ class Architype {
       let tos = graph.targetsByLabel.get(link.getTo().getLabel()) || [];
       for (let from of froms) {
         for (let to of tos) {
-          from.addLink(to, link);
+          // TODO
         }
       }
     }
@@ -148,10 +148,6 @@ class Architype {
         }
       }
     }
-    graph.nodes.sort(
-        (a, b) => {
-          return b.getLinks().length - a.getLinks().length;
-        });
   }
 }
 
@@ -454,8 +450,6 @@ class EditorEntryBase extends ListenUtils {
   constructor() {
     super();
 
-    this.links_ = [];
-
     this.elem_ = document.createElement('li');
     this.elem_.tabIndex = 0;
     this.listen(this.elem_, 'focus', () => this.onElemFocus());
@@ -482,18 +476,6 @@ class EditorEntryBase extends ListenUtils {
   }
 
   clear() {
-    this.links_.length = 0;
-  }
-
-  addLink(target, link) {
-    this.links_.push({
-      target: target,
-      link: link,
-    });
-  }
-
-  getLinks() {
-    return this.links_;
   }
 
   onElemFocus() {
