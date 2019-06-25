@@ -23,9 +23,35 @@ class Architype {
       childList: true,
       subtree: true,
     });
+
+    this.unserialize(JSON.parse(localStorage.getItem('currentState')));
+  }
+
+  serialize() {
+    return {
+      version: 1,
+      editor: this.editor_.serialize(),
+    };
+  }
+
+  unserialize(ser) {
+    if (!ser) {
+      return;
+    }
+
+    switch (ser.version) {
+      case 1:
+        this.editor_.unserialize(ser.editor);
+        break;
+
+      default:
+        console.log('unrecognized localStorage.currentState version', ser);
+        break;
+    }
   }
 
   onEdit(e) {
+    localStorage.setItem('currentState', JSON.stringify(this.serialize()));
     this.graph_ = this.buildGraph();
     console.log(this.graph_);
     this.updateTargets();
@@ -363,6 +389,25 @@ class Editor extends List {
     this.container_.focus();
   }
 
+  clear() {
+    this.container_.innerHTML = '';
+  }
+
+  serialize() {
+    // Doesn't have a type, only used as part of other objects
+    let ret = [];
+    for (let entry of this.getEntries()) {
+      ret.push(entry.serialize());
+    }
+    return ret;
+  }
+
+  unserialize(ser) {
+    for (let entry of ser) {
+      this.container_.appendChild(EditorEntryBase.unserialize(entry));
+    }
+  }
+
   isAllowed(type) {
     return this.mayAdd() && this.allowedTypes_.has(type);
   }
@@ -490,16 +535,25 @@ class EditorEntryBase extends ListenUtils {
 
   static addBefore(container, elem) {
     let entry = new this();
-    container.insertBefore(entry.elem_, elem);
+    container.insertBefore(entry.getElement(), elem);
     entry.afterDomAdd();
-    return entry.elem_;
   }
 
   static addAfter(container, elem) {
     let entry = new this();
-    container.insertBefore(entry.elem_, elem ? elem.nextSibling : null);
+    container.insertBefore(entry.getElement(), elem ? elem.nextSibling : null);
     entry.afterDomAdd();
-    return entry.elem_;
+  }
+
+  static unserialize(ser) {
+    switch (ser.type) {
+      case 'group':
+        return Group.unserialize(ser);
+      case 'link':
+        return Link.unserialize(ser);
+      case 'node':
+        return Node.unserialize(ser);
+    }
   }
 }
 
@@ -524,6 +578,13 @@ class Node extends EditorEntryBase {
     this.input_.focus();
   }
 
+  serialize() {
+    return {
+      type: 'node',
+      label: this.getLabel(),
+    };
+  }
+
   clear() {
     super.clear();
     this.elem_.classList.remove('error');
@@ -535,6 +596,15 @@ class Node extends EditorEntryBase {
 
   getLabel() {
     return this.input_.value;
+  }
+
+  setLabel(label) {
+    this.input_.value = label;
+    this.onInput();
+  }
+
+  getElement() {
+    return this.elem_;
   }
 
   isSoft() {
@@ -599,6 +669,12 @@ class Node extends EditorEntryBase {
       this.elem_.focus();
     }
   }
+
+  static unserialize(ser) {
+    let node = new Node();
+    node.setLabel(ser.label);
+    return node.getElement();
+  }
 }
 
 class Group extends EditorEntryBase {
@@ -627,6 +703,14 @@ class Group extends EditorEntryBase {
     this.input_.focus();
   }
 
+  serialize() {
+    return {
+      type: 'group',
+      label: this.getLabel(),
+      members: this.nodes_.serialize(),
+    };
+  }
+
   clear() {
     super.clear();
     this.elem_.classList.remove('error');
@@ -642,6 +726,15 @@ class Group extends EditorEntryBase {
 
   getLabel() {
     return this.input_.value;
+  }
+
+  setLabel(label) {
+    this.input_.value = label;
+    this.onInput();
+  }
+
+  getElement() {
+    return this.elem_;
   }
 
   onInputKeyDown(e) {
@@ -704,6 +797,14 @@ class Group extends EditorEntryBase {
   stopEdit() {
     this.elem_.focus();
   }
+
+  static unserialize(ser) {
+    let group = new Group();
+    group.setLabel(ser.label);
+    group.nodes_.clear();
+    group.nodes_.unserialize(ser.members);
+    return group.getElement();
+  }
 }
 
 class Link extends EditorEntryBase {
@@ -734,6 +835,15 @@ class Link extends EditorEntryBase {
     this.input_.focus();
   }
 
+  serialize() {
+    return {
+      type: 'link',
+      label: this.getLabel(),
+      from: this.getFrom().serialize(),
+      to: this.getTo().serialize(),
+    };
+  }
+
   clear() {
     super.clear();
     this.elem_.classList.remove('error');
@@ -753,6 +863,15 @@ class Link extends EditorEntryBase {
 
   getLabel() {
     return this.input_.value;
+  }
+
+  setLabel(label) {
+    this.input_.value = label;
+    this.onInput();
+  }
+
+  getElement() {
+    return this.elem_;
   }
 
   onInput() {
@@ -816,6 +935,14 @@ class Link extends EditorEntryBase {
 
   stopEdit() {
     this.elem_.focus();
+  }
+
+  static unserialize(ser) {
+    let link = new Link();
+    link.setLabel(ser.label);
+    link.nodes_.clear();
+    link.nodes_.unserialize([ser.from, ser.to]);
+    return link.getElement();
   }
 }
 
