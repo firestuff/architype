@@ -1,5 +1,14 @@
 'use strict';
 
+function randStr32() {
+  let num = Math.floor(Math.random() * Math.pow(2, 32));
+  return num.toString(16).padStart(8, '0');
+}
+
+function randStr64() {
+  return randStr32() + randStr32();
+}
+
 class Architype {
   constructor(container) {
     this.container_ = container;
@@ -69,7 +78,20 @@ class Architype {
   }
 
   exportGraphviz() {
-    let lines = this.editor_.exportGraphviz('digraph G');
+    let lines = [
+        'digraph G {',
+        '\trankdir = "LR";',
+    ];
+
+    for (let type of ['nodes', 'links', 'groups']) {
+      for (let obj of this.graph_[type]) {
+        for (let line of obj.exportGraphviz()) {
+          lines.push('\t' + line);
+        }
+      }
+    }
+
+    lines.push('}');
     navigator.clipboard.writeText(lines.join('\n'));
   }
 
@@ -116,6 +138,7 @@ class Architype {
     this.buildGraphInt(graph, this.editor_.getEntries());
     this.trimSoftNodes(graph);
     this.processLinks(graph);
+    this.processGroups(graph);
     this.manifestNodes(graph);
     return graph;
   }
@@ -172,12 +195,16 @@ class Architype {
     for (let link of graph.links) {
       // Re-resolve each from/to reference by label, so we skip soft nodes and
       // handle multiple objects with the same label
-      let froms = graph.targetsByLabel.get(link.getFrom().getLabel()) || [];
-      let tos = graph.targetsByLabel.get(link.getTo().getLabel()) || [];
-      for (let from of froms) {
-        for (let to of tos) {
-          // TODO
-        }
+      link.from = graph.targetsByLabel.get(link.getFrom().getLabel()) || [];
+      link.to = graph.targetsByLabel.get(link.getTo().getLabel()) || [];
+    }
+  }
+
+  processGroups(graph) {
+    for (let group of graph.groups) {
+      group.nodes = [];
+      for (let member of group.getNodes()) {
+        group.nodes.push(...(graph.targetsByLabel.get(member.getLabel()) || []));
       }
     }
   }
@@ -424,22 +451,6 @@ class Editor extends List {
     }
   }
 
-  exportGraphviz(prefix, extras) {
-    let ret = [
-        prefix + ' {',
-    ];
-    if (extras) {
-      ret.push(...extras);
-    }
-    for (let entry of this.getEntries()) {
-      for (let line of entry.exportGraphviz()) {
-        ret.push('\t' + line);
-      }
-    }
-    ret.push('}');
-    return ret;
-  }
-
   isAllowed(type) {
     return this.mayAdd() && this.allowedTypes_.has(type);
   }
@@ -526,6 +537,8 @@ class Editor extends List {
 class EditorEntryBase extends ListenUtils {
   constructor() {
     super();
+
+    this.id = randStr64();
 
     this.elem_ = document.createElement('li');
     this.elem_.tabIndex = 0;
@@ -625,7 +638,7 @@ class Node extends EditorEntryBase {
     if (this.getLabel() == '') {
       return [];
     }
-    return ['"' + this.getLabel() + '";'];
+    return ['"' + this.id + '" [label="' + this.getLabel() + '"];'];
   }
 
   clear() {
@@ -764,13 +777,22 @@ class Group extends EditorEntryBase {
   }
 
   exportGraphviz() {
-    let extras = (this.getLabel() == '' ?
-                  [] :
-                  ['label = "' + this.getLabel() + '";']);
-    let ret = this.nodes_.exportGraphviz(
-        'subgraph ' + Math.floor(Math.random() * 999999999),
-        extras);
-    return ret;
+    let lines = [
+        'subgraph "cluster_' + this.id + '" {',
+    ];
+
+    if (this.getLabel() != '') {
+      lines.push('\tlabel = "' + this.getLabel() + '";');
+    }
+
+    for (let obj of this.nodes) {
+      for (let line of obj.exportGraphviz()) {
+        lines.push('\t' + line);
+      }
+    }
+
+    lines.push('}');
+    return lines;
   }
 
   clear() {
@@ -910,12 +932,20 @@ class Link extends EditorEntryBase {
     if (this.getFrom().getLabel() == '' || this.getTo().getLabel() == '') {
       return [];
     }
-    let str = '"' + this.getFrom().getLabel() + '" -> "' +
-        this.getTo().getLabel() + '"';
-    if (this.getLabel()) {
-      str += ' [label="' + this.getLabel() + '"]';
+
+    let label = '';
+    if (this.getLabel() != '') {
+      label = ' [label="' + this.getLabel() + '"]';
     }
-    return [str + ';'];
+
+    let ret = [];
+    for (let f of this.from) {
+      for (let t of this.to) {
+        ret.push('"' + f.id + '" -> "' + t.id + '"' + label + ';');
+      }
+    }
+
+    return ret;
   };
 
   clear() {
