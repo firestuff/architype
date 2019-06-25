@@ -625,6 +625,17 @@ class Node extends EditorEntryBase {
   onInputKeyDown(e) {
     switch (e.key) {
       case 'Enter':
+        e.stopPropagation();
+        e.preventDefault();
+        if (this.elem_.nextElementSibling &&
+            this.elem_.nextElementSibling.xArchObj &&
+            this.elem_.nextElementSibling.xArchObj.getLabel() == '') {
+          this.elem_.nextElementSibling.xArchObj.startEdit();
+        } else {
+          this.stopEdit();
+        }
+        break;
+
       case 'Escape':
         e.stopPropagation();
         e.preventDefault();
@@ -661,13 +672,7 @@ class Node extends EditorEntryBase {
   }
 
   stopEdit() {
-    if (this.elem_.nextElementSibling &&
-        this.elem_.nextElementSibling.xArchObj &&
-        this.elem_.nextElementSibling.xArchObj.getLabel() == '') {
-      this.elem_.nextElementSibling.xArchObj.startEdit();
-    } else {
-      this.elem_.focus();
-    }
+    this.elem_.focus();
   }
 
   static unserialize(ser) {
