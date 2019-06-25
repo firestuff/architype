@@ -523,6 +523,10 @@ class EditorEntryBase extends ListenUtils {
   clear() {
   }
 
+  wantFocus() {
+    return false;
+  }
+
   onElemFocus() {
     this.elem_.scrollIntoView({block: 'center'});
   }
@@ -607,6 +611,10 @@ class Node extends EditorEntryBase {
     return this.elem_;
   }
 
+  wantFocus() {
+    return this.getLabel() == '';
+  }
+
   isSoft() {
     // Nested nodes are presumed to be references to other nodes if they exist
     let iter = this.elem_.parentElement;
@@ -629,7 +637,7 @@ class Node extends EditorEntryBase {
         e.preventDefault();
         if (this.elem_.nextElementSibling &&
             this.elem_.nextElementSibling.xArchObj &&
-            this.elem_.nextElementSibling.xArchObj.getLabel() == '') {
+            this.elem_.nextElementSibling.xArchObj.wantFocus()) {
           this.elem_.nextElementSibling.xArchObj.startEdit();
         } else {
           this.stopEdit();
