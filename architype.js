@@ -129,6 +129,7 @@ class Architype {
   buildGraph() {
     let graph = {
       targetsByLabel: new Map(),
+      nodesByPageRank: new Map(),
       groups: [],
       links: [],
       nodes: [],
@@ -140,6 +141,8 @@ class Architype {
     this.processLinks(graph);
     this.processGroups(graph);
     this.manifestNodes(graph);
+    this.setPageRank(graph);
+    this.bucketByPageRank(graph);
     return graph;
   }
 
@@ -197,6 +200,11 @@ class Architype {
       // handle multiple objects with the same label
       link.from = graph.targetsByLabel.get(link.getFrom().getLabel()) || [];
       link.to = graph.targetsByLabel.get(link.getTo().getLabel()) || [];
+      for (let from of link.from) {
+        for (let to of link.to) {
+          from.links.push(to);
+        }
+      }
     }
   }
 
@@ -216,6 +224,50 @@ class Architype {
           graph.nodes.push(entry);
         }
       }
+    }
+  }
+
+  setPageRank(graph) {
+    for (let link of graph.links) {
+      for (let to of link.to) {
+        this.setPageRankInt(to, new Set());
+      }
+    }
+  }
+
+  setPageRankInt(node, visited) {
+    if (visited.has(node)) {
+      // Loop detection
+      return;
+    }
+    ++node.pageRank;
+    visited.add(node);
+    for (let out of node.links) {
+      this.setPageRankInt(out, visited);
+    }
+    visited.delete(node);
+  }
+
+  bucketByPageRank(graph) {
+    for (let node of graph.nodes) {
+      let bucket = graph.nodesByPageRank.get(node.pageRank);
+      if (!bucket) {
+        bucket = [];
+        graph.nodesByPageRank.set(node.pageRank, bucket);
+      }
+      bucket.push(node);
+    }
+    let cmp = (a, b) => {
+      if (a < b) {
+        return -1;
+      } else if (a > b) {
+        return 1;
+      } else {
+        return 0;
+      }
+    };
+    for (let bucket of graph.nodesByPageRank.values()) {
+      bucket.sort(cmp);
     }
   }
 }
@@ -644,6 +696,8 @@ class Node extends EditorEntryBase {
   clear() {
     super.clear();
     this.elem_.classList.remove('error');
+    this.links = [];
+    this.pageRank = 0;
   }
 
   setError() {
@@ -939,9 +993,9 @@ class Link extends EditorEntryBase {
     }
 
     let ret = [];
-    for (let f of this.from) {
-      for (let t of this.to) {
-        ret.push('"' + f.id + '" -> "' + t.id + '"' + label + ';');
+    for (let ffrom of this.from) {
+      for (let to of this.to) {
+        ret.push('"' + from.id + '" -> "' + to.id + '"' + label + ';');
       }
     }
 
