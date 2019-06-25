@@ -8,6 +8,8 @@ class Architype {
     // TODO: make theme selectable
     this.container_.classList.add('google');
 
+    this.container_.addEventListener('keydown', (e) => { this.onKeyDown(e); });
+
     let editorElem = document.createElement('ul');
     this.container_.appendChild(editorElem);
     this.editor_ = new Editor(editorElem);
@@ -51,10 +53,24 @@ class Architype {
   }
 
   onEdit(e) {
+    // TODO: differentiate between value change and structure change
     localStorage.setItem('currentState', JSON.stringify(this.serialize()));
     this.graph_ = this.buildGraph();
     console.log(this.graph_);
     this.updateTargets();
+  }
+
+  onKeyDown(e) {
+    switch (e.key) {
+      case 'z':
+        this.exportGraphviz();
+        break;
+    }
+  }
+
+  exportGraphviz() {
+    let lines = this.editor_.exportGraphviz('digraph G');
+    navigator.clipboard.writeText(lines.join('\n'));
   }
 
   updateTargets() {
@@ -408,6 +424,22 @@ class Editor extends List {
     }
   }
 
+  exportGraphviz(prefix, extras) {
+    let ret = [
+        prefix + ' {',
+    ];
+    if (extras) {
+      ret.push(...extras);
+    }
+    for (let entry of this.getEntries()) {
+      for (let line of entry.exportGraphviz()) {
+        ret.push('\t' + line);
+      }
+    }
+    ret.push('}');
+    return ret;
+  }
+
   isAllowed(type) {
     return this.mayAdd() && this.allowedTypes_.has(type);
   }
@@ -589,6 +621,13 @@ class Node extends EditorEntryBase {
     };
   }
 
+  exportGraphviz() {
+    if (this.getLabel() == '') {
+      return [];
+    }
+    return ['"' + this.getLabel() + '";'];
+  }
+
   clear() {
     super.clear();
     this.elem_.classList.remove('error');
@@ -724,6 +763,16 @@ class Group extends EditorEntryBase {
     };
   }
 
+  exportGraphviz() {
+    let extras = (this.getLabel() == '' ?
+                  [] :
+                  ['label = "' + this.getLabel() + '";']);
+    let ret = this.nodes_.exportGraphviz(
+        'subgraph ' + Math.floor(Math.random() * 999999999),
+        extras);
+    return ret;
+  }
+
   clear() {
     super.clear();
     this.elem_.classList.remove('error');
@@ -856,6 +905,18 @@ class Link extends EditorEntryBase {
       to: this.getTo().serialize(),
     };
   }
+
+  exportGraphviz() {
+    if (this.getFrom().getLabel() == '' || this.getTo().getLabel() == '') {
+      return [];
+    }
+    let str = '"' + this.getFrom().getLabel() + '" -> "' +
+        this.getTo().getLabel() + '"';
+    if (this.getLabel()) {
+      str += ' [label="' + this.getLabel() + '"]';
+    }
+    return [str + ';'];
+  };
 
   clear() {
     super.clear();
