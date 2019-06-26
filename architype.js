@@ -1051,7 +1051,7 @@ class Link extends EditorEntryBase {
     }
 
     let ret = [];
-    for (let ffrom of this.from) {
+    for (let from of this.from) {
       for (let to of this.to) {
         ret.push('"' + from.id + '" -> "' + to.id + '"' + label + ';');
       }
