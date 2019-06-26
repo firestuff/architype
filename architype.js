@@ -27,6 +27,10 @@ class Architype {
     this.targets_.id = 'arch-targets';
     this.container_.appendChild(this.targets_);
 
+    this.grid_ = document.createElement('div');
+    this.grid_.classList.add('grid');
+    this.container_.appendChild(this.grid_);
+
     this.observer_ = new MutationObserver(e => { this.onEdit(e); });
     this.observer_.observe(editorElem, {
       attributes: true,
@@ -65,7 +69,7 @@ class Architype {
     // TODO: differentiate between value change and structure change
     localStorage.setItem('currentState', JSON.stringify(this.serialize()));
     this.graph_ = this.buildGraph();
-    console.log(this.graph_);
+    this.buildGrid();
     this.updateTargets();
   }
 
@@ -301,6 +305,15 @@ class Architype {
         max[0] - min[0] + 1,
         max[1] - min[1] + 1,
     ];
+  }
+
+  buildGrid() {
+    this.grid_.style.gridTemplateColumns =
+        'repeat(' + this.graph_.size[0] + ',1fr)';
+    this.grid_.style.gridTemplateRows =
+        'repeat(' + this.graph_.size[1] +
+        ',minmax(0, calc((100vw - var(--editor-width)) / ' +
+        this.graph_.size[0] + ')))';
   }
 }
 

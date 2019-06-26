@@ -8,6 +8,10 @@
   --placeholder: #bbbbbb;
 }
 
+:root {
+  --editor-width: 320px;
+}
+
 body {
   position: fixed;
   top: 0;
@@ -21,6 +25,11 @@ body {
   width: 100%;
   height: 100%;
   font-family: 'Courier', monospace;
+
+  display: grid;
+  grid-template:
+      [row1-start] "editor grid" 100% [row1-end]
+      / var(--editor-width) auto;
 }
 
 .editor {
@@ -34,7 +43,7 @@ body {
   outline: 1px solid black;
 
   height: 100%;
-  width: 320px;
+  width: 100%;
 
   overflow-y: scroll;
 }
@@ -107,4 +116,11 @@ body {
 
 .editor .editor {
   margin: 5px;
+}
+
+.grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  align-content: center;
 }
