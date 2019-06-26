@@ -165,15 +165,16 @@ class Architype {
   }
 
   buildGraphNode(graph, node) {
-    node.clear();
-    if (node.getLabel() != '') {
-      let targets = graph.nodesByLabel.get(node.getLabel());
-      if (!targets) {
-        targets = [];
-        graph.nodesByLabel.set(node.getLabel(), targets);
-      }
-      targets.push(node);
+    if (node.getLabel() == '') {
+      return;
     }
+    node.clear();
+    let targets = graph.nodesByLabel.get(node.getLabel());
+    if (!targets) {
+      targets = [];
+      graph.nodesByLabel.set(node.getLabel(), targets);
+    }
+    targets.push(node);
   }
 
   buildGraphGroup(graph, group) {
@@ -308,12 +309,24 @@ class Architype {
   }
 
   buildGrid() {
+    this.grid_.innerHTML = '';
+
     this.grid_.style.gridTemplateColumns =
         'repeat(' + this.graph_.size[0] + ',1fr)';
     this.grid_.style.gridTemplateRows =
         'repeat(' + this.graph_.size[1] +
         ',minmax(0, calc((100vw - var(--editor-width)) / ' +
         this.graph_.size[0] + ')))';
+
+    // TODO: split this out
+    for (let node of this.graph_.nodes) {
+      node.gridElem = document.createElement('div');
+      node.gridElem.classList.add('gridNode');
+      this.grid_.appendChild(node.gridElem);
+      node.gridElem.innerText = node.getLabel();
+      node.gridElem.style.gridColumn = node.pos[0] + 1;
+      node.gridElem.style.gridRow = node.pos[1] + 1;
+    }
   }
 }
 
