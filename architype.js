@@ -659,7 +659,7 @@ class EditorEntryBase extends ListenUtils {
   }
 
   onElemFocus() {
-    this.elem_.scrollIntoView({block: 'center'});
+    this.elem_.scrollIntoView({block: 'nearest'});
   }
 
   onKeyDown(e) {
