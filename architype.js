@@ -143,6 +143,7 @@ class Architype {
     this.manifestNodes(graph);
     this.setPageRank(graph);
     this.bucketByPageRank(graph);
+    this.setInitialPositions(graph);
     return graph;
   }
 
@@ -268,6 +269,17 @@ class Architype {
     };
     for (let bucket of graph.nodesByPageRank.values()) {
       bucket.sort(cmp);
+    }
+  }
+
+  setInitialPositions(graph) {
+    let ranks = Array.from(graph.nodesByPageRank.keys());
+    ranks.sort((a, b) => a - b);
+    for (let r = 0; r < ranks.length; ++r) {
+      let nodes = graph.nodesByPageRank.get(ranks[r]);
+      for (let n = 0; n < nodes.length; ++n) {
+        nodes[n].pos = [r, 0 - Math.floor(nodes.length / 2) + n];
+      }
     }
   }
 }
