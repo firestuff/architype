@@ -103,7 +103,7 @@ class Architype {
       curTargets.set(option.value, option);
     }
 
-    for (let [label, entries] of this.graph_.targetsByLabel.entries()) {
+    for (let [label, entries] of this.graph_.nodesByLabel.entries()) {
       if (curTargets.has(label)) {
         continue;
       }
@@ -119,7 +119,7 @@ class Architype {
     }
 
     for (let [label, option] of curTargets.entries()) {
-      if (this.graph_.targetsByLabel.has(label)) {
+      if (this.graph_.nodesByLabel.has(label)) {
         continue;
       }
       option.remove();
@@ -128,7 +128,7 @@ class Architype {
 
   buildGraph() {
     let graph = {
-      targetsByLabel: new Map(),
+      nodesByLabel: new Map(),
       nodesByPageRank: new Map(),
       groups: [],
       links: [],
@@ -160,18 +160,16 @@ class Architype {
     }
   }
 
-  buildGraphTarget(graph, label, target) {
-    if (label == '') {
-      return;
-    }
-    let targets = graph.targetsByLabel.get(label) || [];
-    targets.push(target);
-    graph.targetsByLabel.set(label, targets);
-  }
-
   buildGraphNode(graph, node) {
     node.clear();
-    this.buildGraphTarget(graph, node.getLabel(), node);
+    if (node.getLabel() != '') {
+      let targets = graph.nodesByLabel.get(node.getLabel());
+      if (!targets) {
+        targets = [];
+        graph.nodesByLabel.set(node.getLabel(), targets);
+      }
+      targets.push(node);
+    }
   }
 
   buildGraphGroup(graph, group) {
@@ -187,7 +185,7 @@ class Architype {
   }
 
   trimSoftNodes(graph) {
-    for (let entries of graph.targetsByLabel.values()) {
+    for (let entries of graph.nodesByLabel.values()) {
       for (let i = entries.length - 1; i >= 0 && entries.length > 1; --i) {
         if (entries[i] instanceof Node && entries[i].isSoft()) {
           entries.splice(i, 1);
@@ -200,8 +198,8 @@ class Architype {
     for (let link of graph.links) {
       // Re-resolve each from/to reference by label, so we skip soft nodes and
       // handle multiple objects with the same label
-      link.from = graph.targetsByLabel.get(link.getFrom().getLabel()) || [];
-      link.to = graph.targetsByLabel.get(link.getTo().getLabel()) || [];
+      link.from = graph.nodesByLabel.get(link.getFrom().getLabel()) || [];
+      link.to = graph.nodesByLabel.get(link.getTo().getLabel()) || [];
       for (let from of link.from) {
         for (let to of link.to) {
           from.links.push(to);
@@ -214,13 +212,13 @@ class Architype {
     for (let group of graph.groups) {
       group.nodes = [];
       for (let member of group.getNodes()) {
-        group.nodes.push(...(graph.targetsByLabel.get(member.getLabel()) || []));
+        group.nodes.push(...(graph.nodesByLabel.get(member.getLabel()) || []));
       }
     }
   }
 
   manifestNodes(graph) {
-    for (let entries of graph.targetsByLabel.values()) {
+    for (let entries of graph.nodesByLabel.values()) {
       for (let entry of entries) {
         if (entry instanceof Node) {
           graph.nodes.push(entry);
