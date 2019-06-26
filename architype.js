@@ -144,6 +144,7 @@ class Architype {
     this.setPageRank(graph);
     this.bucketByPageRank(graph);
     this.setInitialPositions(graph);
+    this.fixOrigin(graph);
     return graph;
   }
 
@@ -281,6 +282,27 @@ class Architype {
         nodes[n].pos = [r, 0 - Math.floor(nodes.length / 2) + n];
       }
     }
+  }
+
+  fixOrigin(graph) {
+    let min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER];
+    let max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
+    for (let node of graph.nodes) {
+      for (let i of [0, 1]) {
+        min[i] = Math.min(min[i], node.pos[i]);
+        max[i] = Math.max(max[i], node.pos[i]);
+      }
+    }
+    // Offset is negative minimum, e.g min -1 means +1 to all values
+    for (let node of graph.nodes) {
+      for (let i of [0, 1]) {
+        node.pos[i] -= min[i];
+      }
+    }
+    graph.size = [
+        max[0] - min[0] + 1,
+        max[1] - min[1] + 1,
+    ];
   }
 }
 
