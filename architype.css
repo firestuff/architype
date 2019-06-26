@@ -31,8 +31,10 @@ body {
   margin: 0;
   padding: 0;
 
+  outline: 1px solid black;
+
   height: 100%;
-  width: 400px;
+  width: 320px;
 
   overflow-y: scroll;
 }
@@ -51,8 +53,9 @@ body {
 
   box-sizing: border-box;
   width: 100%;
-  padding: 3px;
+  padding: 1px;
   border: 5px solid;
+  outline: 1px solid black;
 
   cursor: default;
 }
