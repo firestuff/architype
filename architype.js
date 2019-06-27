@@ -149,6 +149,7 @@ class Architype {
     this.bucketByPageRank(graph);
     this.setInitialPositions(graph);
     this.fixOrigin(graph);
+    this.setAffinity(graph);
     return graph;
   }
 
@@ -165,10 +166,10 @@ class Architype {
   }
 
   buildGraphNode(graph, node) {
+    node.clear();
     if (node.getLabel() == '') {
       return;
     }
-    node.clear();
     let targets = graph.nodesByLabel.get(node.getLabel());
     if (!targets) {
       targets = [];
@@ -217,7 +218,11 @@ class Architype {
     for (let group of graph.groups) {
       group.nodes = [];
       for (let member of group.getNodes()) {
-        group.nodes.push(...(graph.nodesByLabel.get(member.getLabel()) || []));
+        let nodes = graph.nodesByLabel.get(member.getLabel()) || [];
+        for (let node of nodes) {
+          group.nodes.push(node);
+          node.groups.push(group);
+        }
       }
     }
   }
@@ -308,6 +313,34 @@ class Architype {
     ];
   }
 
+  setAffinity(graph) {
+    for (let node of graph.nodes) {
+      for (let to of node.links) {
+        // Stronger affinity for links
+        // Links are directional, but affinity works both ways
+        node.affinity.push({
+          pos: to.pos,
+          weight: 10,
+        });
+        to.affinity.push({
+          pos: node.pos,
+          weight: 10,
+        });
+      }
+      for (let group of node.groups) {
+        for (let member of group.nodes) {
+          // Even stronger affinity for groups
+          // Other nodes will reference this one and take care of the full
+          // affinity mesh.
+          node.affinity.push({
+            pos: member.pos,
+            weight: 100,
+          });
+        }
+      }
+    }
+  }
+
   buildGrid() {
     this.grid_.innerHTML = '';
 
@@ -318,7 +351,31 @@ class Architype {
         ',minmax(0, calc((100vw - var(--editor-width)) / ' +
         this.graph_.size[0] + ')))';
 
-    // TODO: split this out
+    while (this.iterate());
+
+    this.drawGridNodes();
+  }
+
+  iterate() {
+    for (let node of this.graph_.nodes) {
+      let vecSum = [0, 0];
+      for (let aff of node.affinity) {
+        let vec = [aff.pos[0] - node.pos[0], aff.pos[1] - node.pos[1]];
+        let total = Math.abs(vec[0]) + Math.abs(vec[1]);
+        for (let i of [0, 1]) {
+          if (Math.abs(vec[i]) <= 1) {
+            // Adjacent
+            continue;
+          }
+          // We divide by total so far-away links don't pull harder
+          vecSum[i] += (vec[i] / total) * aff.weight;
+        }
+      }
+    }
+    return false;
+  }
+
+  drawGridNodes() {
     for (let node of this.graph_.nodes) {
       node.gridElem = document.createElement('div');
       node.gridElem.classList.add('gridNode');
@@ -755,6 +812,8 @@ class Node extends EditorEntryBase {
     super.clear();
     this.elem_.classList.remove('error');
     this.links = [];
+    this.groups = [];
+    this.affinity = [];
     this.pageRank = 0;
   }
 
