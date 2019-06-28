@@ -69,8 +69,8 @@ class Architype {
     // TODO: differentiate between value change and structure change
     localStorage.setItem('currentState', JSON.stringify(this.serialize()));
     this.graph_ = this.buildGraph();
-    this.buildGrid();
-    this.updateTargets();
+    this.buildGrid(this.graph_);
+    this.updateTargets(this.graph_);
   }
 
   onKeyDown(e) {
@@ -99,7 +99,7 @@ class Architype {
     navigator.clipboard.writeText(lines.join('\n'));
   }
 
-  updateTargets() {
+  updateTargets(graph) {
     // Lots of effort to avoid churning the datalist
 
     let curTargets = new Map();
@@ -107,7 +107,7 @@ class Architype {
       curTargets.set(option.value, option);
     }
 
-    for (let [label, entries] of this.graph_.nodesByLabel.entries()) {
+    for (let [label, entries] of graph.nodesByLabel.entries()) {
       if (curTargets.has(label)) {
         continue;
       }
@@ -123,7 +123,7 @@ class Architype {
     }
 
     for (let [label, option] of curTargets.entries()) {
-      if (this.graph_.nodesByLabel.has(label)) {
+      if (graph.nodesByLabel.has(label)) {
         continue;
       }
       option.remove();
@@ -148,7 +148,6 @@ class Architype {
     this.setPageRank(graph);
     this.bucketByPageRank(graph);
     this.setInitialPositions(graph);
-    this.fixOrigin(graph);
     this.setAffinity(graph);
     return graph;
   }
@@ -341,23 +340,25 @@ class Architype {
     }
   }
 
-  buildGrid() {
+  buildGrid(graph) {
+    while (this.iterate(graph));
+
+    this.fixOrigin(graph);
+
     this.grid_.innerHTML = '';
 
     this.grid_.style.gridTemplateColumns =
-        'repeat(' + this.graph_.size[0] + ',1fr)';
+        'repeat(' + graph.size[0] + ',1fr)';
     this.grid_.style.gridTemplateRows =
-        'repeat(' + this.graph_.size[1] +
+        'repeat(' + graph.size[1] +
         ',minmax(0, calc((100vw - var(--editor-width)) / ' +
-        this.graph_.size[0] + ')))';
+        graph.size[0] + ')))';
 
-    while (this.iterate());
-
-    this.drawGridNodes();
+    this.drawGridNodes(graph);
   }
 
-  iterate() {
-    for (let node of this.graph_.nodes) {
+  iterate(graph) {
+    for (let node of graph.nodes) {
       let vecSum = [0, 0];
       for (let aff of node.affinity) {
         let vec = [aff.pos[0] - node.pos[0], aff.pos[1] - node.pos[1]];
@@ -375,8 +376,8 @@ class Architype {
     return false;
   }
 
-  drawGridNodes() {
-    for (let node of this.graph_.nodes) {
+  drawGridNodes(graph) {
+    for (let node of graph.nodes) {
       node.gridElem = document.createElement('div');
       node.gridElem.classList.add('gridNode');
       this.grid_.appendChild(node.gridElem);
