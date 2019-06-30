@@ -134,6 +134,7 @@ class Architype {
     let graph = {
       nodesByLabel: new Map(),
       nodesByPageRank: new Map(),
+      nodesByPos: new Map(),
       groups: [],
       links: [],
       nodes: [],
@@ -281,12 +282,18 @@ class Architype {
   }
 
   setInitialPositions(graph) {
+    const SPACING = 4;
     let ranks = Array.from(graph.nodesByPageRank.keys());
     ranks.sort((a, b) => a - b);
     for (let r = 0; r < ranks.length; ++r) {
       let nodes = graph.nodesByPageRank.get(ranks[r]);
       for (let n = 0; n < nodes.length; ++n) {
-        nodes[n].pos = [r, 0 - Math.floor(nodes.length / 2) + n];
+        let node = nodes[n];
+        node.pos = [
+            r * SPACING,
+            0 - Math.floor((nodes.length / 2) * SPACING) + (n * SPACING),
+        ];
+        graph.nodesByPos.set(node.pos.toString(), node);
       }
     }
   }
@@ -314,30 +321,34 @@ class Architype {
 
   setAffinity(graph) {
     for (let node of graph.nodes) {
+      for (let other of graph.nodes) {
+        // Weak affinity full mesh
+        // Keep unassociated subgroups together
+        this.addAffinity(node, other, 1);
+      }
       for (let to of node.links) {
         // Stronger affinity for links
         // Links are directional, but affinity works both ways
-        node.affinity.push({
-          pos: to.pos,
-          weight: 10,
-        });
-        to.affinity.push({
-          pos: node.pos,
-          weight: 10,
-        });
+        this.addAffinity(node, to, 10);
+        this.addAffinity(to, node, 10);
       }
       for (let group of node.groups) {
         for (let member of group.nodes) {
           // Even stronger affinity for groups
           // Other nodes will reference this one and take care of the full
-          // affinity mesh.
-          node.affinity.push({
-            pos: member.pos,
-            weight: 100,
-          });
+          // group mesh
+          this.addAffinity(node, member, 100);
         }
       }
     }
+  }
+
+  addAffinity(node, other, weight) {
+    if (node == other) {
+      return;
+    }
+    let oldWeight = node.affinity.get(other) || 0;
+    node.affinity.set(other, oldWeight + weight);
   }
 
   buildGrid(graph) {
@@ -358,22 +369,61 @@ class Architype {
   }
 
   iterate(graph) {
+    this.sortByMostTension(graph.nodes);
     for (let node of graph.nodes) {
-      let vecSum = [0, 0];
-      for (let aff of node.affinity) {
-        let vec = [aff.pos[0] - node.pos[0], aff.pos[1] - node.pos[1]];
-        let total = Math.abs(vec[0]) + Math.abs(vec[1]);
-        for (let i of [0, 1]) {
-          if (Math.abs(vec[i]) <= 1) {
-            // Adjacent
-            continue;
-          }
-          // We divide by total so far-away links don't pull harder
-          vecSum[i] += (vec[i] / total) * aff.weight;
+      if (node.tension == 0) {
+        break;
+      }
+      // TODO: avoid duplicate evaluation if sign() returns 0
+      let offsets = [
+          [Math.sign(node.vec[0]), 0],
+          [0, Math.sign(node.vec[1])],
+          [Math.sign(node.vec[0]), Math.sign(node.vec[1])],
+      ];
+      let newPos = null;
+      let newTension = node.tension;
+      for (let offset of offsets) {
+        let testPos = [node.pos[0] + offset[0], node.pos[1] + offset[1]];
+        if (graph.nodesByPos.has(testPos.toString())) {
+          continue;
         }
+        let testVec = this.findVec(testPos, node.affinity);
+        let testTension = this.findTension(testVec);
+        if (testTension < newTension) {
+          newPos = testPos;
+          newTension = testTension;
+        }
+      }
+      if (newPos) {
+        graph.nodesByPos.delete(node.pos.toString());
+        node.pos = newPos;
+        graph.nodesByPos.set(node.pos.toString(), node);
+        return true;
       }
     }
     return false;
+  }
+
+  sortByMostTension(nodes) {
+    for (let node of nodes) {
+      node.vec = this.findVec(node.pos, node.affinity);
+      node.tension = this.findTension(node.vec);
+    }
+    nodes.sort((a, b) => b.tension - a.tension);
+  }
+
+  findVec(pos, affinity) {
+    let vec = [0, 0];
+    for (let [node, weight] of affinity.entries()) {
+      for (let i of [0, 1]) {
+        vec[i] += (node.pos[i] - pos[i]) * weight;
+      }
+    }
+    return vec;
+  }
+
+  findTension(vec) {
+    return Math.sqrt(Math.pow(vec[0], 2) + Math.pow(vec[1], 2));
   }
 
   drawGridNodes(graph) {
@@ -814,7 +864,7 @@ class Node extends EditorEntryBase {
     this.elem_.classList.remove('error');
     this.links = [];
     this.groups = [];
-    this.affinity = [];
+    this.affinity = new Map();
     this.pageRank = 0;
   }
 
