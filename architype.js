@@ -324,31 +324,33 @@ class Architype {
       for (let other of graph.nodes) {
         // Weak affinity full mesh
         // Keep unassociated subgroups together
-        this.addAffinity(node, other, 1);
+        this.addAffinity(node, other, d => d);
       }
       for (let to of node.links) {
         // Stronger affinity for links
         // Links are directional, but affinity works both ways
-        this.addAffinity(node, to, 10);
-        this.addAffinity(to, node, 10);
+        this.addAffinity(node, to, d => d * 10);
+        this.addAffinity(to, node, d => d * 10);
       }
       for (let group of node.groups) {
         for (let member of group.nodes) {
           // Even stronger affinity for groups
           // Other nodes will reference this one and take care of the full
           // group mesh
-          this.addAffinity(node, member, 100);
+          this.addAffinity(node, member, d => d * 100);
         }
       }
     }
   }
 
-  addAffinity(node, other, weight) {
+  addAffinity(node, other, func) {
     if (node == other) {
       return;
     }
-    let oldWeight = node.affinity.get(other) || 0;
-    node.affinity.set(other, oldWeight + weight);
+    node.affinity.push({
+      node: other,
+      distanceToWeight: func,
+    });
   }
 
   buildGrid(graph) {
@@ -414,9 +416,9 @@ class Architype {
 
   findVec(pos, affinity) {
     let vec = [0, 0];
-    for (let [node, weight] of affinity.entries()) {
+    for (let aff of affinity) {
       for (let i of [0, 1]) {
-        vec[i] += (node.pos[i] - pos[i]) * weight;
+        vec[i] += aff.distanceToWeight(aff.node.pos[i] - pos[i]);
       }
     }
     return vec;
@@ -864,7 +866,7 @@ class Node extends EditorEntryBase {
     this.elem_.classList.remove('error');
     this.links = [];
     this.groups = [];
-    this.affinity = new Map();
+    this.affinity = [];
     this.pageRank = 0;
   }
 
