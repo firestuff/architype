@@ -120,6 +120,8 @@ body {
   display: grid;
   align-items: center;
   justify-items: center;
+  align-content: center;
+  justify-content: center;
   margin: 10px;
 }
 
