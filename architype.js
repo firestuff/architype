@@ -32,11 +32,18 @@ class Architype {
     this.grid_.classList.add('grid');
     this.container_.appendChild(this.grid_);
 
-    this.observer_ = new MutationObserver(e => { this.onEdit(e); });
-    this.observer_.observe(editorElem, {
+    this.observeStructure_ = new MutationObserver(e => { this.onStructureChange(e); });
+    this.observeStructure_.observe(editorElem, {
+      attributes: true,
+      attributeFilter: ['data-struct-change'],
+      childList: true,
+      subtree: true,
+    });
+
+    this.observeContent_ = new MutationObserver(e => { this.onContentChange(e); });
+    this.observeContent_.observe(editorElem, {
       attributes: true,
       attributeFilter: ['data-arch-value'],
-      childList: true,
       subtree: true,
     });
 
@@ -66,10 +73,13 @@ class Architype {
     }
   }
 
-  onEdit(e) {
-    // TODO: differentiate between value change and structure change
-    localStorage.setItem('currentState', JSON.stringify(this.serialize()));
+  onStructureChange(e) {
     this.graph_ = this.buildGraph();
+    this.onContentChange(e);
+  }
+
+  onContentChange(e) {
+    localStorage.setItem('currentState', JSON.stringify(this.serialize()));
     this.buildGrid(this.graph_);
     this.updateTargets(this.graph_);
     this.fixSizes(this.graph_.nodes);
@@ -995,6 +1005,11 @@ class Node extends EditorEntryBase {
   }
 
   onInput() {
+    if (!this.input_.getAttribute('data-arch-value') ||
+        this.input_.value == '') {
+      console.log('struct change');
+      this.input_.setAttribute('data-struct-change', 'x');
+    }
     this.input_.setAttribute('data-arch-value', this.input_.value);
   }
 
