@@ -135,6 +135,7 @@ class Architype {
       nodesByLabel: new Map(),
       nodesByPageRank: new Map(),
       nodesByPos: new Map(),
+      nodesBySubgraph: new Map(),
       groups: [],
       links: [],
       nodes: [],
@@ -148,6 +149,7 @@ class Architype {
     this.manifestNodes(graph);
     this.setPageRank(graph);
     this.bucketByPageRank(graph);
+    this.bucketBySubgraph(graph);
     this.setInitialPositions(graph);
     this.setAffinity(graph);
     return graph;
@@ -278,6 +280,40 @@ class Architype {
     };
     for (let bucket of graph.nodesByPageRank.values()) {
       bucket.sort(cmp);
+    }
+  }
+
+  bucketBySubgraph(graph) {
+    let nodes = new Set();
+    let ranks = Array.from(graph.nodesByPageRank.keys());
+    ranks.sort((a, b) => a - b);
+    for (let rank of ranks) {
+      for (let node of graph.nodesByPageRank.get(rank)) {
+        nodes.add(node);
+      }
+    }
+    for (let subgraph = 0; nodes.size; ++subgraph) {
+      let node = nodes.values().next().value;
+      let subgraphArr = [];
+      graph.nodesBySubgraph.set(subgraph, subgraphArr);
+      this.recurseSubgraph(subgraph, subgraphArr, node, nodes);
+    }
+  }
+
+  recurseSubgraph(subgraph, subgraphArr, node, nodes) {
+    if (node.subgraph !== null) {
+      return;
+    }
+    node.subgraph = subgraph;
+    subgraphArr.push(node);
+    nodes.delete(node);
+    for (let to of node.links) {
+      this.recurseSubgraph(subgraph, subgraphArr, to, nodes);
+    }
+    for (let group of node.groups) {
+      for (let member of group.nodes) {
+        this.recurseSubgraph(subgraph, subgraphArr, member, nodes);
+      }
     }
   }
 
@@ -892,6 +928,7 @@ class Node extends EditorEntryBase {
     this.groups = [];
     this.affinity = [];
     this.pageRank = 0;
+    this.subgraph = null;
   }
 
   setError() {
