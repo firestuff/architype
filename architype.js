@@ -32,6 +32,8 @@ class Architype {
     this.grid_.classList.add('grid');
     this.container_.appendChild(this.grid_);
 
+    this.unserialize(JSON.parse(localStorage.getItem('currentState')));
+
     this.observeStructure_ = new MutationObserver(e => { this.onStructureChange(e); });
     this.observeStructure_.observe(editorElem, {
       attributes: true,
@@ -47,7 +49,7 @@ class Architype {
       subtree: true,
     });
 
-    this.unserialize(JSON.parse(localStorage.getItem('currentState')));
+    this.onStructureChange();
   }
 
   serialize() {
@@ -259,6 +261,17 @@ class Architype {
     for (let link of graph.links) {
       for (let to of link.to) {
         this.setPageRankInt(to, new Set());
+      }
+    }
+    for (let group of graph.groups) {
+      // All members of a group get the rank of the maximum member, so the
+      // initial positions will put them all near each other
+      let maxRank = 0;
+      for (let member of group.nodes) {
+        maxRank = Math.max(maxRank, member.pageRank);
+      }
+      for (let member of group.nodes) {
+        member.pageRank = maxRank;
       }
     }
   }
@@ -1007,7 +1020,6 @@ class Node extends EditorEntryBase {
   onInput() {
     if (!this.input_.getAttribute('data-arch-value') ||
         this.input_.value == '') {
-      console.log('struct change');
       this.input_.setAttribute('data-struct-change', 'x');
     }
     this.input_.setAttribute('data-arch-value', this.input_.value);
