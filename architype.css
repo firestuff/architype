@@ -1,15 +1,18 @@
-.google {
+.dark {
   --focus: #ff0000;
-  --node: #4285f4;
-  --group: #0f9d58;
-  --link: #dba100;
+  --nonfocus: #000000;
+  --node: #091d2a;
+  --group: #092a17;
+  --link: #331400;
   --text: #ffffff;
-  --border: #e3e3e3;
-  --placeholder: #bbbbbb;
+  --placeholder: rgba(255,255,255,0.2);
+  --outline: #323434;
+  --background: #000000;
+  --input: rgba(255,255,255,0.2);
 }
 
 :root {
-  --editor-width: 320px;
+  --editor-width: 305px;
 }
 
 body {
@@ -22,8 +25,11 @@ body {
 }
 
 .architype {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
+  background: var(--background);
+  color: var(--text);
   font-family: 'Courier', monospace;
 
   display: grid;
@@ -33,14 +39,12 @@ body {
 }
 
 .editor {
-  color: var(--text);
-
   list-style: none;
 
   margin: 0;
   padding: 0;
 
-  outline: 1px solid black;
+  outline: 1px solid var(--outline);
 
   height: 100%;
   width: 100%;
@@ -60,49 +64,40 @@ body {
   flex-wrap: wrap;
   white-space: pre;
 
-  box-sizing: border-box;
-  width: 100%;
   padding: 1px;
-  border: 5px solid;
-  outline: 1px solid black;
+  padding-left: 4px;
+  border-left: 10px solid var(--nonfocus);
+  outline: 1px solid var(--outline);
 
   cursor: default;
 }
 
 .editor li.node {
   background-color: var(--node);
-  border-color: var(--node);
-}
-
-.editor li.node.error {
-  background: repeating-linear-gradient(
-                  -45deg,
-                  rgba(255,255,255,0.15) 0 10px,
-                  rgba(0,0,0,0.15) 10px 20px),
-              var(--node);
 }
 
 .editor li.group {
   background-color: var(--group);
-  border-color: var(--group);
 }
 
 .editor li.link {
   background-color: var(--link);
-  border-color: var(--link);
 }
 .editor li:focus {
-  border-color: var(--focus) !important;
-  outline: none;
+  border-left: 10px solid var(--focus) !important;
 }
 
 .editor li input {
-  background-color: rgba(255,255,255,0.2);
-  border: 3px solid var(--border);
-  padding: 4px;
+  background-color: var(--input);
+  border: none;
+  padding: 2px;
+  padding-top: 3px;
+  padding-left: 3px;
+  margin: 2px;
+  margin-left: 5px;
   font-family: 'Courier', monospace;
   color: var(--text);
-  width: 200px;
+  width: 209px;
 }
 
 .editor li input::-webkit-input-placeholder {
@@ -110,12 +105,12 @@ body {
 }
 
 .editor li input:focus {
-  border-color: var(--focus);
+  border: var(--focus);
   outline: none;
 }
 
 .editor .editor {
-  margin: 5px;
+  margin: 3px;
 }
 
 .grid {

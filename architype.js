@@ -15,7 +15,7 @@ class Architype {
 
     this.container_.classList.add('architype');
     // TODO: make theme selectable
-    this.container_.classList.add('google');
+    this.container_.classList.add('dark');
 
     this.container_.addEventListener('keydown', (e) => { this.onKeyDown(e); });
 
@@ -905,7 +905,7 @@ class Node extends EditorEntryBase {
   constructor() {
     super();
 
-    this.elem_.innerText = 'Node:  ';
+    this.elem_.innerText = 'Node:';
     this.elem_.classList.add('node');
 
     this.input_ = document.createElement('input');
@@ -938,16 +938,11 @@ class Node extends EditorEntryBase {
 
   clear() {
     super.clear();
-    this.elem_.classList.remove('error');
     this.links = [];
     this.groups = [];
     this.affinity = [];
     this.pageRank = 0;
     this.subgraph = null;
-  }
-
-  setError() {
-    this.elem_.classList.add('error');
   }
 
   getLabel() {
@@ -1046,7 +1041,7 @@ class Group extends EditorEntryBase {
   constructor() {
     super();
 
-    this.elem_.innerText = 'Group: ';
+    this.elem_.innerText = 'Group:';
     this.elem_.classList.add('group');
 
     this.input_ = document.createElement('input');
@@ -1097,11 +1092,6 @@ class Group extends EditorEntryBase {
 
   clear() {
     super.clear();
-    this.elem_.classList.remove('error');
-  }
-
-  setError() {
-    this.elem_.classList.add('error');
   }
 
   getNodes() {
@@ -1195,7 +1185,7 @@ class Link extends EditorEntryBase {
   constructor() {
     super();
 
-    this.elem_.innerText = 'Link:  ';
+    this.elem_.innerText = 'Link:';
     this.elem_.classList.add('link');
 
     this.input_ = document.createElement('input');
@@ -1250,11 +1240,6 @@ class Link extends EditorEntryBase {
 
   clear() {
     super.clear();
-    this.elem_.classList.remove('error');
-  }
-
-  setError() {
-    this.elem_.classList.add('error');
   }
 
   getFrom() {
