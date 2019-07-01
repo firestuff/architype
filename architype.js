@@ -318,7 +318,13 @@ class Architype {
   }
 
   setInitialPositions(graph) {
-    const SPACING = 8;
+    const SPACING = 4;
+
+    let maxRankNodes = 0;
+    for (let nodes of graph.nodesByPageRank.values()) {
+      maxRankNodes = Math.max(maxRankNodes, nodes.length);
+    }
+
     let ranks = Array.from(graph.nodesByPageRank.keys());
     ranks.sort((a, b) => a - b);
     for (let r = 0; r < ranks.length; ++r) {
@@ -327,7 +333,8 @@ class Architype {
         let node = nodes[n];
         node.pos = [
             r * SPACING,
-            0 - Math.floor((nodes.length / 2) * SPACING) + (n * SPACING),
+            Math.floor((nodes.length / 2) * SPACING) + (n * SPACING) +
+                (node.subgraph * SPACING * maxRankNodes),
         ];
         graph.nodesByPos.set(node.pos.toString(), node);
       }
@@ -368,18 +375,18 @@ class Architype {
       }
       for (let to of node.links) {
         // Stronger affinity for links
-        // Links are directional, but affinity works both ways
-        this.addAffinity(node, to, d => d * 10);
-        this.addAffinity(to, node, d => d * 10);
+        // Prefer to move toward the target instance
+        this.addAffinity(node, to, d => d * 11);
+        this.addAffinity(to, node, d => d * 9);
       }
       for (let group of node.groups) {
-        let members = new Set(group.nodes);
         for (let member of group.nodes) {
           // Even stronger affinity for groups
           // Other nodes will reference this one and take care of the full
           // group mesh
           this.addAffinity(node, member, d => d * 100);
         }
+        let members = new Set(group.nodes);
         for (let other of graph.nodes) {
           if (members.has(other)) {
             continue;
