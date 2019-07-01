@@ -324,12 +324,13 @@ class Architype {
       for (let other of graph.nodes) {
         // Weak affinity full mesh
         // Keep unassociated subgroups together
-        this.addAffinityDir(node, other, d => d);
+        this.addAffinity(node, other, d => d);
       }
       for (let to of node.links) {
         // Stronger affinity for links
         // Links are directional, but affinity works both ways
         this.addAffinity(node, to, d => d * 10);
+        this.addAffinity(to, node, d => d * 10);
       }
       for (let group of node.groups) {
         let members = new Set(group.nodes);
@@ -337,25 +338,20 @@ class Architype {
           // Even stronger affinity for groups
           // Other nodes will reference this one and take care of the full
           // group mesh
-          this.addAffinityDir(node, member, d => d * 100);
+          this.addAffinity(node, member, d => d * 100);
         }
         for (let other of graph.nodes) {
           if (members.has(other)) {
             continue;
           }
-          // Repel nodes not in this group
-          this.addAffinity(node, other, d => d < 3 ? -50 : 0);
+          // Nodes not in this group run away
+          this.addAffinity(other, node, d => d < 1.5 ? -500 : 0);
         }
       }
     }
   }
 
   addAffinity(node, other, func) {
-    this.addAffinityDir(node, other, func);
-    this.addAffinityDir(other, node, func);
-  }
-
-  addAffinityDir(node, other, func) {
     if (node == other) {
       return;
     }
