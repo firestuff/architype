@@ -18,6 +18,7 @@ class Architype {
     this.container_.classList.add('dark');
 
     this.container_.addEventListener('keydown', (e) => { this.onKeyDown(e); });
+    this.container_.addEventListener('resize', (e) => { this.onResize(e); });
 
     let editorElem = document.createElement('ul');
     this.container_.appendChild(editorElem);
@@ -71,6 +72,7 @@ class Architype {
     this.graph_ = this.buildGraph();
     this.buildGrid(this.graph_);
     this.updateTargets(this.graph_);
+    this.fixSizes(this.graph_.nodes);
   }
 
   onKeyDown(e) {
@@ -79,6 +81,10 @@ class Architype {
         this.exportGraphviz();
         break;
     }
+  }
+
+  onResize(e) {
+    this.fixSizes(this.graph_.nodes);
   }
 
   exportGraphviz() {
@@ -511,6 +517,19 @@ class Architype {
       node.gridElem.innerText = node.getLabel();
       node.gridElem.style.gridColumn = node.pos[0] + 1;
       node.gridElem.style.gridRow = node.pos[1] + 1;
+    }
+  }
+
+  fixSizes(nodes) {
+    for (let node of nodes) {
+      let elem = node.gridElem;
+      let size = 16;
+      for (let size = 16;
+           size && (elem.scrollWidth > elem.clientWidth ||
+                    elem.scrollHeight > elem.clientHeight);
+           --size) {
+        elem.style.fontSize = size + 'px';
+      }
     }
   }
 }
