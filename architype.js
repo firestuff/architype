@@ -318,7 +318,7 @@ class Architype {
   }
 
   setInitialPositions(graph) {
-    const SPACING = 4;
+    const SPACING = 8;
     let ranks = Array.from(graph.nodesByPageRank.keys());
     ranks.sort((a, b) => a - b);
     for (let r = 0; r < ranks.length; ++r) {
@@ -361,6 +361,10 @@ class Architype {
         // Weak affinity full mesh
         // Keep unassociated subgroups together
         this.addAffinity(node, other, d => d);
+
+        if (node.subgraph != other.subgraph) {
+          this.addAffinity(node, other, d => d < 1.5 ? -10000 : 0);
+        }
       }
       for (let to of node.links) {
         // Stronger affinity for links
@@ -381,7 +385,7 @@ class Architype {
             continue;
           }
           // Nodes not in this group run away
-          this.addAffinity(other, node, d => d < 1.5 ? -500 : 0);
+          this.addAffinity(other, node, d => d < 1.5 ? -10000 : 0);
         }
       }
     }
@@ -420,13 +424,17 @@ class Architype {
     let newTension = this.getTotalTension(graph.nodes);
     for (let node of graph.nodes) {
       let origPos = node.pos;
-      // TODO: avoid duplicate evaluation if sign() returns 0
-      let offsets = [
-          [Math.sign(node.vec[0]), 0],
-          [0, Math.sign(node.vec[1])],
-          [Math.sign(node.vec[0]), Math.sign(node.vec[1])],
-      ];
-      for (let offset of offsets) {
+      let offsets = new Map();
+      let addOffset = (x, y) => {
+        if (!offsets.has([x, y].toString())) {
+          offsets.set([x, y].toString(), [x, y]);
+        }
+      };
+      for (let dir of [-1, 0, 1]) {
+        addOffset(Math.sign(node.vec[0]), dir);
+        addOffset(dir, Math.sign(node.vec[1]));
+      }
+      for (let offset of offsets.values()) {
         let testPos = [node.pos[0] + offset[0], node.pos[1] + offset[1]];
         if (graph.nodesByPos.has(testPos.toString())) {
           continue;
