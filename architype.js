@@ -18,7 +18,7 @@ class Architype {
     this.container_.classList.add('dark');
 
     this.container_.addEventListener('keydown', (e) => { this.onKeyDown(e); });
-    this.container_.addEventListener('resize', (e) => { this.onResize(e); });
+    addEventListener('resize', (e) => { this.onResize(e); });
 
     let editorElem = document.createElement('ul');
     this.container_.appendChild(editorElem);
@@ -524,6 +524,7 @@ class Architype {
     for (let node of nodes) {
       let elem = node.gridElem;
       let size = 16;
+      elem.style.fontSize = null;
       for (let size = 16;
            size && (elem.scrollWidth > elem.clientWidth ||
                     elem.scrollHeight > elem.clientHeight);

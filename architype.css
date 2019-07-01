@@ -129,6 +129,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 
   border-radius: 10px;
   padding: 3px;
