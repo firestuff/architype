@@ -324,26 +324,38 @@ class Architype {
       for (let other of graph.nodes) {
         // Weak affinity full mesh
         // Keep unassociated subgroups together
-        this.addAffinity(node, other, d => d);
+        this.addAffinityDir(node, other, d => d);
       }
       for (let to of node.links) {
         // Stronger affinity for links
         // Links are directional, but affinity works both ways
         this.addAffinity(node, to, d => d * 10);
-        this.addAffinity(to, node, d => d * 10);
       }
       for (let group of node.groups) {
+        let members = new Set(group.nodes);
         for (let member of group.nodes) {
           // Even stronger affinity for groups
           // Other nodes will reference this one and take care of the full
           // group mesh
-          this.addAffinity(node, member, d => d * 100);
+          this.addAffinityDir(node, member, d => d * 100);
+        }
+        for (let other of graph.nodes) {
+          if (members.has(other)) {
+            continue;
+          }
+          // Repel nodes not in this group
+          this.addAffinity(node, other, d => d < 3 ? -15 : 0);
         }
       }
     }
   }
 
   addAffinity(node, other, func) {
+    this.addAffinityDir(node, other, func);
+    this.addAffinityDir(other, node, func);
+  }
+
+  addAffinityDir(node, other, func) {
     if (node == other) {
       return;
     }
@@ -371,6 +383,7 @@ class Architype {
   }
 
   iterate(graph) {
+    // TODO: evaluate based on total graph tension, not per-node tension
     this.sortByMostTension(graph.nodes);
     for (let node of graph.nodes) {
       if (node.tension == 0) {
