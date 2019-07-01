@@ -650,6 +650,7 @@ class List {
     switch (e.key) {
       case 'Escape':
       case 'ArrowLeft':
+      case 'h':
         if (this.container_.parentElement.xArchObj) {
           this.container_.parentElement.focus();
         }
@@ -800,13 +801,13 @@ class Editor extends List {
         e.preventDefault();
         return;
 
-      case 'l':
+      case 'i':
         this.addLinkAfter();
         e.stopPropagation();
         e.preventDefault();
         return;
 
-      case 'L':
+      case 'I':
         this.addLinkBefore();
         e.stopPropagation();
         e.preventDefault();
@@ -1155,6 +1156,7 @@ class Group extends EditorEntryBase {
         break;
 
       case 'ArrowRight':
+      case 'l':
         this.nodes_.selectNext();
         break;
     }
@@ -1313,6 +1315,7 @@ class Link extends EditorEntryBase {
         break;
 
       case 'ArrowRight':
+      case 'l':
         this.nodes_.selectNext();
         break;
     }
