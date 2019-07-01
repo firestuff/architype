@@ -420,9 +420,10 @@ class Architype {
 
   iterate(graph) {
     this.sortByMostTension(graph.nodes);
-    let newPos = null;
-    let newTension = this.getTotalTension(graph.nodes);
     for (let node of graph.nodes) {
+      let newPos = null;
+      let newTension = node.tension;
+
       let origPos = node.pos;
       let offsets = new Map();
       let addOffset = (x, y) => {
@@ -439,9 +440,8 @@ class Architype {
         if (graph.nodesByPos.has(testPos.toString())) {
           continue;
         }
-        node.pos = testPos;
-        let testTension = this.getTotalTension(graph.nodes);
-        node.pos = origPos;
+        let testVec = this.findVec(testPos, node.affinity);
+        let testTension = this.findTension(testVec);
         if (testTension < newTension) {
           newPos = testPos;
           newTension = testTension;
