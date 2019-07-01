@@ -496,8 +496,7 @@ class Architype {
   getTotalTension(nodes) {
     let total = 0;
     for (let node of nodes) {
-      node.vec = this.findVec(node.pos, node.affinity);
-      node.tension = this.findTension(node.vec);
+      this.setTension(node);
       total += node.tension;
     }
     return total;
@@ -505,31 +504,27 @@ class Architype {
 
   sortByMostTension(nodes) {
     for (let node of nodes) {
-      node.vec = this.findVec(node.pos, node.affinity);
-      node.tension = this.findTension(node.vec);
+      this.setTension(node);
     }
     nodes.sort((a, b) => b.tension - a.tension);
   }
 
-  findVec(pos, affinity) {
-    let totalVec = [0, 0];
-    for (let aff of affinity) {
+  setTension(node) {
+    node.vec = [0, 0];
+    node.tension = 0;
+    for (let aff of node.affinity) {
       let vec = [], vecsum = 0;
       for (let i of [0, 1]) {
-        vec[i] = aff.node.pos[i] - pos[i];
+        vec[i] = aff.node.pos[i] - node.pos[i];
         vecsum += Math.abs(vec[i]);
       };
       let distance = Math.sqrt(Math.pow(vec[0], 2) + Math.pow(vec[1], 2));
       let weight = aff.distanceToWeight(distance);
       for (let i of [0, 1]) {
-        totalVec[i] += (weight * vec[i]) / vecsum;
+        node.vec[i] += (weight * vec[i]) / vecsum;
       }
+      node.tension += Math.abs(weight);
     }
-    return totalVec;
-  }
-
-  findTension(vec) {
-    return Math.abs(vec[0]) + Math.abs(vec[1]);
   }
 
   drawGridNodes(graph) {
