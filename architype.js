@@ -392,6 +392,7 @@ class Architype {
   }
 
   setAffinity(graph) {
+    const INF = 999999;
     for (let node of graph.nodes) {
       for (let other of graph.nodes) {
         // Weak affinity full mesh
@@ -399,14 +400,14 @@ class Architype {
         this.addAffinity(node, other, d => d);
 
         if (node.subgraph != other.subgraph) {
-          this.addAffinity(node, other, d => d < 1.5 ? -10000 : 0);
+          this.addAffinity(node, other, d => d < 1.5 ? -INF : 0);
         }
       }
       for (let to of node.links) {
         // Stronger affinity for links
         // Prefer to move toward the target instance
-        this.addAffinity(node, to, d => d * 11);
-        this.addAffinity(to, node, d => d * 9);
+        this.addAffinity(node, to, d => d < 1.5 ? -INF : d * 11);
+        this.addAffinity(to, node, d => d < 1.5 ? -INF : d * 9);
       }
       for (let group of node.groups) {
         for (let member of group.nodes) {
@@ -421,7 +422,7 @@ class Architype {
             continue;
           }
           // Nodes not in this group run away
-          this.addAffinity(other, node, d => d < 1.5 ? -10000 : 0);
+          this.addAffinity(other, node, d => d < 1.5 ? -INF : 0);
         }
       }
     }
