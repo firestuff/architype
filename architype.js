@@ -344,7 +344,7 @@ class Architype {
             continue;
           }
           // Repel nodes not in this group
-          this.addAffinity(node, other, d => d < 3 ? -15 : 0);
+          this.addAffinity(node, other, d => d < 3 ? -50 : 0);
         }
       }
     }
@@ -383,27 +383,25 @@ class Architype {
   }
 
   iterate(graph) {
-    // TODO: evaluate based on total graph tension, not per-node tension
     this.sortByMostTension(graph.nodes);
+    let newPos = null;
+    let newTension = this.getTotalTension(graph.nodes);
     for (let node of graph.nodes) {
-      if (node.tension == 0) {
-        break;
-      }
+      let origPos = node.pos;
       // TODO: avoid duplicate evaluation if sign() returns 0
       let offsets = [
           [Math.sign(node.vec[0]), 0],
           [0, Math.sign(node.vec[1])],
           [Math.sign(node.vec[0]), Math.sign(node.vec[1])],
       ];
-      let newPos = null;
-      let newTension = node.tension;
       for (let offset of offsets) {
         let testPos = [node.pos[0] + offset[0], node.pos[1] + offset[1]];
         if (graph.nodesByPos.has(testPos.toString())) {
           continue;
         }
-        let testVec = this.findVec(testPos, node.affinity);
-        let testTension = this.findTension(testVec);
+        node.pos = testPos;
+        let testTension = this.getTotalTension(graph.nodes);
+        node.pos = origPos;
         if (testTension < newTension) {
           newPos = testPos;
           newTension = testTension;
@@ -419,6 +417,16 @@ class Architype {
     return false;
   }
 
+  getTotalTension(nodes) {
+    let total = 0;
+    for (let node of nodes) {
+      node.vec = this.findVec(node.pos, node.affinity);
+      node.tension = this.findTension(node.vec);
+      total += node.tension;
+    }
+    return total;
+  }
+
   sortByMostTension(nodes) {
     for (let node of nodes) {
       node.vec = this.findVec(node.pos, node.affinity);
@@ -428,17 +436,24 @@ class Architype {
   }
 
   findVec(pos, affinity) {
-    let vec = [0, 0];
+    let totalVec = [0, 0];
     for (let aff of affinity) {
+      let vec = [], vecsum = 0;
       for (let i of [0, 1]) {
-        vec[i] += aff.distanceToWeight(aff.node.pos[i] - pos[i]);
+        vec[i] = aff.node.pos[i] - pos[i];
+        vecsum += Math.abs(vec[i]);
+      };
+      let distance = Math.sqrt(Math.pow(vec[0], 2) + Math.pow(vec[1], 2));
+      let weight = aff.distanceToWeight(distance);
+      for (let i of [0, 1]) {
+        totalVec[i] += (weight * vec[i]) / vecsum;
       }
     }
-    return vec;
+    return totalVec;
   }
 
   findTension(vec) {
-    return Math.sqrt(Math.pow(vec[0], 2) + Math.pow(vec[1], 2));
+    return Math.abs(vec[0]) + Math.abs(vec[1]);
   }
 
   drawGridNodes(graph) {
