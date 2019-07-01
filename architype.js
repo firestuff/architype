@@ -170,6 +170,10 @@ class Architype {
     this.bucketBySubgraph(graph);
     this.setInitialPositions(graph);
     this.setAffinity(graph);
+
+    while (this.iterate(graph));
+    this.fixOrigin(graph);
+
     return graph;
   }
 
@@ -439,10 +443,6 @@ class Architype {
   }
 
   buildGrid(graph) {
-    while (this.iterate(graph));
-
-    this.fixOrigin(graph);
-
     this.grid_.innerHTML = '';
 
     this.grid_.style.gridTemplateColumns =
