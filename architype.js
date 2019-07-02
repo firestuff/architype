@@ -456,10 +456,13 @@ class Architype {
   }
 
   iterate(graph) {
-    this.sortByMostTension(graph.nodes);
+    let nodes = Array.from(graph.nodes);
+    this.sortByMostTension(nodes);
+    nodes.push(...graph.groups);
+
     let newOffset = null;
-    let newTension = this.getTotalTension(graph.nodes);
-    for (let node of graph.nodes) {
+    let newTension = this.getTotalTension(nodes);
+    for (let node of nodes) {
       let origPos = node.pos;
       let offsets = new Map();
       let addOffset = (x, y) => {
@@ -477,7 +480,7 @@ class Architype {
         }
         node.savePos();
         node.moveBy(graph, offset);
-        let testTension = this.getTotalTension(graph.nodes);
+        let testTension = this.getTotalTension(nodes);
         node.restorePos(graph);
         if (testTension < newTension) {
           newOffset = offset;
@@ -1019,7 +1022,7 @@ class Node extends EditorEntryBase {
 
   offsetCollides(graph, offset) {
     let newPos = this.offsetToPos(offset);
-    return graph.nodesByPos.has(newPos.toString());
+    return graph.nodesByPos.get(newPos.toString());
   }
 
   moveBy(graph, offset) {
@@ -1182,6 +1185,55 @@ class Group extends EditorEntryBase {
 
   getElement() {
     return this.elem_;
+  }
+
+  setTension() {
+    this.vec = [0, 0];
+    this.tension = 0;
+    for (let node of this.nodes) {
+      node.setTension();
+      for (let i of [0, 1]) {
+        this.vec[i] += node.vec[i];
+      };
+      this.tension += node.tension;
+    }
+  }
+
+  offsetCollides(graph, offset) {
+    // TODO: make this.nodes always a set
+    let nodeSet = new Set(this.nodes);
+    for (let node of this.nodes) {
+      let other = node.offsetCollides(graph, offset);
+      if (other && !nodeSet.has(other)) {
+        return other;
+      }
+    }
+    return null;
+  }
+
+  savePos() {
+    for (let node of this.nodes) {
+      node.savePos();
+    }
+  }
+
+  restorePos(graph) {
+    for (let node of this.nodes) {
+      node.restorePos(graph);
+    }
+  }
+
+  moveBy(graph, offset) {
+    let nodes = new Set(this.nodes);
+    while (nodes.size) {
+      for (let node of nodes) {
+        if (node.offsetCollides(graph, offset)) {
+          continue;
+        }
+        node.moveBy(graph, offset);
+        nodes.delete(node);
+      }
+    }
   }
 
   onInputKeyDown(e) {
