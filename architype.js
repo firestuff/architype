@@ -364,12 +364,12 @@ class Architype {
       let nodes = graph.nodesByPageRank.get(ranks[r]);
       for (let n = 0; n < nodes.length; ++n) {
         let node = nodes[n];
-        node.pos = [
+        let pos = [
             r * SPACING,
             Math.floor((nodes.length / 2) * SPACING) + (n * SPACING) +
                 (node.subgraph * SPACING * maxRankNodes),
         ];
-        graph.nodesByPos.set(node.pos.toString(), node);
+        node.moveTo(graph, pos);
       }
     }
   }
@@ -485,9 +485,7 @@ class Architype {
         }
       }
       if (newPos) {
-        graph.nodesByPos.delete(node.pos.toString());
-        node.pos = newPos;
-        graph.nodesByPos.set(node.pos.toString(), node);
+        node.moveTo(graph, newPos);
         return true;
       }
     }
@@ -497,7 +495,7 @@ class Architype {
   getTotalTension(nodes) {
     let total = 0;
     for (let node of nodes) {
-      this.setTension(node);
+      node.setTension();
       total += node.tension;
     }
     return total;
@@ -505,27 +503,9 @@ class Architype {
 
   sortByMostTension(nodes) {
     for (let node of nodes) {
-      this.setTension(node);
+      node.setTension();
     }
     nodes.sort((a, b) => b.tension - a.tension);
-  }
-
-  setTension(node) {
-    node.vec = [0, 0];
-    node.tension = 0;
-    for (let aff of node.affinity) {
-      let vec = [], vecsum = 0;
-      for (let i of [0, 1]) {
-        vec[i] = aff.node.pos[i] - node.pos[i];
-        vecsum += Math.abs(vec[i]);
-      };
-      let distance = Math.sqrt(Math.pow(vec[0], 2) + Math.pow(vec[1], 2));
-      let weight = aff.distanceToWeight(distance);
-      for (let i of [0, 1]) {
-        node.vec[i] += (weight * vec[i]) / vecsum;
-      }
-      node.tension += Math.abs(weight);
-    }
   }
 
   drawGridNodes(graph) {
@@ -1010,6 +990,32 @@ class Node extends EditorEntryBase {
       }
     }
     return false;
+  }
+
+  setTension() {
+    this.vec = [0, 0];
+    this.tension = 0;
+    for (let aff of this.affinity) {
+      let vec = [], vecsum = 0;
+      for (let i of [0, 1]) {
+        vec[i] = aff.node.pos[i] - this.pos[i];
+        vecsum += Math.abs(vec[i]);
+      };
+      let distance = Math.sqrt(Math.pow(vec[0], 2) + Math.pow(vec[1], 2));
+      let weight = aff.distanceToWeight(distance);
+      for (let i of [0, 1]) {
+        this.vec[i] += (weight * vec[i]) / vecsum;
+      }
+      this.tension += Math.abs(weight);
+    }
+  }
+
+  moveTo(graph, pos) {
+    if (this.pos) {
+      graph.nodesByPos.delete(this.pos.toString());
+    }
+    this.pos = pos;
+    graph.nodesByPos.set(this.pos.toString(), this);
   }
 
   onInput() {
