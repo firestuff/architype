@@ -458,7 +458,12 @@ class Architype {
   iterate(graph) {
     let nodes = Array.from(graph.nodes);
     this.sortByMostTension(nodes);
-    nodes.push(...graph.groups);
+    for (let group of graph.groups) {
+      nodes.push(group.getCollection());
+    }
+    for (let subgraph of graph.nodesBySubgraph.values()) {
+      nodes.push(new Collection(subgraph));
+    }
 
     let newOffset = null;
     let newTension = this.getTotalTension(nodes);
@@ -1057,7 +1062,6 @@ class Node extends EditorEntryBase {
     switch (e.key) {
       case 'Enter':
         e.stopPropagation();
-        e.preventDefault();
         if (this.elem_.nextElementSibling &&
             this.elem_.nextElementSibling.xArchObj &&
             this.elem_.nextElementSibling.xArchObj.wantFocus()) {
@@ -1069,7 +1073,6 @@ class Node extends EditorEntryBase {
 
       case 'Escape':
         e.stopPropagation();
-        e.preventDefault();
         this.stopEdit();
         break;
 
@@ -1110,6 +1113,61 @@ class Node extends EditorEntryBase {
     let node = new Node();
     node.setLabel(ser.label);
     return node.getElement();
+  }
+}
+
+class Collection {
+  constructor(nodes) {
+    this.nodes = nodes;
+  }
+
+  setTension() {
+    this.vec = [0, 0];
+    this.tension = 0;
+    for (let node of this.nodes) {
+      node.setTension();
+      for (let i of [0, 1]) {
+        this.vec[i] += node.vec[i];
+      };
+      this.tension += node.tension;
+    }
+  }
+
+  offsetCollides(graph, offset) {
+    // TODO: make this.nodes always a set
+    let nodeSet = new Set(this.nodes);
+    for (let node of this.nodes) {
+      let other = node.offsetCollides(graph, offset);
+      if (other && !nodeSet.has(other)) {
+        return other;
+      }
+    }
+    return null;
+  }
+
+  savePos() {
+    for (let node of this.nodes) {
+      node.savePos();
+    }
+  }
+
+  restorePos(graph) {
+    for (let node of this.nodes) {
+      node.restorePos(graph);
+    }
+  }
+
+  moveBy(graph, offset) {
+    let nodes = new Set(this.nodes);
+    while (nodes.size) {
+      for (let node of nodes) {
+        if (node.offsetCollides(graph, offset)) {
+          continue;
+        }
+        node.moveBy(graph, offset);
+        nodes.delete(node);
+      }
+    }
   }
 }
 
@@ -1187,53 +1245,8 @@ class Group extends EditorEntryBase {
     return this.elem_;
   }
 
-  setTension() {
-    this.vec = [0, 0];
-    this.tension = 0;
-    for (let node of this.nodes) {
-      node.setTension();
-      for (let i of [0, 1]) {
-        this.vec[i] += node.vec[i];
-      };
-      this.tension += node.tension;
-    }
-  }
-
-  offsetCollides(graph, offset) {
-    // TODO: make this.nodes always a set
-    let nodeSet = new Set(this.nodes);
-    for (let node of this.nodes) {
-      let other = node.offsetCollides(graph, offset);
-      if (other && !nodeSet.has(other)) {
-        return other;
-      }
-    }
-    return null;
-  }
-
-  savePos() {
-    for (let node of this.nodes) {
-      node.savePos();
-    }
-  }
-
-  restorePos(graph) {
-    for (let node of this.nodes) {
-      node.restorePos(graph);
-    }
-  }
-
-  moveBy(graph, offset) {
-    let nodes = new Set(this.nodes);
-    while (nodes.size) {
-      for (let node of nodes) {
-        if (node.offsetCollides(graph, offset)) {
-          continue;
-        }
-        node.moveBy(graph, offset);
-        nodes.delete(node);
-      }
-    }
+  getCollection() {
+    return new Collection(this.nodes);
   }
 
   onInputKeyDown(e) {
