@@ -1,0 +1,141 @@
+<svg version="1.1"
+     baseProfile="full"
+     width="100"
+     height="100"
+     viewBox="0 0 100 100"
+     preserveAspectRatio="none"
+     xmlns="http://www.w3.org/2000/svg">
+  <style>
+/* <![CDATA[ */
+.s0 #s0 { visibility: visible; }
+.s1 #s1 { visibility: visible; }
+.s2 #s2 { visibility: visible; }
+.s3 #s3 { visibility: visible; }
+.s4 #s4 { visibility: visible; }
+.s5 #s5 { visibility: visible; }
+.s6 #s6 { visibility: visible; }
+.s7 #s7 { visibility: visible; }
+
+.i0o1 #i0o1 { visibility: visible; }
+.i0o2 #i0o2 { visibility: visible; }
+.i0o3 #i0o3 { visibility: visible; }
+.i0o4 #i0o4 { visibility: visible; }
+.i0o5 #i0o5 { visibility: visible; }
+.i0o6 #i0o6 { visibility: visible; }
+.i0o7 #i0o7 { visibility: visible; }
+
+.i1o0 #i0o1 { visibility: visible; }
+.i1o2 #i1o2 { visibility: visible; }
+.i1o3 #i1o3 { visibility: visible; }
+.i1o4 #i1o4 { visibility: visible; }
+.i1o5 #i1o5 { visibility: visible; }
+.i1o6 #i1o6 { visibility: visible; }
+.i1o7 #i1o7 { visibility: visible; }
+
+.i2o0 #i0o2 { visibility: visible; }
+.i2o1 #i1o2 { visibility: visible; }
+.i2o3 #i2o3 { visibility: visible; }
+.i2o4 #i2o4 { visibility: visible; }
+.i2o5 #i2o5 { visibility: visible; }
+.i2o6 #i2o6 { visibility: visible; }
+.i2o7 #i2o7 { visibility: visible; }
+
+.i3o0 #i0o3 { visibility: visible; }
+.i3o1 #i1o3 { visibility: visible; }
+.i3o2 #i2o3 { visibility: visible; }
+.i3o4 #i3o4 { visibility: visible; }
+.i3o5 #i3o5 { visibility: visible; }
+.i3o6 #i3o6 { visibility: visible; }
+.i3o7 #i3o7 { visibility: visible; }
+
+.i4o0 #i0o4 { visibility: visible; }
+.i4o1 #i1o4 { visibility: visible; }
+.i4o2 #i2o4 { visibility: visible; }
+.i4o3 #i3o4 { visibility: visible; }
+.i4o5 #i4o5 { visibility: visible; }
+.i4o6 #i4o6 { visibility: visible; }
+.i4o7 #i4o7 { visibility: visible; }
+
+.i5o0 #i0o5 { visibility: visible; }
+.i5o1 #i1o5 { visibility: visible; }
+.i5o2 #i2o5 { visibility: visible; }
+.i5o3 #i3o5 { visibility: visible; }
+.i5o4 #i4o5 { visibility: visible; }
+.i5o6 #i5o6 { visibility: visible; }
+.i5o7 #i5o7 { visibility: visible; }
+
+.i6o0 #i0o6 { visibility: visible; }
+.i6o1 #i1o6 { visibility: visible; }
+.i6o2 #i2o6 { visibility: visible; }
+.i6o3 #i3o6 { visibility: visible; }
+.i6o4 #i4o6 { visibility: visible; }
+.i6o5 #i5o6 { visibility: visible; }
+.i6o7 #i6o7 { visibility: visible; }
+
+.i7o0 #i0o7 { visibility: visible; }
+.i7o1 #i1o7 { visibility: visible; }
+.i7o2 #i2o7 { visibility: visible; }
+.i7o3 #i3o7 { visibility: visible; }
+.i7o4 #i4o7 { visibility: visible; }
+.i7o5 #i5o7 { visibility: visible; }
+.i7o6 #i6o7 { visibility: visible; }
+
+.white path {
+  stroke: white;
+}
+
+path {
+  stroke: black;
+  stroke-width: 2;
+  fill: transparent;
+  visibility: hidden;
+}
+    /* ]]> */
+  </style>
+
+  <!-- Stop in the middle lines -->
+  <path id="s0" d="M  50,0    L 50 50" />
+  <path id="s1" d="M 100,0    L 50,50" />
+  <path id="s2" d="M 100,50   L 50,50" />
+  <path id="s3" d="M 100,100  L 50,50" />
+  <path id="s4" d="M  50,100  L 50,50" />
+  <path id="s5" d="M   0,100  L 50,50" />
+  <path id="s6" d="M   0,50   L 50,50" />
+  <path id="s7" d="M   0,0    L 50,50" />
+
+  <!-- Point to point links -->
+  <path id="i0o1" d="M  50,0    Q 50,50 100,0  " />
+  <path id="i0o2" d="M  50,0    Q 50,50 100,50 " />
+  <path id="i0o3" d="M  50,0    Q 50,50 100,100" />
+  <path id="i0o4" d="M  50,0    Q 50,50  50,100" />
+  <path id="i0o5" d="M  50,0    Q 50,50   0,100" />
+  <path id="i0o6" d="M  50,0    Q 50,50   0,50 " />
+  <path id="i0o7" d="M  50,0    Q 50,50   0,0  " />
+
+  <path id="i1o2" d="M 100,0    Q 50,50 100,50 " />
+  <path id="i1o3" d="M 100,0    Q 50,50 100,100" />
+  <path id="i1o4" d="M 100,0    Q 50,50  50,100" />
+  <path id="i1o5" d="M 100,0    Q 50,50   0,100" />
+  <path id="i1o6" d="M 100,0    Q 50,50   0,50 " />
+  <path id="i1o7" d="M 100,0    Q 50,50   0,0  " />
+
+  <path id="i2o3" d="M 100,50   Q 50,50 100,100" />
+  <path id="i2o4" d="M 100,50   Q 50,50  50,100" />
+  <path id="i2o5" d="M 100,50   Q 50,50   0,100" />
+  <path id="i2o6" d="M 100,50   Q 50,50   0,50 " />
+  <path id="i2o7" d="M 100,50   Q 50,50   0,0  " />
+
+  <path id="i3o4" d="M 100,100  Q 50,50  50,100" />
+  <path id="i3o5" d="M 100,100  Q 50,50   0,100" />
+  <path id="i3o6" d="M 100,100  Q 50,50   0,50 " />
+  <path id="i3o7" d="M 100,100  Q 50,50   0,0  " />
+
+  <path id="i4o5" d="M  50,100  Q 50,50   0,100" />
+  <path id="i4o6" d="M  50,100  Q 50,50   0,50 " />
+  <path id="i4o7" d="M  50,100  Q 50,50   0,0  " />
+
+  <path id="i5o6" d="M   0,100  Q 50,50   0,50 " />
+  <path id="i5o7" d="M   0,100  Q 50,50   0,0  " />
+
+  <path id="i6o7" d="M   0,50   Q 50,50   0,0  " />
+</svg>

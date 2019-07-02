@@ -28,6 +28,12 @@ class Architype {
     this.targets_.id = 'arch-targets';
     this.container_.appendChild(this.targets_);
 
+    this.lines_ = document.createElement('div');
+    this.lines_.innerHTML = `<!--# include file="lines.svg" -->`;
+    this.lines_ = this.lines_.firstElementChild;
+    this.lines_.classList.add('gridLines');
+    this.lines_.classList.add('white');
+
     this.grid_ = document.createElement('div');
     this.grid_.classList.add('grid');
     this.container_.appendChild(this.grid_);
@@ -42,6 +48,7 @@ class Architype {
       subtree: true,
     });
 
+    // TODO: handle case when value change alters link graph
     this.observeContent_ = new MutationObserver(e => { this.onContentChange(e); });
     this.observeContent_.observe(editorElem, {
       attributes: true,
@@ -453,6 +460,15 @@ class Architype {
         graph.size[0] + ')))';
 
     this.drawGridNodes(graph);
+  }
+
+  addLines(pos, cls) {
+    let lines = this.lines_.cloneNode(true);
+    lines.classList.add(cls);
+    lines.style.gridColumn = pos[0] + 1;
+    lines.style.gridRow = pos[1] + 1;
+    this.grid_.appendChild(lines);
+    return lines;
   }
 
   iterate(graph) {
