@@ -457,7 +457,7 @@ class Architype {
 
   iterate(graph) {
     this.sortByMostTension(graph.nodes);
-    let newPos = null;
+    let newOffset = null;
     let newTension = this.getTotalTension(graph.nodes);
     for (let node of graph.nodes) {
       let origPos = node.pos;
@@ -472,20 +472,20 @@ class Architype {
         addOffset(dir, Math.sign(node.vec[1]));
       }
       for (let offset of offsets.values()) {
-        let testPos = [node.pos[0] + offset[0], node.pos[1] + offset[1]];
-        if (graph.nodesByPos.has(testPos.toString())) {
+        if (node.offsetCollides(graph, offset)) {
           continue;
         }
-        node.pos = testPos;
+        node.savePos();
+        node.moveBy(graph, offset);
         let testTension = this.getTotalTension(graph.nodes);
-        node.pos = origPos;
+        node.restorePos(graph);
         if (testTension < newTension) {
-          newPos = testPos;
+          newOffset = offset;
           newTension = testTension;
         }
       }
-      if (newPos) {
-        node.moveTo(graph, newPos);
+      if (newOffset) {
+        node.moveBy(graph, newOffset);
         return true;
       }
     }
@@ -1010,12 +1010,36 @@ class Node extends EditorEntryBase {
     }
   }
 
+  offsetToPos(offset) {
+    return [
+        this.pos[0] + offset[0],
+        this.pos[1] + offset[1],
+    ];
+  }
+
+  offsetCollides(graph, offset) {
+    let newPos = this.offsetToPos(offset);
+    return graph.nodesByPos.has(newPos.toString());
+  }
+
+  moveBy(graph, offset) {
+    this.moveTo(graph, this.offsetToPos(offset));
+  }
+
   moveTo(graph, pos) {
     if (this.pos) {
       graph.nodesByPos.delete(this.pos.toString());
     }
     this.pos = pos;
     graph.nodesByPos.set(this.pos.toString(), this);
+  }
+
+  savePos() {
+    this.savedPos = this.pos;
+  }
+
+  restorePos(graph) {
+    this.moveTo(graph, this.savedPos);
   }
 
   onInput() {
