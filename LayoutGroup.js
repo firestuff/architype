@@ -9,7 +9,6 @@ class LayoutGroup {
     // tension
     this.vec = [0, 0];
     for (let node of this.nodes.values()) {
-      node.setTension();
       for (let i of [0, 1]) {
         this.vec[i] += node.vec[i];
       };

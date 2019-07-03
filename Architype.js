@@ -77,7 +77,7 @@ class Architype {
   }
 
   onResize(e) {
-    this.fixSizes(this.graph_.nodes);
+    this.fixSizes();
   }
 
   exportGraphviz() {

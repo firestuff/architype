@@ -50,19 +50,19 @@ class GraphNode {
 
       // Keep one space between subgraphs
       if (this.subgraph != node.subgraph) {
-        this.addAffinity(node, d => d < 1.5 ? -INF : 0);
+        this.addAffinity(node, d => d <= 2 ? -INF : 0);
       }
 
       // Keep one space around groups
       if (this.groups.size && !intersects(this.groups, node.groups)) {
-        node.addAffinity(this, d => d < 1.5 ? -INF : 0);
+        node.addAffinity(this, d => d <= 2 ? -INF : 0);
       }
     }
     for (let to of this.links) {
       // Stronger affinity for links
       // Prefer to move toward the target instance
-      this.addAffinity(to, d => d < 1.5 ? -INF : d * 11);
-      to.addAffinity(this, d => d < 1.5 ? -INF : d * 9);
+      this.addAffinity(to, d => d <= 2 ? -INF : d * 11);
+      to.addAffinity(this, d => d <= 2 ? -INF : d * 9);
     }
     for (let group of this.groups.values()) {
       for (let node of group.nodes) {

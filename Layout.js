@@ -67,9 +67,14 @@ class Layout {
 
   iterate() {
     let objects = Array.from(this.nodes_);
-    objects.push(...this.groups_);
     this.setTension(objects);
     this.sortByMostTension(objects);
+    for (let group of this.groups_) {
+      // Groups go in the list after nodes, and nodes must have tension set
+      // properly first.
+      group.setTension();
+      objects.push(group);
+    }
 
     let newOffset = null;
     let newTension = this.getTotalTension(objects);
