@@ -99,8 +99,6 @@ class Architype {
   }
 
   draw(steps) {
-    console.log(steps);
-
     this.grid_.innerHTML = '';
     this.gridNodes_ = [];
 
@@ -133,6 +131,7 @@ class Architype {
     node.innerText = label;
     node.style.gridColumn = pos[0] + 1;
     node.style.gridRow = pos[1] + 1;
+    this.gridNodes_.push(node);
   }
 
   fixSizes() {

@@ -90,6 +90,7 @@ class Layout {
         }
         obj.savePos();
         obj.moveBy(offset);
+        this.setTension(objects);
         let testTension = this.getTotalTension(objects);
         obj.restorePos();
         if (testTension < newTension) {
