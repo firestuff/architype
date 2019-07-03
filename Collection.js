@@ -1,12 +1,12 @@
 class Collection {
   constructor(nodes) {
-    this.nodes = nodes;
+    this.nodes = new Set(nodes);
   }
 
   setTension() {
     this.vec = [0, 0];
     this.tension = 0;
-    for (let node of this.nodes) {
+    for (let node of this.nodes.values()) {
       node.setTension();
       for (let i of [0, 1]) {
         this.vec[i] += node.vec[i];
@@ -16,11 +16,9 @@ class Collection {
   }
 
   offsetCollides(graph, offset) {
-    // TODO: make this.nodes always a set
-    let nodeSet = new Set(this.nodes);
-    for (let node of this.nodes) {
+    for (let node of this.nodes.values()) {
       let other = node.offsetCollides(graph, offset);
-      if (other && !nodeSet.has(other)) {
+      if (other && !this.nodes.has(other)) {
         return other;
       }
     }
@@ -28,19 +26,19 @@ class Collection {
   }
 
   savePos() {
-    for (let node of this.nodes) {
+    for (let node of this.nodes.values()) {
       node.savePos();
     }
   }
 
   restorePos(graph) {
-    for (let node of this.nodes) {
+    for (let node of this.nodes.values()) {
       node.restorePos(graph);
     }
   }
 
   moveBy(graph, offset) {
-    let nodes = new Set(this.nodes);
+    let nodes = new Set(this.nodes.values());
     while (nodes.size) {
       for (let node of nodes) {
         if (node.offsetCollides(graph, offset)) {
