@@ -26,11 +26,15 @@ class Architype {
     this.container_.appendChild(this.grid_);
 
     this.generation_ = 0;
+    this.renderGeneration_ = -1;
     this.drawGeneration_ = -1;
 
-    this.render_ = new Worker('render.js');
-    this.render_.addEventListener('message', (e) => { this.onRender(e); });
-    this.renderPending_ = false;
+    this.render_ = [];
+    for (let i = 0; i < navigator.hardwareConcurrency; ++i) {
+      let render = new Worker('render.js');
+      render.addEventListener('message', (e) => { this.onRender(e); });
+      this.render_.push(render);
+    }
 
     this.unserialize(JSON.parse(localStorage.getItem('currentState')));
 
@@ -48,7 +52,7 @@ class Architype {
   serialize() {
     return {
       version: 1,
-      generation: this.generation_,
+      generation: ++this.generation_,
       editor: this.editor_.serialize(),
     };
   }
@@ -71,33 +75,38 @@ class Architype {
   }
 
   onChange(e) {
-    ++this.generation_;
     this.serialized_ = this.serialize();
-
-    if (!this.renderPending_) {
-      this.startRender();
-    }
-
+    this.startRender();
     localStorage.setItem('currentState', JSON.stringify(this.serialized_));
   }
 
   onRender(e) {
-    this.renderPending_ = false;
+    this.render_.push(e.target);
 
     if (e.data.generation > this.drawGeneration_) {
+      // Received newer than we've drawn; redraw
+      this.drawGeneration_ = e.data.generation;
       this.draw(e.data.steps);
       this.fixSizes();
-      this.drawGeneration_ = e.data.generation;
     }
 
-    if (this.generation_ > this.drawGeneration_) {
-      this.startRender();
-    }
+    this.startRender();
   }
 
   startRender() {
-    this.renderPending_ = true;
-    this.render_.postMessage(this.serialized_);
+    if (this.generation_ == this.renderGeneration_) {
+      // Already sent this generation for rendering
+      return;
+    }
+
+    let render = this.render_.pop();
+    if (!render) {
+      // Ran out of workers
+      return;
+    }
+
+    this.renderGeneration_ = this.serialized_.generation;
+    render.postMessage(this.serialized_);
   }
 
   onKeyDown(e) {
