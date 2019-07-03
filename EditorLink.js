@@ -55,10 +55,6 @@ class EditorLink extends EditorEntryBase {
     return ret;
   };
 
-  clear() {
-    super.clear();
-  }
-
   getFrom() {
     return this.nodes_.getEntries()[0];
   }

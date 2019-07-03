@@ -33,15 +33,6 @@ class EditorNode extends EditorEntryBase {
     return ['"' + this.id + '" [label="' + this.getLabel() + '"];'];
   }
 
-  clear() {
-    super.clear();
-    this.links = [];
-    this.groups = [];
-    this.affinity = [];
-    this.pageRank = 0;
-    this.subgraph = null;
-  }
-
   getLabel() {
     return this.input_.value;
   }
@@ -68,56 +59,6 @@ class EditorNode extends EditorEntryBase {
       }
     }
     return false;
-  }
-
-  setTension() {
-    this.vec = [0, 0];
-    this.tension = 0;
-    for (let aff of this.affinity) {
-      let vec = [], vecsum = 0;
-      for (let i of [0, 1]) {
-        vec[i] = aff.node.pos[i] - this.pos[i];
-        vecsum += Math.abs(vec[i]);
-      };
-      let distance = Math.sqrt(Math.pow(vec[0], 2) + Math.pow(vec[1], 2));
-      let weight = aff.distanceToWeight(distance);
-      for (let i of [0, 1]) {
-        this.vec[i] += (weight * vec[i]) / vecsum;
-      }
-      this.tension += Math.abs(weight);
-    }
-  }
-
-  offsetToPos(offset) {
-    return [
-        this.pos[0] + offset[0],
-        this.pos[1] + offset[1],
-    ];
-  }
-
-  offsetCollides(graph, offset) {
-    let newPos = this.offsetToPos(offset);
-    return graph.nodesByPos.get(newPos.toString());
-  }
-
-  moveBy(graph, offset) {
-    this.moveTo(graph, this.offsetToPos(offset));
-  }
-
-  moveTo(graph, pos) {
-    if (this.pos) {
-      graph.nodesByPos.delete(this.pos.toString());
-    }
-    this.pos = pos;
-    graph.nodesByPos.set(this.pos.toString(), this);
-  }
-
-  savePos() {
-    this.savedPos = this.pos;
-  }
-
-  restorePos(graph) {
-    this.moveTo(graph, this.savedPos);
   }
 
   onInput() {

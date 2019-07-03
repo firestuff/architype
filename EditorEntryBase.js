@@ -31,9 +31,6 @@ class EditorEntryBase extends ListenUtils {
     this.elem_.xArchObj = null;
   }
 
-  clear() {
-  }
-
   wantFocus() {
     return false;
   }

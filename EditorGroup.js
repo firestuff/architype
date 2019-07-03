@@ -51,10 +51,6 @@ class EditorGroup extends EditorEntryBase {
     return lines;
   }
 
-  clear() {
-    super.clear();
-  }
-
   getNodes() {
     return this.nodes_.getEntries();
   }
@@ -70,10 +66,6 @@ class EditorGroup extends EditorEntryBase {
 
   getElement() {
     return this.elem_;
-  }
-
-  getCollection() {
-    return new Collection(this.nodes);
   }
 
   onInputKeyDown(e) {

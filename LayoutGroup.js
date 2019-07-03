@@ -1,23 +1,24 @@
-class Collection {
+class LayoutGroup {
   constructor(nodes) {
     this.nodes = new Set(nodes);
+    this.tension = 0;
   }
 
   setTension() {
+    // Groups don't track tension, since we always want to sort last for total
+    // tension
     this.vec = [0, 0];
-    this.tension = 0;
     for (let node of this.nodes.values()) {
       node.setTension();
       for (let i of [0, 1]) {
         this.vec[i] += node.vec[i];
       };
-      this.tension += node.tension;
     }
   }
 
-  offsetCollides(graph, offset) {
+  offsetCollides(offset) {
     for (let node of this.nodes.values()) {
-      let other = node.offsetCollides(graph, offset);
+      let other = node.offsetCollides(offset);
       if (other && !this.nodes.has(other)) {
         return other;
       }
@@ -31,20 +32,20 @@ class Collection {
     }
   }
 
-  restorePos(graph) {
+  restorePos() {
     for (let node of this.nodes.values()) {
-      node.restorePos(graph);
+      node.restorePos();
     }
   }
 
-  moveBy(graph, offset) {
+  moveBy(offset) {
     let nodes = new Set(this.nodes.values());
     while (nodes.size) {
       for (let node of nodes) {
-        if (node.offsetCollides(graph, offset)) {
+        if (node.offsetCollides(offset)) {
           continue;
         }
-        node.moveBy(graph, offset);
+        node.moveBy(offset);
         nodes.delete(node);
       }
     }
