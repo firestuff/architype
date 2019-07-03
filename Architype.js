@@ -15,10 +15,6 @@ class Architype {
     this.container_.appendChild(editorElem);
     this.editor_ = new Editor(editorElem);
 
-    this.targets_ = document.createElement('datalist');
-    this.targets_.id = 'arch-targets';
-    this.container_.appendChild(this.targets_);
-
     this.lines_ = document.createElement('div');
     this.lines_.innerHTML = `<!--# include file="lines.svg" -->`;
     this.lines_ = this.lines_.firstElementChild;
@@ -67,11 +63,9 @@ class Architype {
 
   onChange(e) {
     let serialized = this.serialize();
-    onmessage(serialized);
+    this.draw(render(serialized));
     localStorage.setItem('currentState', JSON.stringify(serialized));
-
-    //this.updateTargets(this.graph_);
-    //this.fixSizes(this.graph_.nodes);
+    this.fixSizes();
   }
 
   onKeyDown(e) {
@@ -104,50 +98,56 @@ class Architype {
     navigator.clipboard.writeText(lines.join('\n'));
   }
 
-  updateTargets(graph) {
-    // Lots of effort to avoid churning the datalist
+  draw(steps) {
+    console.log(steps);
 
-    let curTargets = new Map();
-    for (let option of this.targets_.options) {
-      curTargets.set(option.value, option);
-    }
-
-    for (let [label, entries] of graph.nodesByLabel.entries()) {
-      if (curTargets.has(label)) {
-        continue;
-      }
-      if (entries.length == 1 &&
-          document.activeElement.parentElement.xArchObj &&
-          document.activeElement.parentElement.xArchObj == entries[0]) {
-        // Skip an element currently being edited
-        continue;
-      }
-      let option = document.createElement('option');
-      option.value = label;
-      this.targets_.appendChild(option);
-    }
-
-    for (let [label, option] of curTargets.entries()) {
-      if (graph.nodesByLabel.has(label)) {
-        continue;
-      }
-      option.remove();
-    }
-  }
-
-  buildGrid(graph) {
     this.grid_.innerHTML = '';
+    this.gridNodes_ = [];
 
-    this.grid_.style.gridTemplateColumns =
-        'repeat(' + graph.size[0] + ',1fr)';
-    this.grid_.style.gridTemplateRows =
-        'repeat(' + graph.size[1] +
-        ',minmax(0, calc((100vw - var(--editor-width)) / ' +
-        graph.size[0] + ')))';
+    for (let step of steps) {
+      switch (step.type) {
+        case 'size':
+          this.drawGrid(step.size);
+          break;
 
-    this.drawGridNodes(graph);
+        case 'node':
+          this.drawGridNode(step.label, step.pos);
+          break;
+      }
+    }
   }
 
+  drawGrid(size) {
+    this.grid_.style.gridTemplateColumns =
+        'repeat(' + size[0] + ',1fr)';
+    this.grid_.style.gridTemplateRows =
+        'repeat(' + size[1] +
+        ',minmax(0, calc((100vw - var(--editor-width)) / ' +
+        size[0] + ')))';
+  }
+
+  drawGridNode(label, pos) {
+    let node = document.createElement('div');
+    node.classList.add('gridNode');
+    this.grid_.appendChild(node);
+    node.innerText = label;
+    node.style.gridColumn = pos[0] + 1;
+    node.style.gridRow = pos[1] + 1;
+  }
+
+  fixSizes() {
+    for (let node of this.gridNodes_) {
+      node.style.fontSize = null;
+      for (let size = 20;
+           size && (node.scrollWidth > node.clientWidth ||
+                    node.scrollHeight > node.clientHeight);
+           --size) {
+        node.style.fontSize = size + 'px';
+      }
+    }
+  }
+
+  // TODO: fix this
   addLines(pos, cls) {
     let lines = this.lines_.cloneNode(true);
     lines.classList.add(cls);
@@ -155,30 +155,6 @@ class Architype {
     lines.style.gridRow = pos[1] + 1;
     this.grid_.appendChild(lines);
     return lines;
-  }
-
-  drawGridNodes(graph) {
-    for (let node of graph.nodes) {
-      node.gridElem = document.createElement('div');
-      node.gridElem.classList.add('gridNode');
-      this.grid_.appendChild(node.gridElem);
-      node.gridElem.innerText = node.getLabel();
-      node.gridElem.style.gridColumn = node.pos[0] + 1;
-      node.gridElem.style.gridRow = node.pos[1] + 1;
-    }
-  }
-
-  fixSizes(nodes) {
-    for (let node of nodes) {
-      let elem = node.gridElem;
-      elem.style.fontSize = null;
-      for (let size = 20;
-           size && (elem.scrollWidth > elem.clientWidth ||
-                    elem.scrollHeight > elem.clientHeight);
-           --size) {
-        elem.style.fontSize = size + 'px';
-      }
-    }
   }
 }
 

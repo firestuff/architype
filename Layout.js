@@ -143,6 +143,29 @@ class Layout {
         max[1] - min[1] + 1,
     ];
   }
+
+  getDrawSteps() {
+    let steps = [
+      {
+        type: 'size',
+        size: this.size,
+      },
+    ];
+
+    let nodes = Array.from(this.nodesByPos_.values());
+    for (let i of [1, 0]) {
+      nodes.sort((a, b) => a.pos[i] - b.pos[i]);
+    }
+    for (let node of nodes) {
+      steps.push({
+        type: 'node',
+        pos: node.pos,
+        label: node.graphNode.label,
+      });
+    }
+
+    return steps;
+  }
 }
 
 <!--# include file="LayoutGroup.js" -->

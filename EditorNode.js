@@ -8,7 +8,6 @@ class EditorNode extends EditorEntryBase {
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
     this.input_.placeholder = 'node name';
-    this.input_.setAttribute('list', 'arch-targets');
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
     this.listen(this.input_, 'input', (e) => this.onInput());
     this.listen(this.input_, 'blur', (e) => this.onInput());
