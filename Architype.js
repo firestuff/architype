@@ -8,7 +8,6 @@ class Architype {
     // TODO: make theme selectable
     this.container_.classList.add('dark');
 
-    this.container_.addEventListener('keydown', (e) => { this.onKeyDown(e); });
     addEventListener('resize', (e) => { this.onResize(e); });
 
     let editorElem = document.createElement('ul');
@@ -109,34 +108,8 @@ class Architype {
     render.postMessage(this.serialized_);
   }
 
-  onKeyDown(e) {
-    switch (e.key) {
-      case 'z':
-        this.exportGraphviz();
-        break;
-    }
-  }
-
   onResize(e) {
     this.fixSizes();
-  }
-
-  exportGraphviz() {
-    let lines = [
-        'digraph G {',
-        '\trankdir = "LR";',
-    ];
-
-    for (let type of ['nodes', 'links', 'groups']) {
-      for (let obj of this.graph_[type]) {
-        for (let line of obj.exportGraphviz()) {
-          lines.push('\t' + line);
-        }
-      }
-    }
-
-    lines.push('}');
-    navigator.clipboard.writeText(lines.join('\n'));
   }
 
   draw(steps) {
