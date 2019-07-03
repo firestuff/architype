@@ -66,8 +66,11 @@ class Architype {
   }
 
   onChange(e) {
+    let serialized = this.serialize();
+    onmessage(serialized);
+    localStorage.setItem('currentState', JSON.stringify(serialized));
+
     this.graph_ = this.buildGraph();
-    localStorage.setItem('currentState', JSON.stringify(this.serialize()));
     this.buildGrid(this.graph_);
     this.updateTargets(this.graph_);
     this.fixSizes(this.graph_.nodes);
@@ -543,6 +546,8 @@ class Architype {
 <!--# include file="EditorGroup.js" -->
 <!--# include file="EditorLink.js" -->
 <!--# include file="EditorNode.js" -->
+
+<!--# include file="Graph.js" -->
 
 <!--# include file="utils.js" -->
 
