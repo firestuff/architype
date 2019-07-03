@@ -31,23 +31,15 @@ class Architype {
 
     this.unserialize(JSON.parse(localStorage.getItem('currentState')));
 
-    this.observeStructure_ = new MutationObserver(e => { this.onStructureChange(e); });
-    this.observeStructure_.observe(editorElem, {
+    this.observer_ = new MutationObserver(e => { this.onChange(e); });
+    this.observer_.observe(editorElem, {
       attributes: true,
-      attributeFilter: ['data-struct-change'],
+      attributeFilter: ['data-arch-value'],
       childList: true,
       subtree: true,
     });
 
-    // TODO: handle case when value change alters link graph
-    this.observeContent_ = new MutationObserver(e => { this.onContentChange(e); });
-    this.observeContent_.observe(editorElem, {
-      attributes: true,
-      attributeFilter: ['data-arch-value'],
-      subtree: true,
-    });
-
-    this.onStructureChange();
+    this.onChange();
   }
 
   serialize() {
@@ -73,12 +65,8 @@ class Architype {
     }
   }
 
-  onStructureChange(e) {
+  onChange(e) {
     this.graph_ = this.buildGraph();
-    this.onContentChange(e);
-  }
-
-  onContentChange(e) {
     localStorage.setItem('currentState', JSON.stringify(this.serialize()));
     this.buildGrid(this.graph_);
     this.updateTargets(this.graph_);

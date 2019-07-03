@@ -121,10 +121,6 @@ class EditorNode extends EditorEntryBase {
   }
 
   onInput() {
-    if (!this.input_.getAttribute('data-arch-value') ||
-        this.input_.value == '') {
-      this.input_.setAttribute('data-struct-change', 'x');
-    }
     this.input_.setAttribute('data-arch-value', this.input_.value);
   }
 
