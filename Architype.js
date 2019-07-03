@@ -547,8 +547,8 @@ class Architype {
 <!--# include file="EditorLink.js" -->
 <!--# include file="EditorNode.js" -->
 
-<!--# include file="Graph.js" -->
-
 <!--# include file="utils.js" -->
+
+<!--# include file="render.js" -->
 
 new Architype(document.getElementById('architype'));

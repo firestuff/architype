@@ -133,7 +133,3 @@ class Graph {
 <!--# include file="GraphGroup.js" -->
 <!--# include file="GraphLink.js" -->
 <!--# include file="GraphNode.js" -->
-
-function onmessage(def) {
-  new Graph(def);
-}
