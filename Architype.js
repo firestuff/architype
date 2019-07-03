@@ -25,6 +25,13 @@ class Architype {
     this.grid_.classList.add('grid');
     this.container_.appendChild(this.grid_);
 
+    this.generation_ = 0;
+    this.drawGeneration_ = -1;
+
+    this.render_ = new Worker('render.js');
+    this.render_.addEventListener('message', (e) => { this.onRender(e); });
+    this.renderPending_ = false;
+
     this.unserialize(JSON.parse(localStorage.getItem('currentState')));
 
     this.observer_ = new MutationObserver(e => { this.onChange(e); });
@@ -41,6 +48,7 @@ class Architype {
   serialize() {
     return {
       version: 1,
+      generation: this.generation_,
       editor: this.editor_.serialize(),
     };
   }
@@ -52,6 +60,7 @@ class Architype {
 
     switch (ser.version) {
       case 1:
+        this.generation_ = ser.generation;
         this.editor_.unserialize(ser.editor);
         break;
 
@@ -62,10 +71,33 @@ class Architype {
   }
 
   onChange(e) {
-    let serialized = this.serialize();
-    this.draw(render(serialized));
-    localStorage.setItem('currentState', JSON.stringify(serialized));
-    this.fixSizes();
+    ++this.generation_;
+    this.serialized_ = this.serialize();
+
+    if (!this.renderPending_) {
+      this.startRender();
+    }
+
+    localStorage.setItem('currentState', JSON.stringify(this.serialized_));
+  }
+
+  onRender(e) {
+    this.renderPending_ = false;
+
+    if (e.data.generation > this.drawGeneration_) {
+      this.draw(e.data.steps);
+      this.fixSizes();
+      this.drawGeneration_ = e.data.generation;
+    }
+
+    if (this.generation_ > this.drawGeneration_) {
+      this.startRender();
+    }
+  }
+
+  startRender() {
+    this.renderPending_ = true;
+    this.render_.postMessage(this.serialized_);
   }
 
   onKeyDown(e) {
@@ -165,7 +197,5 @@ class Architype {
 <!--# include file="EditorNode.js" -->
 
 <!--# include file="utils.js" -->
-
-<!--# include file="render.js" -->
 
 new Architype(document.getElementById('architype'));

@@ -1,8 +1,13 @@
-function render(def) {
-  let graph = new Graph(def);
+addEventListener('message', (e) => {
+  let graph = new Graph(e.data);
   let layout = new Layout(graph);
-  return layout.getDrawSteps();
-}
+  postMessage({
+    generation: e.data.generation,
+    steps: layout.getDrawSteps(),
+  });
+});
 
 <!--# include file="Graph.js" -->
 <!--# include file="Layout.js" -->
+
+<!--# include file="utils.js" -->
