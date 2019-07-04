@@ -5,7 +5,8 @@
   <style>
 /* <![CDATA[ */
 path {
-  stroke-width: 1;
+  stroke: var(--line-color, black);
+  stroke-width: 1.5;
   fill: transparent;
   shape-rendering: geometricPrecision;
 }
