@@ -116,8 +116,16 @@ class Architype {
           this.drawGrid(step.size);
           break;
 
+        case 'group':
+          this.drawGroup(step.min, step.max, step.label);
+          break;
+
+        case 'line':
+          this.drawLine(step.pos, step.cls);
+          break;
+
         case 'node':
-          this.drawGridNode(step.label, step.pos);
+          this.drawNode(step.label, step.pos);
           break;
       }
     }
@@ -132,7 +140,28 @@ class Architype {
         size[0] + ')))';
   }
 
-  drawGridNode(label, pos) {
+  drawGroup(min, max, label) {
+    let group = document.createElement('div');
+    group.classList.add('gridGroup');
+    this.grid_.appendChild(group);
+    group.innerText = label;
+    group.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
+    group.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
+  }
+
+  drawLine(pos, cls) {
+    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('gridLines');
+    svg.style.gridColumn = pos[0] + 1;
+    svg.style.gridRow = pos[1] + 1;
+    this.grid_.appendChild(svg);
+
+    let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    svg.appendChild(use);
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
+  }
+
+  drawNode(label, pos) {
     let node = document.createElement('div');
     node.classList.add('gridNode');
     this.grid_.appendChild(node);
@@ -152,18 +181,6 @@ class Architype {
         node.style.fontSize = size + 'px';
       }
     }
-  }
-
-  addLine(pos, cls) {
-    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.classList.add('gridLines');
-    svg.style.gridColumn = pos[0] + 1;
-    svg.style.gridRow = pos[1] + 1;
-    this.grid_.appendChild(svg);
-
-    let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-    svg.appendChild(use);
-    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
   }
 }
 
