@@ -51,6 +51,8 @@ body {
   width: 100%;
 
   overflow-y: scroll;
+
+  user-select: none;
 }
 
 .editor:focus {
@@ -143,6 +145,9 @@ body {
 
   background: var(--background);
   z-index: 2;
+
+  cursor: default;
+  user-select: none;
 }
 
 .gridGroup {
@@ -165,6 +170,9 @@ body {
 
   background: var(--background);
   z-index: 1;
+
+  cursor: default;
+  user-select: none;
 }
 
 .gridGroup:empty {
