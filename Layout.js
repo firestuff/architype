@@ -51,11 +51,11 @@ class Layout {
     this.groups_ = [];
     for (let group of this.graph_.groups) {
       let nodes = this.nodesFromGraphNodes(group.nodes);
-      this.groups_.push(new LayoutGroup(nodes));
+      this.groups_.push(new LayoutGroup(group, nodes));
     }
     for (let subgraph of this.graph_.nodesBySubgraph.values()) {
       let nodes = this.nodesFromGraphNodes(subgraph);
-      this.groups_.push(new LayoutGroup(nodes));
+      this.groups_.push(new LayoutGroup(null, nodes));
     }
   }
 
@@ -133,10 +133,11 @@ class Layout {
   fixOrigin() {
     let min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER];
     let max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
-    for (let node of this.nodes_) {
+    for (let group of this.groups_) {
+      let [groupMin, groupMax] = group.getMinMax();
       for (let i of [0, 1]) {
-        min[i] = Math.min(min[i], node.pos[i]);
-        max[i] = Math.max(max[i], node.pos[i]);
+        min[i] = Math.min(min[i], groupMin[i]);
+        max[i] = Math.max(max[i], groupMax[i]);
       }
     }
     // Offset is negative minimum, e.g min -1 means +1 to all values
@@ -164,11 +165,13 @@ class Layout {
       nodes.sort((a, b) => a.pos[i] - b.pos[i]);
     }
     for (let node of nodes) {
-      steps.push({
-        type: 'node',
-        pos: node.pos,
-        label: node.graphNode.label,
-      });
+      steps.push(node.getStep());
+    }
+    for (let group of this.groups_) {
+      let step = group.getStep();
+      if (step) {
+        steps.push(step);
+      }
     }
 
     return steps;

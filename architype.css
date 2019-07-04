@@ -133,7 +133,7 @@ body {
   justify-content: center;
   text-align: center;
   font-size: 20px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 
   border-radius: 10px;
   padding: 3px;
@@ -154,11 +154,11 @@ body {
   justify-content: flex-start;
   text-align: center;
   font-size: 20px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 
   border-radius: 10px;
   margin-top: 20px;
-  padding: 3px;
+  padding: 5px;
   border: 1px dashed white;
 
   overflow: hidden;

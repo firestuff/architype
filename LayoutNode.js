@@ -1,6 +1,6 @@
 class LayoutNode {
   constructor(graphNode, nodesByPos, pos) {
-    this.graphNode = graphNode;
+    this.graphNode_ = graphNode;
     this.nodesByPos_ = nodesByPos;
     this.pos = pos;
 
@@ -9,7 +9,7 @@ class LayoutNode {
 
   resolveAffinity(nodesByGraphNode) {
     this.affinity_ = [];
-    for (let aff of this.graphNode.affinity) {
+    for (let aff of this.graphNode_.affinity) {
       this.affinity_.push({
         node: nodesByGraphNode.get(aff.node),
         distanceToWeight: aff.distanceToWeight,
@@ -64,5 +64,13 @@ class LayoutNode {
 
   restorePos() {
     this.moveTo(this.savedPos_);
+  }
+
+  getStep() {
+    return {
+      type: 'node',
+      pos: this.pos,
+      label: this.graphNode_.label,
+    };
   }
 }

@@ -1,5 +1,6 @@
 class LayoutGroup {
-  constructor(nodes) {
+  constructor(graphGroup, nodes) {
+    this.graphGroup_ = graphGroup;
     this.nodes = new Set(nodes);
     this.tension = 0;
   }
@@ -48,5 +49,35 @@ class LayoutGroup {
         nodes.delete(node);
       }
     }
+  }
+
+  getMinMax() {
+    let min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER];
+    let max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
+    for (let node of this.nodes) {
+      for (let i of [0, 1]) {
+        min[i] = Math.min(min[i], node.pos[i]);
+        max[i] = Math.max(max[i], node.pos[i]);
+      }
+    }
+    if (this.graphGroup_ && this.graphGroup_.label) {
+      // Room for the label
+      --min[1];
+    }
+    return [min, max];
+  }
+
+  getStep() {
+    if (!this.graphGroup_) {
+      return null;
+    }
+
+    let [min, max] = this.getMinMax();
+    return {
+      type: 'group',
+      min: min,
+      max: max,
+      label: this.graphGroup_.label,
+    };
   }
 }
