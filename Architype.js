@@ -14,12 +14,6 @@ class Architype {
     this.container_.appendChild(editorElem);
     this.editor_ = new Editor(editorElem);
 
-    this.lines_ = document.createElement('div');
-    this.lines_.innerHTML = `<!--# include file="lines.svg" -->`;
-    this.lines_ = this.lines_.firstElementChild;
-    this.lines_.classList.add('gridLines');
-    this.lines_.classList.add('white');
-
     this.grid_ = document.createElement('div');
     this.grid_.classList.add('grid');
     this.container_.appendChild(this.grid_);
@@ -160,17 +154,18 @@ class Architype {
     }
   }
 
-  // TODO: fix this
-  addLines(pos, cls) {
-    let lines = this.lines_.cloneNode(true);
-    lines.classList.add(cls);
-    lines.style.gridColumn = pos[0] + 1;
-    lines.style.gridRow = pos[1] + 1;
-    this.grid_.appendChild(lines);
-    return lines;
+  addLine(pos, cls) {
+    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('gridLines');
+    svg.style.gridColumn = pos[0] + 1;
+    svg.style.gridRow = pos[1] + 1;
+    this.grid_.appendChild(svg);
+
+    let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    svg.appendChild(use);
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
   }
 }
-
 
 <!--# include file="Editor.js" -->
 <!--# include file="EditorEntryBase.js" -->
