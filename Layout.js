@@ -53,11 +53,11 @@ class Layout {
     this.groups_ = [];
     for (let group of this.graph_.groups) {
       let nodes = this.nodesFromGraphNodes(group.nodes);
-      this.groups_.push(new LayoutGroup(group, nodes));
+      this.groups_.push(new LayoutGroup(group, this.nodesByPos_, nodes));
     }
     for (let subgraph of this.graph_.nodesBySubgraph.values()) {
       let nodes = this.nodesFromGraphNodes(subgraph);
-      this.groups_.push(new LayoutGroup(null, nodes));
+      this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes));
     }
   }
 

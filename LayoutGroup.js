@@ -1,6 +1,7 @@
 class LayoutGroup {
-  constructor(graphGroup, nodes) {
+  constructor(graphGroup, nodesByPos, nodes) {
     this.graphGroup_ = graphGroup;
+    this.nodesByPos_ = nodesByPos;
     this.nodes = new Set(nodes);
     this.tension = 0;
   }
@@ -9,7 +10,7 @@ class LayoutGroup {
     // Groups don't track tension, since we always want to sort last for total
     // tension
     this.vec = [0, 0];
-    for (let node of this.nodes.values()) {
+    for (let node of this.nodes) {
       for (let i of [0, 1]) {
         this.vec[i] += node.vec[i];
       };
@@ -17,7 +18,7 @@ class LayoutGroup {
   }
 
   offsetCollides(offset) {
-    for (let node of this.nodes.values()) {
+    for (let node of this.nodes) {
       let other = node.offsetCollides(offset);
       if (other && !this.nodes.has(other)) {
         return other;
@@ -27,27 +28,24 @@ class LayoutGroup {
   }
 
   savePos() {
-    for (let node of this.nodes.values()) {
+    for (let node of this.nodes) {
       node.savePos();
     }
   }
 
   restorePos() {
-    for (let node of this.nodes.values()) {
+    for (let node of this.nodes) {
       node.restorePos();
     }
   }
 
   moveBy(offset) {
-    let nodes = new Set(this.nodes.values());
-    while (nodes.size) {
-      for (let node of nodes) {
-        if (node.offsetCollides(offset)) {
-          continue;
-        }
-        node.moveBy(offset);
-        nodes.delete(node);
-      }
+    for (let node of this.nodes) {
+      node.moveBy(offset);
+    }
+    // Fix up nodesByPos, as intra-group collisions may have corrupted it
+    for (let node of this.nodes) {
+      this.nodesByPos_.set(node.pos.toString(), node);
     }
   }
 

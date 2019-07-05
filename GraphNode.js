@@ -34,7 +34,7 @@ class GraphNode {
     for (let from of this.linksIn) {
       from.setSubgraph(subgraph, nodes);
     }
-    for (let group of this.groups.values()) {
+    for (let group of this.groups) {
       for (let node of group.nodes) {
         node.setSubgraph(subgraph, nodes);
       }
@@ -64,7 +64,7 @@ class GraphNode {
       this.addAffinity(to, d => d <= 2 ? -INF : d * 11);
       to.addAffinity(this, d => d <= 2 ? -INF : d * 9);
     }
-    for (let group of this.groups.values()) {
+    for (let group of this.groups) {
       for (let node of group.nodes) {
         this.addAffinity(node, d => d * 100);
       }
