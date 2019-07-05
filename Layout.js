@@ -3,7 +3,7 @@ class Layout {
     this.graph_ = graph;
 
     this.nodes_ = [];
-    this.nodesByPos_ = new Map();
+    this.nodesByPos_ = new StringMap();
     this.nodesByGraphNode_ = new Map();
     this.lineSteps_ = [];
 
@@ -81,12 +81,12 @@ class Layout {
     let newOffset = null;
     let newTension = this.getTotalTension(objects);
     for (let obj of objects) {
-      let offsets = new Map();
+      let offsets = new StringMap();
       let addOffset = (x, y) => {
         if (x == 0 && y == 0) {
           return;
         }
-        offsets.set([x, y].toString(), [x, y]);
+        offsets.set([x, y], [x, y]);
       };
       for (let dir of [-1, 0, 1]) {
         addOffset(Math.sign(obj.vec[0]), dir);
@@ -177,15 +177,15 @@ class Layout {
   }
 
   // Mapping to lines.svg clock-style numbering
-  outPointLookup = new Map([
-    ['0,-1', 0],
-    ['1,-1', 1],
-    ['1,0', 2],
-    ['1,1', 3],
-    ['0,1', 4],
-    ['-1,1', 5],
-    ['-1,0', 6],
-    ['-1,-1', 7],
+  outPointLookup = new StringMap([
+    [[ 0,-1], 0],
+    [[ 1,-1], 1],
+    [[ 1, 0], 2],
+    [[ 1, 1], 3],
+    [[ 0, 1], 4],
+    [[-1, 1], 5],
+    [[-1, 0], 6],
+    [[-1,-1], 7],
   ]);
 
   drawLine(from, to) {
@@ -196,7 +196,7 @@ class Layout {
       for (let i of [0, 1]) {
         offset[i] = Math.sign(to.pos[i] - pos[i]);
       }
-      let outPoint = this.outPointLookup.get(offset.toString());
+      let outPoint = this.outPointLookup.get(offset);
       if (inPoint === null) {
         this.lineSteps_.push({
           type: 'line',

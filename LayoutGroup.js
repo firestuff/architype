@@ -45,7 +45,7 @@ class LayoutGroup {
     }
     // Fix up nodesByPos, as intra-group collisions may have corrupted it
     for (let node of this.nodes) {
-      this.nodesByPos_.set(node.pos.toString(), node);
+      this.nodesByPos_.set(node.pos, node);
     }
   }
 

@@ -4,7 +4,7 @@ class LayoutNode {
     this.nodesByPos_ = nodesByPos;
     this.pos = pos;
 
-    this.nodesByPos_.set(this.pos.toString(), this);
+    this.nodesByPos_.set(this.pos, this);
   }
 
   resolveAffinity(nodesByGraphNode) {
@@ -45,13 +45,13 @@ class LayoutNode {
 
   offsetCollides(offset) {
     let newPos = this.offsetToPos(offset);
-    return this.nodesByPos_.get(newPos.toString());
+    return this.nodesByPos_.get(newPos);
   }
 
   moveTo(pos) {
-    this.nodesByPos_.delete(this.pos.toString());
+    this.nodesByPos_.delete(this.pos);
     this.pos = pos;
-    this.nodesByPos_.set(this.pos.toString(), this);
+    this.nodesByPos_.set(this.pos, this);
   }
 
   moveBy(offset) {
