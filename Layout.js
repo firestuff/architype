@@ -5,11 +5,13 @@ class Layout {
     this.nodes_ = [];
     this.nodesByPos_ = new Map();
     this.nodesByGraphNode_ = new Map();
+    this.lineSteps_ = [];
 
     this.setInitialPositions();
     this.resolveAffinity();
     this.resolveGroups();
     while (this.iterate());
+    this.drawLines();
     this.fixOrigin();
   }
 
@@ -146,10 +148,79 @@ class Layout {
         node.pos[i] -= min[i];
       }
     }
+    for (let lineStep of this.lineSteps_) {
+      for (let i of [0, 1]) {
+        lineStep.pos[i] -= min[i];
+      }
+    }
     this.size = [
         max[0] - min[0] + 1,
         max[1] - min[1] + 1,
     ];
+  }
+
+  drawLines() {
+    for (let link of this.graph_.links) {
+      for (let from of link.from) {
+        for (let to of link.to) {
+          this.drawLine(
+            this.nodesByGraphNode_.get(from),
+            this.nodesByGraphNode_.get(to));
+        }
+      }
+    }
+  }
+
+  // Mapping to lines.svg clock-style numbering
+  outPointLookup = new Map([
+    ['0,-1', 0],
+    ['1,-1', 1],
+    ['1,0', 2],
+    ['1,1', 3],
+    ['0,1', 4],
+    ['-1,1', 5],
+    ['-1,0', 6],
+    ['-1,-1', 7],
+  ]);
+
+  drawLine(from, to) {
+    let pos = Array.from(from.pos);
+    let inPoint = null;
+    while (true) {
+      let offset = [];
+      for (let i of [0, 1]) {
+        offset[i] = Math.sign(to.pos[i] - pos[i]);
+      }
+      let outPoint = this.outPointLookup.get(offset.toString());
+      if (inPoint === null) {
+        this.lineSteps_.push({
+          type: 'line',
+          pos: Array.from(pos),
+          cls: 's' + outPoint,
+        });
+      } else {
+        if (offset[0] == 0 && offset[1] == 0) {
+          // Reached destination
+          this.lineSteps_.push({
+            type: 'line',
+            pos: Array.from(pos),
+            cls: 's' + inPoint,
+          });
+          break;
+        } else {
+          this.lineSteps_.push({
+            type: 'line',
+            pos: Array.from(pos),
+            cls: 'i' + inPoint + 'o' + outPoint,
+          });
+        }
+      }
+      // Set values for the next loop
+      inPoint = (outPoint + 4) % 8;
+      for (let i of [0, 1]) {
+        pos[i] += offset[i];
+      }
+    }
   }
 
   getDrawSteps() {
@@ -173,6 +244,7 @@ class Layout {
         steps.push(step);
       }
     }
+    steps.push(...this.lineSteps_);
 
     return steps;
   }
