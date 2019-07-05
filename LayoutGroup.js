@@ -37,6 +37,9 @@ class LayoutGroup {
     for (let node of this.nodes) {
       node.restorePos();
     }
+    for (let node of this.nodes) {
+      this.nodesByPos_.set(node.pos, node);
+    }
   }
 
   moveBy(offset) {
