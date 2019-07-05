@@ -97,10 +97,15 @@ class Layout {
           continue;
         }
         obj.savePos();
+        let nodesByPos = new Map(this.nodesByPos_);
         obj.moveBy(offset);
         this.setTension(objects);
         let testTension = this.getTotalTension(objects);
         obj.restorePos();
+        this.nodesByPos_.clear();
+        for (let [k, v] of nodesByPos) {
+          this.nodesByPos_.set(k, v);
+        }
         if (testTension < newTension) {
           newOffset = offset;
           newTension = testTension;
