@@ -108,7 +108,7 @@ class Architype {
 
   draw(steps) {
     this.grid_.innerHTML = '';
-    this.gridNodes_ = [];
+    this.toSize_ = [];
 
     for (let step of steps) {
       switch (step.type) {
@@ -142,11 +142,20 @@ class Architype {
 
   drawGroup(min, max, label) {
     let group = document.createElement('div');
-    group.classList.add('gridGroup');
     this.grid_.appendChild(group);
-    group.innerText = label;
+    group.classList.add('gridGroup');
     group.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     group.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
+
+    if (label != '') {
+      let labelNode = document.createElement('div');
+      this.grid_.appendChild(labelNode);
+      labelNode.classList.add('gridGroupLabel');
+      labelNode.innerText = label;
+      labelNode.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
+      labelNode.style.gridRow = min[1] + 1;
+      this.toSize_.push(labelNode);
+    }
   }
 
   drawLine(pos, cls) {
@@ -168,11 +177,11 @@ class Architype {
     node.innerText = label;
     node.style.gridColumn = pos[0] + 1;
     node.style.gridRow = pos[1] + 1;
-    this.gridNodes_.push(node);
+    this.toSize_.push(node);
   }
 
   fixSizes() {
-    for (let node of this.gridNodes_) {
+    for (let node of this.toSize_) {
       node.style.fontSize = null;
       for (let size = 20;
            size && (node.scrollWidth > node.clientWidth ||
