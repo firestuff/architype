@@ -78,8 +78,7 @@ class Layout {
       objects.push(group);
     }
 
-    let newOffset = null;
-    let newTension = this.getTotalTension(objects);
+    let baseTension = this.getTotalTension(objects);
     for (let obj of objects) {
       let offsets = new StringMap();
       let addOffset = (x, y) => {
@@ -88,10 +87,15 @@ class Layout {
         }
         offsets.set([x, y], [x, y]);
       };
+
+      // Map remembers insertion order. We do a relatively exhaustive offset
+      // search, but we short circuit, so try the most likely offset first.
+      addOffset(Math.sign(obj.vec[0]), Math.sign(obj.vec[1]));
       for (let dir of [-1, 0, 1]) {
         addOffset(Math.sign(obj.vec[0]), dir);
         addOffset(dir, Math.sign(obj.vec[1]));
       }
+
       for (let offset of offsets.values()) {
         if (obj.offsetCollides(offset)) {
           continue;
@@ -101,14 +105,10 @@ class Layout {
         this.setTension(objects);
         let testTension = this.getTotalTension(objects);
         obj.restorePos();
-        if (testTension < newTension) {
-          newOffset = offset;
-          newTension = testTension;
+        if (testTension < baseTension) {
+          obj.moveBy(offset);
+          return true;
         }
-      }
-      if (newOffset) {
-        obj.moveBy(newOffset);
-        return true;
       }
     }
     return false;
