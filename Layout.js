@@ -97,7 +97,7 @@ class Layout {
           continue;
         }
         obj.savePos();
-        let nodesByPos = new Map(this.nodesByPos_);
+        let nodesByPos = Array.from(this.nodesByPos_);
         obj.moveBy(offset);
         this.setTension(objects);
         let testTension = this.getTotalTension(objects);
