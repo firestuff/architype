@@ -5,13 +5,14 @@ class Layout {
     this.nodes_ = [];
     this.nodesByPos_ = new StringMap();
     this.nodesByGraphNode_ = new Map();
-    this.lineSteps_ = [];
+    this.links_ = [];
 
     this.setInitialPositions();
+    this.resolveLinks();
     this.resolveAffinity();
     this.resolveGroups();
     while (this.iterate());
-    this.drawLines();
+    this.drawLinks();
     this.fixOrigin();
   }
 
@@ -61,8 +62,14 @@ class Layout {
     }
   }
 
+  resolveLinks() {
+    for (let node of this.nodes_) {
+      node.resolveLinks(this.nodesByGraphNode_);
+    }
+  }
+
   resolveAffinity() {
-    for (let node of this.nodesByGraphNode_.values()) {
+    for (let node of this.nodes_) {
       node.resolveAffinity(this.nodesByGraphNode_);
     }
   }
@@ -148,9 +155,11 @@ class Layout {
         node.pos[i] -= min[i];
       }
     }
-    for (let lineStep of this.lineSteps_) {
-      for (let i of [0, 1]) {
-        lineStep.pos[i] -= min[i];
+    for (let link of this.links_) {
+      for (let hop of link.path) {
+        for (let i of [0, 1]) {
+          hop[i] -= min[i];
+        }
       }
     }
     this.size = [
@@ -159,66 +168,12 @@ class Layout {
     ];
   }
 
-  drawLines() {
-    for (let link of this.graph_.links) {
-      for (let from of link.from) {
-        for (let to of link.to) {
-          this.drawLine(
-            this.nodesByGraphNode_.get(from),
-            this.nodesByGraphNode_.get(to));
-        }
-      }
-    }
-  }
-
-  // Mapping to lines.svg clock-style numbering
-  outPointLookup = new StringMap([
-    [[ 0,-1], 0],
-    [[ 1,-1], 1],
-    [[ 1, 0], 2],
-    [[ 1, 1], 3],
-    [[ 0, 1], 4],
-    [[-1, 1], 5],
-    [[-1, 0], 6],
-    [[-1,-1], 7],
-  ]);
-
-  drawLine(from, to) {
-    let pos = Array.from(from.pos);
-    let inPoint = null;
-    while (true) {
-      let offset = [];
-      for (let i of [0, 1]) {
-        offset[i] = Math.sign(to.pos[i] - pos[i]);
-      }
-      let outPoint = this.outPointLookup.get(offset);
-      if (inPoint === null) {
-        this.lineSteps_.push({
-          type: 'line',
-          pos: Array.from(pos),
-          cls: 's' + outPoint,
-        });
-      } else {
-        if (offset[0] == 0 && offset[1] == 0) {
-          // Reached destination
-          this.lineSteps_.push({
-            type: 'line',
-            pos: Array.from(pos),
-            cls: 's' + inPoint,
-          });
-          break;
-        } else {
-          this.lineSteps_.push({
-            type: 'line',
-            pos: Array.from(pos),
-            cls: 'i' + inPoint + 'o' + outPoint,
-          });
-        }
-      }
-      // Set values for the next loop
-      inPoint = (outPoint + 4) % 8;
-      for (let i of [0, 1]) {
-        pos[i] += offset[i];
+  drawLinks() {
+    let nodes = Array.from(this.nodes_);
+    nodes.sort((a, b) => (b.links.length - a.links.length));
+    for (let node of nodes) {
+      for (let to of node.links) {
+        this.links_.push(new LayoutLink(node, to, this.nodesByPos_));
       }
     }
   }
@@ -244,11 +199,14 @@ class Layout {
         steps.push(step);
       }
     }
-    steps.push(...this.lineSteps_);
+    for (let link of this.links_) {
+      steps.push(...link.getSteps());
+    }
 
     return steps;
   }
 }
 
 <!--# include file="LayoutGroup.js" -->
+<!--# include file="LayoutLink.js" -->
 <!--# include file="LayoutNode.js" -->

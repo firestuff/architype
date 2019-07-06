@@ -7,6 +7,13 @@ class LayoutNode {
     this.nodesByPos_.set(this.pos, this);
   }
 
+  resolveLinks(nodesByGraphNode) {
+    this.links = [];
+    for (let to of this.graphNode_.links) {
+      this.links.push(nodesByGraphNode.get(to));
+    }
+  }
+
   resolveAffinity(nodesByGraphNode) {
     this.affinity_ = [];
     for (let aff of this.graphNode_.affinity) {
