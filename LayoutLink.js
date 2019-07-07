@@ -7,39 +7,14 @@ class LayoutLink {
     this.bfs();
   }
 
-  getDirect() {
-    let cost = 0;
-    let pos = Array.from(this.from_.pos);
-    let path = [Array.from(this.from_.pos)];
-
-    while (pos[0] != this.to_.pos[0] || pos[1] != this.to_.pos[1]) {
-      cost += 1;
-      if (this.linksByPos_.has(pos)) {
-        cost += 2;
-      }
-      if (this.nodesByPos_.has(pos)) {
-        cost += 5;
-      }
-      for (let i of [0, 1]) {
-        pos[i] += Math.sign(this.to_.pos[i] - pos[i]);
-      }
-      path.push(Array.from(pos));
-    }
-    
-    return [cost, path];
-  }
-
   bfs() {
     // TODO: give more thought to birdirectional search
     // TODO: make diagonals cost more
-    // TODO: remove getDirect() once bidirectional + minheap are done
 
     let cheapestCostByPos = new StringMap();
 
-    // shortcuts to save the lookup
-    let direct = this.getDirect();
-    let cheapestCostToGoal = direct[0];
-    this.path = direct[1];
+    // shortcut to save the lookup
+    let cheapestCostToGoal = null;
 
     // BFS work queue
     let queue = new MinHeap((a) => a.cost);
