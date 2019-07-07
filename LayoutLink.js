@@ -32,7 +32,7 @@ class LayoutLink {
   bfs() {
     // TODO: give more thought to birdirectional search
     // TODO: give more thought to minheap instead of queue
-    // TODO: don't intersect other lines at the same angle
+    // TODO: make diagonals cost more
     // TODO: remove getDirect() once bidirectional + minheap are done
 
     let cheapestCostByPos = new StringMap();
