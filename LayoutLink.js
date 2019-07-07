@@ -31,7 +31,6 @@ class LayoutLink {
 
   bfs() {
     // TODO: give more thought to birdirectional search
-    // TODO: give more thought to minheap instead of queue
     // TODO: make diagonals cost more
     // TODO: remove getDirect() once bidirectional + minheap are done
 
@@ -43,17 +42,15 @@ class LayoutLink {
     this.path = direct[1];
 
     // BFS work queue
-    let queue = [
-      {
-        path: [Array.from(this.from_.pos)],
-        cost: 0,
-      },
-    ];
+    let queue = new MinHeap((a) => a.cost);
+    queue.push({
+      path: [Array.from(this.from_.pos)],
+      cost: 0,
+    });
 
     let iter = 0;
-    while (queue.length) {
+    for (let next = queue.pop(); next; next = queue.pop()) {
       ++iter;
-      let next = queue.shift();
       let pos = next.path[next.path.length - 1];
 
       if (cheapestCostToGoal && next.cost >= cheapestCostToGoal) {
@@ -113,7 +110,6 @@ class LayoutLink {
           });
         }
       }
-      queue.sort((a, b) => (a.cost - b.cost));
     }
 
     for (let hop of this.path) {

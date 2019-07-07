@@ -25,4 +25,5 @@ function intersects(set1, set2) {
   return false;
 }
 
+<!--# include file="MinHeap.js" -->
 <!--# include file="StringMap.js" -->
