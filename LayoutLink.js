@@ -28,13 +28,6 @@ class LayoutLink {
       ++iter;
       let pos = next.path[next.path.length - 1];
 
-      if (cheapestCostToGoal && next.cost >= cheapestCostToGoal) {
-        // Can't possibly find a cheaper route via this path
-        // We check this twice (again below), to avoid excessive queueing but
-        // to handle cheapestCostToGoal changing while we're in queue.
-        break;
-      }
-
       let prevCost = cheapestCostByPos.get(pos);
       if (prevCost && prevCost <= next.cost) {
         // Reached a previous pos via a higher- or equal-cost path
@@ -43,10 +36,8 @@ class LayoutLink {
       cheapestCostByPos.set(pos, next);
 
       if (pos[0] == this.to_.pos[0] && pos[1] == this.to_.pos[1]) {
-        // Reached the goal
-        cheapestCostToGoal = next.cost;
         this.path = next.path;
-        continue;
+        break;
       }
 
       //// Calculate cost for next hop
@@ -63,12 +54,6 @@ class LayoutLink {
       if (this.nodesByPos_.has(pos)) {
         // Traversing nodes has higher cost
         newCost += 5;
-      }
-
-      if (cheapestCostToGoal && newCost >= cheapestCostToGoal) {
-        // Can't possibly find a cheaper route via this path
-        // See duplicate check note above
-        continue;
       }
 
       for (let xOff of [-1, 0, 1]) {
