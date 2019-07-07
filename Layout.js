@@ -5,6 +5,7 @@ class Layout {
     this.nodes_ = [];
     this.nodesByPos_ = new StringMap();
     this.nodesByGraphNode_ = new Map();
+    this.linksByPos_ = new StringMap();
     this.links_ = [];
 
     this.setInitialPositions();
@@ -173,7 +174,8 @@ class Layout {
     nodes.sort((a, b) => (b.links.length - a.links.length));
     for (let node of nodes) {
       for (let to of node.links) {
-        this.links_.push(new LayoutLink(node, to, this.nodesByPos_));
+        this.links_.push(
+            new LayoutLink(node, to, this.nodesByPos_, this.linksByPos_));
       }
     }
   }

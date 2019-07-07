@@ -1,8 +1,9 @@
 class LayoutLink {
-  constructor(from, to, nodesByPos) {
+  constructor(from, to, nodesByPos, linksByPos) {
     this.from_ = from;
     this.to_ = to;
     this.nodesByPos_ = nodesByPos;
+    this.linksByPos_ = linksByPos;
     this.bfs();
   }
 
@@ -13,6 +14,9 @@ class LayoutLink {
 
     while (pos[0] != this.to_.pos[0] || pos[1] != this.to_.pos[1]) {
       cost += 1;
+      if (this.linksByPos_.has(pos)) {
+        cost += 2;
+      }
       if (this.nodesByPos_.has(pos)) {
         cost += 5;
       }
@@ -28,9 +32,8 @@ class LayoutLink {
   bfs() {
     // TODO: give more thought to birdirectional search
     // TODO: give more thought to minheap instead of queue
-    // TODO: first hop is free
-    // TODO: diagonals cost more
     // TODO: don't intersect other lines at the same angle
+    // TODO: remove getDirect() once bidirectional + minheap are done
 
     let cheapestCostByPos = new StringMap();
 
@@ -51,8 +54,15 @@ class LayoutLink {
       let next = queue.shift();
       let pos = next.path[next.path.length - 1];
 
-      let prev = cheapestCostByPos.get(pos);
-      if (prev && prev <= next.cost) {
+      if (cheapestCostToGoal && next.cost >= cheapestCostToGoal) {
+        // Can't possibly find a cheaper route via this path
+        // We check this twice (again below), to avoid excessive queueing but
+        // to handle cheapestCostToGoal changing while we're in queue.
+        continue;
+      }
+
+      let prevCost = cheapestCostByPos.get(pos);
+      if (prevCost && prevCost <= next.cost) {
         // Reached a previous pos via a higher- or equal-cost path
         continue;
       }
@@ -71,6 +81,11 @@ class LayoutLink {
       // Any hop has cost
       newCost += 1;
 
+      // Overlapping links have cost
+      if (this.linksByPos_.has(pos)) {
+        newCost += 2;
+      }
+
       if (this.nodesByPos_.has(pos)) {
         // Traversing nodes has higher cost
         newCost += 5;
@@ -78,6 +93,7 @@ class LayoutLink {
 
       if (cheapestCostToGoal && newCost >= cheapestCostToGoal) {
         // Can't possibly find a cheaper route via this path
+        // See duplicate check note above
         continue;
       }
 
@@ -95,6 +111,15 @@ class LayoutLink {
           });
         }
       }
+    }
+
+    for (let hop of this.path) {
+      let links = this.linksByPos_.get(hop);
+      if (!links) {
+        links = [];
+        this.linksByPos_.set(hop, links);
+      }
+      links.push(this);
     }
   }
 
