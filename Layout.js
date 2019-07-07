@@ -178,14 +178,34 @@ class Layout {
   }
 
   drawLinks() {
-    let nodes = Array.from(this.nodes_);
-    nodes.sort((a, b) => (b.links.length - a.links.length));
-    for (let node of nodes) {
-      for (let to of node.links) {
-        this.links_.push(
-            new LayoutLink(node, to, this.nodesByPos_, this.linksByPos_));
+    let links = [];
+    for (let from of this.nodes_) {
+      for (let to of from.links) {
+        links.push({
+          from: from,
+          to: to,
+        });
       }
     }
+
+    // Shortest links first
+    links.sort((a, b) => (
+            this.distance(a.from.pos, a.to.pos) -
+            this.distance(b.from.pos, b.to.pos)));
+
+    for (let link of links) {
+      this.links_.push(
+          new LayoutLink(link.from, link.to,
+                         this.nodesByPos_, this.linksByPos_));
+    }
+  }
+
+  distance(a, b) {
+    let vec = [
+        b[0] - a[0],
+        b[1] - a[1],
+    ];
+    return Math.sqrt((vec[0] * vec[0]) + (vec[1] * vec[1]));
   }
 
   getDrawSteps() {
