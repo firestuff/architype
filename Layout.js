@@ -150,6 +150,14 @@ class Layout {
         max[i] = Math.max(max[i], groupMax[i]);
       }
     }
+    for (let link of this.links_) {
+      for (let hop of link.path) {
+        for (let i of [0, 1]) {
+          min[i] = Math.min(min[i], hop[i]);
+          max[i] = Math.max(max[i], hop[i]);
+        }
+      }
+    }
     // Offset is negative minimum, e.g min -1 means +1 to all values
     for (let node of this.nodes_) {
       for (let i of [0, 1]) {
