@@ -117,12 +117,7 @@ class LayoutLink {
     }
 
     for (let hop of this.path) {
-      let links = this.linksByPos_.get(hop);
-      if (!links) {
-        links = [];
-        this.linksByPos_.set(hop, links);
-      }
-      links.push(this);
+      getOrSet(this.linksByPos_, hop, []).push(this);
     }
 
     console.log(iter);
