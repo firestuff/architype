@@ -8,37 +8,47 @@ class LayoutLink {
   }
 
   bfs() {
-    // TODO: give more thought to birdirectional search
     // TODO: make diagonals cost more
 
-    let cheapestCostByPos = new StringMap();
+    let bestByPos = new StringMap();
 
     // shortcut to save the lookup
     let cheapestCostToGoal = null;
 
     // BFS work queue
     let queue = new MinHeap((a) => a.cost);
-    queue.push({
-      path: [Array.from(this.from_.pos)],
-      cost: 0,
-    });
+    queue.push(...[
+      {
+        path: [Array.from(this.from_.pos)],
+        cost: 0,
+        source: 1,
+      },
+      {
+        path: [Array.from(this.to_.pos)],
+        cost: 0,
+        source: 2,
+      },
+    ]);
 
-    let iter = 0;
     for (let next = queue.pop(); next; next = queue.pop()) {
-      ++iter;
       let pos = next.path[next.path.length - 1];
 
-      let prevCost = cheapestCostByPos.get(pos);
-      if (prevCost && prevCost <= next.cost) {
-        // Reached a previous pos via a higher- or equal-cost path
-        continue;
-      }
-      cheapestCostByPos.set(pos, next);
+      let best = bestByPos.get(pos);
+      if (best) {
+        if (best.source != next.source) {
+          // Goal reached; encountered a path from the other source
+          best.path.reverse();
+          next.path.splice(next.path.length - 1, 1);
+          this.path = next.path.concat(best.path);
+          break;
+        }
 
-      if (pos[0] == this.to_.pos[0] && pos[1] == this.to_.pos[1]) {
-        this.path = next.path;
-        break;
+        if (best.cost <= next.cost) {
+          // Reached a previous pos via a higher- or equal-cost path
+          continue;
+        }
       }
+      bestByPos.set(pos, next);
 
       //// Calculate cost for next hop
       let newCost = next.cost;
@@ -65,8 +75,9 @@ class LayoutLink {
           let newPath = Array.from(next.path);
           newPath.push(newPos);
           queue.push({
-            cost: newCost,
             path: newPath,
+            cost: newCost,
+            source: next.source,
           });
         }
       }
@@ -75,8 +86,6 @@ class LayoutLink {
     for (let hop of this.path) {
       getOrSet(this.linksByPos_, hop, []).push(this);
     }
-
-    console.log(iter);
   }
 
   // Mapping to lines.svg clock-style numbering

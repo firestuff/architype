@@ -46,7 +46,7 @@ class MinHeap {
     
       // Find the minimum value of the current node and its two children
       for (let child of children) {
-        if (this.data_[child] != undefined && 
+        if (this.data_[child] != undefined &&
             this.valueFunc_(this.data_[child]) <
             this.valueFunc_(this.data_[toSwap])) {
           toSwap = child;
