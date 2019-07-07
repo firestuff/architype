@@ -8,8 +8,6 @@ class LayoutLink {
   }
 
   bfs() {
-    // TODO: make diagonals cost more
-
     let bestByPos = new StringMap();
 
     // shortcut to save the lookup
@@ -50,33 +48,17 @@ class LayoutLink {
       }
       bestByPos.set(pos, next);
 
-      //// Calculate cost for next hop
-      let newCost = next.cost;
-
-      // Any hop has cost
-      newCost += 1;
-
-      // Overlapping links have cost
-      if (this.linksByPos_.has(pos)) {
-        newCost += 2;
-      }
-
-      if (this.nodesByPos_.has(pos)) {
-        // Traversing nodes has higher cost
-        newCost += 5;
-      }
-
       for (let xOff of [-1, 0, 1]) {
         for (let yOff of [-1, 0, 1]) {
           if (xOff == 0 && yOff == 0) {
             continue;
           }
           let newPos = [pos[0] + xOff, pos[1] + yOff];
-          let newPath = Array.from(next.path);
-          newPath.push(newPos);
+          let path = Array.from(next.path);
+          path.push(newPos);
           queue.push({
-            path: newPath,
-            cost: newCost,
+            path: path,
+            cost: next.cost + this.getCost(pos, newPos),
             source: next.source,
           });
         }
@@ -84,7 +66,7 @@ class LayoutLink {
     }
 
     for (let hop of this.path) {
-      getOrSet(this.linksByPos_, hop, []).push(this);
+      getOrSet(this.linksByPos_, hop, new Set()).add(this);
     }
   }
 
@@ -99,6 +81,49 @@ class LayoutLink {
     [[-1, 0], 6],
     [[-1,-1], 7],
   ]);
+
+  getCost(from, to) {
+    // Only handles adjacent positions
+
+    let cost = 1;
+
+    // Because we're doing bidirectional search, this function must always be
+    // symmetric, i.e. returning the same value regardless of order of
+    // arguments. That means that any costs applied to nodes must be applied
+    // whether the node is from or to. Traversal is double-charged.
+    for (let pos of [from, to]) {
+      if (this.nodesByPos_.has(pos)) {
+        // Traversing nodes has higher cost
+        cost += 5;
+      } else if (this.linksByPos_.has(pos)) {
+        // Overlapping links have cost
+        cost += 2 * this.linksByPos_.get(pos).size;
+      }
+    }
+
+    let offset = [
+        to[0] - from[0],
+        to[1] - from[1],
+    ];
+    if (offset[0] != 0 && offset[1] != 0) {
+      // Diagonal; approximate sqrt(2) from distance formula
+      cost += 0.5;
+
+      // The two other positions in a quad covering this diagonal
+      let others = [
+          [from[0] + Math.sign(offset[0]), from[1]],
+          [from[0], from[1] + Math.sign(offset[1])],
+      ];
+      if (intersects(
+              this.linksByPos_.get(others[0]) || new Set(),
+              this.linksByPos_.get(others[1]) || new Set())) {
+        // We cross another link at a right angle
+        cost += 2;
+      }
+    }
+
+    return cost;
+  }
 
   getOutPoint(from, to) {
     let offset = [
