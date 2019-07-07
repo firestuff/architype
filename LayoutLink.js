@@ -50,7 +50,9 @@ class LayoutLink {
       },
     ];
 
+    let iter = 0;
     while (queue.length) {
+      ++iter;
       let next = queue.shift();
       let pos = next.path[next.path.length - 1];
 
@@ -58,7 +60,7 @@ class LayoutLink {
         // Can't possibly find a cheaper route via this path
         // We check this twice (again below), to avoid excessive queueing but
         // to handle cheapestCostToGoal changing while we're in queue.
-        continue;
+        break;
       }
 
       let prevCost = cheapestCostByPos.get(pos);
@@ -111,6 +113,7 @@ class LayoutLink {
           });
         }
       }
+      queue.sort((a, b) => (a.cost - b.cost));
     }
 
     for (let hop of this.path) {
@@ -121,6 +124,8 @@ class LayoutLink {
       }
       links.push(this);
     }
+
+    console.log(iter);
   }
 
   // Mapping to lines.svg clock-style numbering
