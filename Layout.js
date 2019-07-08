@@ -61,6 +61,10 @@ class Layout {
       let nodes = this.nodesFromGraphNodes(subgraph);
       this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes));
     }
+    for (let labelGroup of this.graph_.nodesByLabel.values()) {
+      let nodes = this.nodesFromGraphNodes(labelGroup);
+      this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes));
+    }
   }
 
   resolveLinks() {

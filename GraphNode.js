@@ -58,6 +58,11 @@ class GraphNode {
       if (this.groups.size && !intersects(this.groups, node.groups)) {
         node.addAffinity(this, d => d <= 2 ? -INF : 0);
       }
+
+      // Try to stack nodes with the same label
+      if (node.label == this.label) {
+        this.addAffinity(node, (d, v) => v[0] == 0 ? 200 : 500);
+      }
     }
 
     for (let to of this.links) {
