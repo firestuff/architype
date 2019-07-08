@@ -35,7 +35,7 @@ class LayoutNode {
       };
       // Avoid calling sqrt(), since the results are used relatively
       let distanceSquared = vec[0] * vec[0] + vec[1] * vec[1];
-      let weight = aff.distanceToWeight(distanceSquared);
+      let weight = aff.distanceToWeight(distanceSquared, vec);
       for (let i of [0, 1]) {
         this.vec[i] += (weight * vec[i]) / vecsum;
       }
