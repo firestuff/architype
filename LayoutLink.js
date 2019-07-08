@@ -125,6 +125,7 @@ class LayoutLink {
     return cost;
   }
 
+  // TODO: split layout and rendering
   getOutPoint(from, to) {
     let offset = [
         to[0] - from[0],
