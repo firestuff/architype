@@ -158,6 +158,19 @@ class Layout {
         }
       }
     }
+
+    // Set a minimum size and center the smaller graph
+    const MIN_SIZE = 6;
+    for (let i of [0, 1]) {
+      let expand = MIN_SIZE - (max[i] - min[i] + 1);
+      if (expand <= 0) {
+        continue;
+      }
+      let expandHalf = Math.floor(expand / 2);
+      min[i] -= expandHalf;
+      max[i] += (expand - expandHalf);
+    }
+
     // Offset is negative minimum, e.g min -1 means +1 to all values
     for (let node of this.nodes_) {
       for (let i of [0, 1]) {
