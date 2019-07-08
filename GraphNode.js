@@ -45,10 +45,6 @@ class GraphNode {
     const INF = 999999;
 
     for (let node of nodes) {
-      if (node == this) {
-        continue;
-      }
-
       // Weak affinity full mesh
       // Keep unassociated subgroups together
       this.addAffinity(node, d => d);
@@ -73,10 +69,6 @@ class GraphNode {
 
     for (let group of this.groups) {
       for (let node of group.nodes) {
-        if (node == this) {
-          continue;
-        }
-
         this.addAffinity(node, d => d * 100);
       }
     }
