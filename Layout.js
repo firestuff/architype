@@ -30,13 +30,12 @@ class Layout {
     ranks.sort((a, b) => a - b);
     for (let r = 0; r < ranks.length; ++r) {
       let nodes = this.graph_.nodesByPageRank.get(ranks[r]);
+      let x = r * SPACING;
+      let yRankOffset = 0 - ((nodes.length / 2) * SPACING);
       for (let n = 0; n < nodes.length; ++n) {
         let node = nodes[n];
-        let pos = [
-            r * SPACING,
-            Math.floor((nodes.length / 2) * SPACING) + (n * SPACING) +
-                (node.subgraph * SPACING * maxRankNodes),
-        ];
+        let ySubgraphOffset = (node.subgraph * SPACING * maxRankNodes);
+        let pos = [x, (n * SPACING) + yRankOffset + ySubgraphOffset];
         let layoutNode = new LayoutNode(node, this.nodesByPos_, pos);
         this.nodes_.push(layoutNode);
         this.nodesByGraphNode_.set(node, layoutNode);
