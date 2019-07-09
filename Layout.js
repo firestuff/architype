@@ -9,9 +9,9 @@ class Layout {
     this.links_ = [];
 
     this.setInitialPositions();
+    this.resolveGroups();
     this.resolveLinks();
     this.resolveAffinity();
-    this.resolveGroups();
     while (this.iterate());
     this.addGroupPos();
     this.drawLinks();

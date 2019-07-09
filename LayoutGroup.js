@@ -4,6 +4,10 @@ class LayoutGroup {
     this.nodesByPos_ = nodesByPos;
     this.nodes = new Set(nodes);
     this.tension = 0;
+
+    for (let node of nodes) {
+      node.groups.push(this);
+    }
   }
 
   setTension() {
@@ -66,6 +70,12 @@ class LayoutGroup {
       --min[1];
     }
     return [min, max];
+  }
+
+  isContained(pos) {
+    let [min, max] = this.getMinMax();
+    return (pos[0] >= min[0] && pos[0] <= max[0] &&
+            pos[1] >= min[1] && pos[1] <= max[1]);
   }
 
   getStep() {

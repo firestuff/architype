@@ -41,6 +41,7 @@ class GraphNode {
     }
   }
 
+  // TODO: move this to LayoutNode, item by item
   setAffinity(nodes) {
     const INF = 999999;
 
