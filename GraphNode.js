@@ -41,6 +41,7 @@ class GraphNode {
     }
   }
 
+  // TODO: move affinity to LayoutNode
   setAffinity(nodes) {
     const INF = 999999;
 
@@ -63,6 +64,11 @@ class GraphNode {
       if (node.label == this.label) {
         this.addAffinity(node, (d, v) => v[0] == 0 ? 200 : 500);
       }
+
+      // Try to preserve pagerank left-to-right flow from initial positions
+      let rankSign = Math.sign(node.pageRank - this.pageRank);
+      this.addAffinity(node, (d, v) =>
+                       [Math.sign(v[0]) == rankSign ? 0 : -500, 0]);
     }
 
     for (let to of this.links) {
