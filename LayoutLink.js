@@ -144,7 +144,7 @@ class LayoutLink {
         // Encourage merging
         cost -= 0.25;
       } else {
-        cost += 2;
+        cost += 5;
       }
     }
 
