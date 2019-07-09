@@ -8,6 +8,7 @@
   --placeholder: rgba(255,255,255,0.2);
   --outline: #323434;
   --background: #202020;
+  --group-background: rgba(0,0,0,0.3);
   --node-background: #000000;
   --input: rgba(255,255,255,0.2);
 }
@@ -154,7 +155,7 @@ body {
 .gridGroup {
   width: calc(100% - 10px);
   height: calc(100% - 30px);
-  background: var(--background);
+  background: var(--group-background);
   justify-content: flex-start;
   margin-top: 20px;
   padding: 5px;
