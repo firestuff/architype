@@ -8,7 +8,7 @@
   --placeholder: rgba(255,255,255,0.2);
   --outline: #323434;
   --background: #202020;
-  --group-background: rgba(0,0,0,0.3);
+  --group-background: rgba(0,0,0,0.5);
   --node-background: #000000;
   --input: rgba(255,255,255,0.2);
 }
@@ -136,7 +136,6 @@ body {
   text-align: center;
 
   font-size: 20px;
-  border-radius: 10%;
   overflow-wrap: anywhere;
   overflow: hidden;
   cursor: default;
@@ -149,12 +148,13 @@ body {
   background: var(--node-background);
   justify-content: center;
   border: 1px solid white;
+  border-radius: 10%;
   z-index: 3;
 }
 
 .gridGroup {
-  width: calc(100% - 10px);
-  height: calc(100% - 30px);
+  width: 100%;
+  height: 100%;
   background: var(--group-background);
   justify-content: flex-start;
   margin-top: 20px;
@@ -176,7 +176,7 @@ body {
   padding-top: 3px;
   overflow: hidden;
   overflow-wrap: anywhere;
-  z-index: 3;
+  z-index: 1;
 }
 
 .gridLines {

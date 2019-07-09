@@ -41,7 +41,6 @@ class GraphNode {
     }
   }
 
-  // TODO: move affinity to LayoutNode
   setAffinity(nodes) {
     const INF = 999999;
 
@@ -55,9 +54,12 @@ class GraphNode {
         this.addAffinity(node, d => d <= 2 ? -INF : 0);
       }
 
-      // Keep one space around groups
-      if (this.groups.size && !intersects(this.groups, node.groups)) {
-        node.addAffinity(this, d => d <= 2 ? -INF : 0);
+      // Am I in any labeled groups that node is not?
+      // If so, preserve one space above the group
+      let labeled = new Set(Array.from(this.groups).filter(g => g.label != ''));
+      if (asymDifference(labeled, node.groups).size) {
+        node.addAffinity(this, (d, v) =>
+                         (v[0] == 0 && v[1] > 0 && v[1] < 2) ? -INF : 0);
       }
 
       // Try to stack nodes with the same label
@@ -67,8 +69,10 @@ class GraphNode {
 
       // Try to preserve pagerank left-to-right flow from initial positions
       let rankSign = Math.sign(node.pageRank - this.pageRank);
-      this.addAffinity(node, (d, v) =>
-                       [Math.sign(v[0]) == rankSign ? 0 : -1000, 0]);
+      if (rankSign != 0) {
+        this.addAffinity(node, (d, v) =>
+                         [Math.sign(v[0]) == rankSign ? 0 : -1000, 0]);
+      }
     }
 
     for (let to of this.links) {
@@ -78,6 +82,7 @@ class GraphNode {
       to.addAffinity(this, d => d <= 2 ? -INF : d * 9);
     }
 
+    // Affinity for groups
     for (let group of this.groups) {
       for (let node of group.nodes) {
         this.addAffinity(node, d => d * 100);
