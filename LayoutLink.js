@@ -70,10 +70,28 @@ class LayoutLink {
       }
     }
 
-    for (let hop of this.path) {
-      let links = getOrSet(this.linksByPos_, hop, new Set());
-      links.add('f' + this.from_.pos.toString());
-      links.add('t' + this.to_.pos.toString());
+    for (let i = 0; i < this.path.length; ++i) {
+      let hop = this.path[i];
+      let prevHop = this.path[i - 1];
+      let nextHop = this.path[i + 1];
+
+      if (prevHop) {
+        let links = getOrSet(
+            this.linksByPos_,
+            [hop, this.getInPoint(prevHop, hop)],
+            new Set());
+        links.add('f' + this.from_.pos.toString());
+        links.add('t' + this.to_.pos.toString());
+      }
+
+      if (nextHop) {
+        let links = getOrSet(
+            this.linksByPos_,
+            [hop, this.getOutPoint(hop, nextHop)],
+            new Set());
+        links.add('f' + this.from_.pos.toString());
+        links.add('t' + this.to_.pos.toString());
+      }
     }
   }
 
@@ -102,12 +120,20 @@ class LayoutLink {
       if (this.nodesByPos_.has(pos)) {
         // Traversing nodes has higher cost
         cost += 5;
-      } else if (this.linksByPos_.has(pos)) {
-        // Overlapping links have cost, but not if they are from or to the same
-        // node we are (which render as merging or splitting lines). Allowing
-        // that saves space. We XOR because we want to force apart lines between
-        // the same pair, e.g. for redundant or cyclical links.
-        let links = this.linksByPos_.get(pos);
+      };
+
+      // Overlapping links have cost, but not if they are from or to the same
+      // node we are (which render as merging or splitting lines). Allowing
+      // that saves space. We XOR because we want to force apart lines between
+      // the same pair, e.g. for redundant or cyclical links.
+      for (let point of [this.getInPoint(from, to),
+                         this.getOutPoint(from, to)]) {
+        // inPoint/outPoint is part of the key because we only count the lines
+        // as "overlapping" if they travel together, not if they just cross.
+        let links = this.linksByPos_.get([pos, point]);
+        if (!links) {
+          continue;
+        }
         let hasFrom = links.has('f' + this.from_.pos.toString());
         let hasTo = links.has('t' + this.to_.pos.toString());
         if (!(hasFrom || hasTo) || (hasFrom && hasTo)) {
@@ -128,7 +154,6 @@ class LayoutLink {
     return cost;
   }
 
-  // TODO: split layout and rendering
   getOutPoint(from, to) {
     let offset = [
         to[0] - from[0],
