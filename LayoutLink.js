@@ -71,7 +71,9 @@ class LayoutLink {
     }
 
     for (let hop of this.path) {
-      getOrSet(this.linksByPos_, hop, new Set()).add(this);
+      let links = getOrSet(this.linksByPos_, hop, new Set());
+      links.add('f' + this.from_.pos.toString());
+      links.add('t' + this.to_.pos.toString());
     }
   }
 
@@ -101,8 +103,16 @@ class LayoutLink {
         // Traversing nodes has higher cost
         cost += 5;
       } else if (this.linksByPos_.has(pos)) {
-        // Overlapping links have cost
-        cost += 2;
+        // Overlapping links have cost, but not if they are from or to the same
+        // node we are (which render as merging or splitting lines). Allowing
+        // that saves space. We XOR because we want to force apart lines between
+        // the same pair, e.g. for redundant or cyclical links.
+        let links = this.linksByPos_.get(pos);
+        let hasFrom = links.has('f' + this.from_.pos.toString());
+        let hasTo = links.has('t' + this.to_.pos.toString());
+        if (!(hasFrom || hasTo) || (hasFrom && hasTo)) {
+          cost += 2;
+        }
       }
     }
 
