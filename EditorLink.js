@@ -2,16 +2,8 @@ class EditorLink extends EditorEntryBase {
   constructor() {
     super();
 
-    this.elem_.innerText = 'Link:';
+    this.elem_.innerText = '↓';
     this.elem_.classList.add('link');
-
-    this.input_ = document.createElement('input');
-    this.input_.type = 'text';
-    this.input_.placeholder = 'label';
-    this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
-    this.listen(this.input_, 'input', (e) => this.onInput());
-    this.listen(this.input_, 'blur', (e) => this.onInput());
-    this.elem_.appendChild(this.input_);
 
     let nodeList = document.createElement('div');
     this.nodes_ = new Editor(nodeList, [Editor.NODE]);
@@ -23,7 +15,7 @@ class EditorLink extends EditorEntryBase {
   }
 
   afterDomAdd() {
-    this.input_.focus();
+    this.nodes_.selectNext();
   }
 
   serialize() {
@@ -64,55 +56,17 @@ class EditorLink extends EditorEntryBase {
   }
 
   getLabel() {
-    return this.input_.value;
+    // TODO
+    return '';
   }
 
   setLabel(label) {
-    this.input_.value = label;
-    this.onInput();
+    // TODO
+    //this.input_.setAttribute('data-arch-value', this.input_.value);
   }
 
   getElement() {
     return this.elem_;
-  }
-
-  onInput() {
-    this.input_.setAttribute('data-arch-value', this.input_.value);
-  }
-
-  onInputKeyDown(e) {
-    switch (e.key) {
-      case 'Enter':
-        e.stopPropagation();
-        e.preventDefault();
-        this.stopEdit();
-        {
-          let nodes = this.nodes_.getEntries();
-          if (nodes[0].getLabel() == '') {
-            nodes[0].startEdit();
-          } else if (nodes[1].getLabel() == '') {
-            nodes[1].startEdit();
-          }
-        }
-        break;
-
-      case 'Escape':
-        e.stopPropagation();
-        e.preventDefault();
-        this.stopEdit();
-        break;
-
-      case 'ArrowUp':
-      case 'ArrowDown':
-      case 'PageUp':
-      case 'PageDown':
-        this.stopEdit();
-        break;
-
-      default:
-        e.stopPropagation();
-        break;
-    }
   }
 
   onKeyDown(e) {
@@ -120,24 +74,13 @@ class EditorLink extends EditorEntryBase {
 
     switch (e.key) {
       case 'Enter':
-        this.startEdit();
-        e.stopPropagation();
-        e.preventDefault();
-        break;
-
       case 'ArrowRight':
       case 'l':
         this.nodes_.selectNext();
+        e.stopPropagation();
+        e.preventDefault();
         break;
     }
-  }
-
-  startEdit() {
-    this.input_.focus();
-  }
-
-  stopEdit() {
-    this.elem_.focus();
   }
 
   static unserialize(ser) {

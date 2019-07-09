@@ -7,14 +7,15 @@
   --text: #ffffff;
   --placeholder: rgba(255,255,255,0.2);
   --outline: #323434;
-  --background: #202020;
+  --editor-background: #000000;
+  --grid-background: #202020;
   --group-background: rgba(0,0,0,0.5);
   --node-background: #000000;
   --input: rgba(255,255,255,0.2);
 }
 
 :root {
-  --editor-width: 305px;
+  --editor-width: 280px;
 }
 
 body {
@@ -30,7 +31,6 @@ body {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  background: var(--background);
   color: var(--text);
   font-family: 'Courier', monospace;
   font-size: 16px;
@@ -48,13 +48,11 @@ body {
   padding: 0;
 
   outline: 1px solid var(--outline);
-
   height: 100%;
-  width: 100%;
-
   overflow-y: scroll;
-
   user-select: none;
+
+  background: var(--editor-background);
 }
 
 .editor:focus {
@@ -73,6 +71,8 @@ body {
   padding-left: 4px;
   border-left: 10px solid var(--nonfocus);
   outline: 1px solid var(--outline);
+
+  font-size: 30px;
 
   cursor: default;
 }
@@ -116,17 +116,19 @@ body {
 
 .editor .editor {
   margin: 3px;
+  margin-left: 5px;
 }
 
 .grid {
   width: calc(100% - 20px);
   height: calc(100% - 20px);
   display: grid;
+  background: var(--grid-background);
   align-items: center;
   justify-items: center;
   align-content: center;
   justify-content: center;
-  margin: 10px;
+  padding: 10px;
 }
 
 .gridNode, .gridGroup, .gridGroupLabel {

@@ -2,7 +2,6 @@ class EditorNode extends EditorEntryBase {
   constructor() {
     super();
 
-    this.elem_.innerText = 'Node:';
     this.elem_.classList.add('node');
 
     this.input_ = document.createElement('input');
