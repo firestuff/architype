@@ -12,6 +12,7 @@
   --group-background: rgba(0,0,0,0.5);
   --node-background: #000000;
   --input: rgba(255,255,255,0.2);
+  --input-focus: rgba(255,0,0,0.2);
 }
 
 :root {
@@ -110,7 +111,7 @@ body {
 }
 
 .editor li input:focus {
-  border: var(--focus);
+  background-color: var(--input-focus);
   outline: none;
 }
 

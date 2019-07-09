@@ -14,6 +14,7 @@ class EditorGroup extends EditorEntryBase {
 
   afterDomAdd() {
     this.nodes_.selectNext();
+    this.nodes_.getSelected().xArchObj.startEdit();
   }
 
   serialize() {
