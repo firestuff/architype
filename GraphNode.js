@@ -50,7 +50,7 @@ class GraphNode {
       this.addAffinity(node, d => d);
 
       // Keep one space between subgraphs
-      if (this.subgraph != node.subgraph) {
+      if (this.subgraph != node.subgraph && this.label != node.label) {
         this.addAffinity(node, d => d <= 2 ? -INF : 0);
       }
 
