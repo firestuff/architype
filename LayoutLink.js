@@ -154,7 +154,7 @@ class LayoutLink {
     ];
     if (offset[0] != 0 && offset[1] != 0) {
       // Diagonal; approximate sqrt(2) from distance formula
-      cost += 0.5;
+      cost += 0.4;
     }
 
     return cost;
