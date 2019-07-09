@@ -116,6 +116,10 @@ class Architype {
           this.drawGrid(step.size);
           break;
 
+        case 'arrow':
+          this.drawArrow(step.pos, step.cls);
+          break;
+
         case 'group':
           this.drawGroup(step.min, step.max, step.label);
           break;
@@ -138,6 +142,19 @@ class Architype {
         'repeat(' + size[1] +
         ',minmax(0, calc((100vw - var(--editor-width)) / ' +
         size[0] + ')))';
+  }
+
+  drawArrow(pos, cls) {
+    let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('gridArrow');
+    svg.classList.add(cls);
+    svg.style.gridColumn = pos[0] + 1;
+    svg.style.gridRow = pos[1] + 1;
+    this.grid_.appendChild(svg);
+
+    let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    svg.appendChild(use);
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
   }
 
   drawGroup(min, max, label) {

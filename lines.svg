@@ -4,7 +4,7 @@
      style="display: none">
   <style>
 /* <![CDATA[ */
-path {
+path.line {
   stroke: var(--line-color, black);
   stroke-width: 1.5;
   fill: transparent;
@@ -15,266 +15,266 @@ path {
 
   <!-- Stop in the middle lines -->
   <symbol id="s0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    L 50 50" />
+    <path d="M  50,0    L 50,50" class="line" />
   </symbol>
 
   <symbol id="s1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    L 50,50" />
+    <path d="M 100,0    L 50,50" class="line" />
   </symbol>
 
   <symbol id="s2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   L 50,50" />
+    <path d="M 100,50   L 50,50" class="line" />
   </symbol>
 
   <symbol id="s3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  L 50,50" />
+    <path d="M 100,100  L 50,50" class="line" />
   </symbol>
 
   <symbol id="s4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  L 50,50" />
+    <path d="M  50,100  L 50,50" class="line" />
   </symbol>
 
   <symbol id="s5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  L 50,50" />
+    <path d="M   0,100  L 50,50" class="line" />
   </symbol>
 
   <symbol id="s6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   L 50,50" />
+    <path d="M   0,50   L 50,50" class="line" />
   </symbol>
 
   <symbol id="s7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    L 50,50" />
+    <path d="M   0,0    L 50,50" class="line" />
   </symbol>
 
   <!-- Point to point links -->
   <symbol id="i0o1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    Q 50,50 100,0  " />
+    <path d="M  50,0    Q 50,50 100,0  " class="line" />
   </symbol>
 
   <symbol id="i0o2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    Q 50,50 100,50 " />
+    <path d="M  50,0    Q 50,50 100,50 " class="line" />
   </symbol>
 
   <symbol id="i0o3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    Q 50,50 100,100" />
+    <path d="M  50,0    Q 50,50 100,100" class="line" />
   </symbol>
 
   <symbol id="i0o4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    Q 50,50  50,100" />
+    <path d="M  50,0    Q 50,50  50,100" class="line" />
   </symbol>
 
   <symbol id="i0o5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    Q 50,50   0,100" />
+    <path d="M  50,0    Q 50,50   0,100" class="line" />
   </symbol>
 
   <symbol id="i0o6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    Q 50,50   0,50 " />
+    <path d="M  50,0    Q 50,50   0,50 " class="line" />
   </symbol>
 
   <symbol id="i0o7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,0    Q 50,50   0,0  " />
+    <path d="M  50,0    Q 50,50   0,0  " class="line" />
   </symbol>
 
 
   <symbol id="i1o0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    Q 50,50  50,0  " />
+    <path d="M 100,0    Q 50,50  50,0  " class="line" />
   </symbol>
 
   <symbol id="i1o2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    Q 50,50 100,50 " />
+    <path d="M 100,0    Q 50,50 100,50 " class="line" />
   </symbol>
 
   <symbol id="i1o3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    Q 50,50 100,100" />
+    <path d="M 100,0    Q 50,50 100,100" class="line" />
   </symbol>
 
   <symbol id="i1o4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    Q 50,50  50,100" />
+    <path d="M 100,0    Q 50,50  50,100" class="line" />
   </symbol>
 
   <symbol id="i1o5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    Q 50,50   0,100" />
+    <path d="M 100,0    Q 50,50   0,100" class="line" />
   </symbol>
 
   <symbol id="i1o6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    Q 50,50   0,50 " />
+    <path d="M 100,0    Q 50,50   0,50 " class="line" />
   </symbol>
 
   <symbol id="i1o7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,0    Q 50,50   0,0  " />
+    <path d="M 100,0    Q 50,50   0,0  " class="line" />
   </symbol>
 
 
   <symbol id="i2o0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   Q 50,50  50,0  " />
+    <path d="M 100,50   Q 50,50  50,0  " class="line" />
   </symbol>
 
   <symbol id="i2o1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   Q 50,50 100,0  " />
+    <path d="M 100,50   Q 50,50 100,0  " class="line" />
   </symbol>
 
   <symbol id="i2o3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   Q 50,50 100,100" />
+    <path d="M 100,50   Q 50,50 100,100" class="line" />
   </symbol>
 
   <symbol id="i2o4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   Q 50,50  50,100" />
+    <path d="M 100,50   Q 50,50  50,100" class="line" />
   </symbol>
 
   <symbol id="i2o5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   Q 50,50   0,100" />
+    <path d="M 100,50   Q 50,50   0,100" class="line" />
   </symbol>
 
   <symbol id="i2o6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   Q 50,50   0,50 " />
+    <path d="M 100,50   Q 50,50   0,50 " class="line" />
   </symbol>
 
   <symbol id="i2o7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,50   Q 50,50   0,0  " />
+    <path d="M 100,50   Q 50,50   0,0  " class="line" />
   </symbol>
 
 
   <symbol id="i3o0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  Q 50,50  50,0  " />
+    <path d="M 100,100  Q 50,50  50,0  " class="line" />
   </symbol>
 
   <symbol id="i3o1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  Q 50,50 100,0  " />
+    <path d="M 100,100  Q 50,50 100,0  " class="line" />
   </symbol>
 
   <symbol id="i3o2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  Q 50,50 100,50 " />
+    <path d="M 100,100  Q 50,50 100,50 " class="line" />
   </symbol>
 
   <symbol id="i3o4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  Q 50,50  50,100" />
+    <path d="M 100,100  Q 50,50  50,100" class="line" />
   </symbol>
 
   <symbol id="i3o5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  Q 50,50   0,100" />
+    <path d="M 100,100  Q 50,50   0,100" class="line" />
   </symbol>
 
   <symbol id="i3o6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  Q 50,50   0,50 " />
+    <path d="M 100,100  Q 50,50   0,50 " class="line" />
   </symbol>
 
   <symbol id="i3o7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M 100,100  Q 50,50   0,0  " />
+    <path d="M 100,100  Q 50,50   0,0  " class="line" />
   </symbol>
 
 
   <symbol id="i4o0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  Q 50,50  50,0  " />
+    <path d="M  50,100  Q 50,50  50,0  " class="line" />
   </symbol>
 
   <symbol id="i4o1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  Q 50,50 100,0  " />
+    <path d="M  50,100  Q 50,50 100,0  " class="line" />
   </symbol>
 
   <symbol id="i4o2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  Q 50,50 100,50 " />
+    <path d="M  50,100  Q 50,50 100,50 " class="line" />
   </symbol>
 
   <symbol id="i4o3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  Q 50,50 100,100" />
+    <path d="M  50,100  Q 50,50 100,100" class="line" />
   </symbol>
 
   <symbol id="i4o5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  Q 50,50   0,100" />
+    <path d="M  50,100  Q 50,50   0,100" class="line" />
   </symbol>
 
   <symbol id="i4o6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  Q 50,50   0,50 " />
+    <path d="M  50,100  Q 50,50   0,50 " class="line" />
   </symbol>
 
   <symbol id="i4o7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M  50,100  Q 50,50   0,0  " />
+    <path d="M  50,100  Q 50,50   0,0  " class="line" />
   </symbol>
 
 
   <symbol id="i5o0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  Q 50,50  50,0  " />
+    <path d="M   0,100  Q 50,50  50,0  " class="line" />
   </symbol>
 
   <symbol id="i5o1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  Q 50,50 100,0  " />
+    <path d="M   0,100  Q 50,50 100,0  " class="line" />
   </symbol>
 
   <symbol id="i5o2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  Q 50,50 100,50 " />
+    <path d="M   0,100  Q 50,50 100,50 " class="line" />
   </symbol>
 
   <symbol id="i5o3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  Q 50,50 100,100" />
+    <path d="M   0,100  Q 50,50 100,100" class="line" />
   </symbol>
 
   <symbol id="i5o4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  Q 50,50  50,100" />
+    <path d="M   0,100  Q 50,50  50,100" class="line" />
   </symbol>
 
   <symbol id="i5o6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  Q 50,50   0,50 " />
+    <path d="M   0,100  Q 50,50   0,50 " class="line" />
   </symbol>
 
   <symbol id="i5o7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,100  Q 50,50   0,0  " />
+    <path d="M   0,100  Q 50,50   0,0  " class="line" />
   </symbol>
 
 
   <symbol id="i6o0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   Q 50,50  50,0  " />
+    <path d="M   0,50   Q 50,50  50,0  " class="line" />
   </symbol>
 
   <symbol id="i6o1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   Q 50,50 100,0  " />
+    <path d="M   0,50   Q 50,50 100,0  " class="line" />
   </symbol>
 
   <symbol id="i6o2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   Q 50,50 100,50 " />
+    <path d="M   0,50   Q 50,50 100,50 " class="line" />
   </symbol>
 
   <symbol id="i6o3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   Q 50,50 100,100" />
+    <path d="M   0,50   Q 50,50 100,100" class="line" />
   </symbol>
 
   <symbol id="i6o4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   Q 50,50  50,100" />
+    <path d="M   0,50   Q 50,50  50,100" class="line" />
   </symbol>
 
   <symbol id="i6o5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   Q 50,50   0,100" />
+    <path d="M   0,50   Q 50,50   0,100" class="line" />
   </symbol>
 
   <symbol id="i6o7" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,50   Q 50,50   0,0  " />
+    <path d="M   0,50   Q 50,50   0,0  " class="line" />
   </symbol>
 
 
   <symbol id="i7o0" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    Q 50,50  50,0  " />
+    <path d="M   0,0    Q 50,50  50,0  " class="line" />
   </symbol>
 
   <symbol id="i7o1" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    Q 50,50 100,0  " />
+    <path d="M   0,0    Q 50,50 100,0  " class="line" />
   </symbol>
 
   <symbol id="i7o2" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    Q 50,50 100,50 " />
+    <path d="M   0,0    Q 50,50 100,50 " class="line" />
   </symbol>
 
   <symbol id="i7o3" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    Q 50,50 100,100" />
+    <path d="M   0,0    Q 50,50 100,100" class="line" />
   </symbol>
 
   <symbol id="i7o4" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    Q 50,50  50,100" />
+    <path d="M   0,0    Q 50,50  50,100" class="line" />
   </symbol>
 
   <symbol id="i7o5" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    Q 50,50   0,100" />
+    <path d="M   0,0    Q 50,50   0,100" class="line" />
   </symbol>
 
   <symbol id="i7o6" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path d="M   0,0    Q 50,50   0,50 " />
+    <path d="M   0,0    Q 50,50   0,50 " class="line" />
   </symbol>
 </svg>

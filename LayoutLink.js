@@ -38,6 +38,11 @@ class LayoutLink {
           best.path.reverse();
           next.path.splice(next.path.length - 1, 1);
           this.path = next.path.concat(best.path);
+          if (next.source == 2) {
+            // path is backward because this half of the path started from the
+            // end point. Fix it so the arrows end up in the right places.
+            this.path.reverse();
+          }
           break;
         }
 
@@ -157,11 +162,19 @@ class LayoutLink {
       });
     }
 
+    let endInPoint = this.getInPoint(this.path[this.path.length - 2],
+                                     this.path[this.path.length - 1])
+
     steps.push({
       type: 'line',
       pos: Array.from(this.path[this.path.length - 1]),
-      cls: 's' + this.getInPoint(
-          this.path[this.path.length - 2], this.path[this.path.length - 1]),
+      cls: 's' + endInPoint,
+    });
+
+    steps.push({
+      type: 'arrow',
+      pos: Array.from(this.path[this.path.length - 1]),
+      cls: 'a' + endInPoint,
     });
 
     return steps;
