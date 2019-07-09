@@ -102,7 +102,7 @@ class LayoutLink {
         cost += 5;
       } else if (this.linksByPos_.has(pos)) {
         // Overlapping links have cost
-        cost += 2 * this.linksByPos_.get(pos).size;
+        cost += 2;
       }
     }
 
@@ -113,18 +113,6 @@ class LayoutLink {
     if (offset[0] != 0 && offset[1] != 0) {
       // Diagonal; approximate sqrt(2) from distance formula
       cost += 0.5;
-
-      // The two other positions in a quad covering this diagonal
-      let others = [
-          [from[0] + Math.sign(offset[0]), from[1]],
-          [from[0], from[1] + Math.sign(offset[1])],
-      ];
-      if (intersects(
-              this.linksByPos_.get(others[0]) || new Set(),
-              this.linksByPos_.get(others[1]) || new Set())) {
-        // We cross another link at a right angle
-        cost += 2;
-      }
     }
 
     return cost;
