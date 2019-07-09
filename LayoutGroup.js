@@ -81,4 +81,8 @@ class LayoutGroup {
       label: this.graphGroup_.label,
     };
   }
+
+  hasGraphGroup() {
+    return this.graphGroup_ != null;
+  }
 }

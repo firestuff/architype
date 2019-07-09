@@ -13,6 +13,7 @@ class Layout {
     this.resolveAffinity();
     this.resolveGroups();
     while (this.iterate());
+    this.addGroupPos();
     this.drawLinks();
     this.fixOrigin();
   }
@@ -192,6 +193,20 @@ class Layout {
         max[0] - min[0] + 1,
         max[1] - min[1] + 1,
     ];
+  }
+
+  addGroupPos() {
+    for (let group of this.groups_) {
+      if (!group.hasGraphGroup()) {
+        continue;
+      }
+      let [min, max] = group.getMinMax();
+      for (let x = min[0]; x <= max[0]; ++x) {
+        for (let y = min[1]; y <= max[1]; ++y) {
+          getOrSet(this.nodesByPos_, [x, y], group);
+        }
+      }
+    }
   }
 
   drawLinks() {
