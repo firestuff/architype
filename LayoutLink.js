@@ -121,24 +121,30 @@ class LayoutLink {
         // Traversing nodes has higher cost
         cost += 5;
       };
+    }
 
-      // Overlapping links have cost, but not if they are from or to the same
-      // node we are (which render as merging or splitting lines). Allowing
-      // that saves space. We XOR because we want to force apart lines between
-      // the same pair, e.g. for redundant or cyclical links.
-      for (let point of [this.getInPoint(from, to),
-                         this.getOutPoint(from, to)]) {
-        // inPoint/outPoint is part of the key because we only count the lines
-        // as "overlapping" if they travel together, not if they just cross.
-        let links = this.linksByPos_.get([pos, point]);
-        if (!links) {
-          continue;
-        }
-        let hasFrom = links.has('f' + this.from_.pos.toString());
-        let hasTo = links.has('t' + this.to_.pos.toString());
-        if (!(hasFrom || hasTo) || (hasFrom && hasTo)) {
-          cost += 2;
-        }
+    // Overlapping links have cost, but not if they are from or to the same
+    // node we are (which render as merging or splitting lines). Allowing
+    // that saves space. We XOR because we want to force apart lines between
+    // the same pair, e.g. for redundant or cyclical links.
+    for (let key of [[from, this.getOutPoint(from, to)],
+                     [to, this.getInPoint(from, to)]]) {
+      // inPoint/outPoint is part of the key because we only count the lines
+      // as "overlapping" if they travel together, not if they just cross.
+      let links = this.linksByPos_.get(key);
+      if (!links) {
+        continue;
+      }
+      let hasFrom = links.has('f' + this.from_.pos.toString());
+      let hasTo = links.has('t' + this.to_.pos.toString());
+      if (hasFrom && hasTo) {
+        // Push apart lines between the same pair
+        cost += 2;
+      } else if (hasFrom || hasTo) {
+        // Encourage merging
+        cost -= 0.25;
+      } else {
+        cost += 2;
       }
     }
 

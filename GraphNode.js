@@ -68,7 +68,7 @@ class GraphNode {
       // Try to preserve pagerank left-to-right flow from initial positions
       let rankSign = Math.sign(node.pageRank - this.pageRank);
       this.addAffinity(node, (d, v) =>
-                       [Math.sign(v[0]) == rankSign ? 0 : -500, 0]);
+                       [Math.sign(v[0]) == rankSign ? 0 : -1000, 0]);
     }
 
     for (let to of this.links) {
