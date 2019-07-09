@@ -8,6 +8,7 @@
   --placeholder: rgba(255,255,255,0.2);
   --outline: #323434;
   --background: #000000;
+  --node-background: #080808;
   --input: rgba(255,255,255,0.2);
 }
 
@@ -144,7 +145,7 @@ body {
 .gridNode {
   width: 85%;
   height: 85%;
-  background: var(--background);
+  background: var(--node-background);
   justify-content: center;
   border: 1px solid white;
   z-index: 3;
