@@ -246,7 +246,6 @@ class Architype {
 
   fixSizes() {
     for (let node of this.toSize_) {
-      console.log(node, node.scrollHeight, node.clientHeight);
       node.style.fontSize = null;
       for (let size = 30;
            size && (node.scrollWidth > node.clientWidth ||

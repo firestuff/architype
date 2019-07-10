@@ -146,8 +146,8 @@ class Layout {
   }
 
   fixOrigin() {
-    let min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER];
-    let max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
+    let min = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
+    let max = [Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY];
     for (let group of this.groups_) {
       let [groupMin, groupMax] = group.getMinMax();
       for (let i of [0, 1]) {
@@ -165,7 +165,7 @@ class Layout {
     }
 
     if (this.graph_.label) {
-      min[0] -= 1;
+      min[1] -= 1;
     }
 
     // Set a minimum size and center the smaller graph
