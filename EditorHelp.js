@@ -45,6 +45,10 @@ class EditorHelp extends EditorEntryBase {
     this.addText('+');
     this.addKey('d');
     this.addText('Del after ');
+
+    this.addLine();
+    this.addKey('␣');
+    this.addText('Highlight       ');
   }
 
   addLine() {
