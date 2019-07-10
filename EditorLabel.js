@@ -81,6 +81,12 @@ class EditorLabel extends EditorEntryBase {
         e.stopPropagation();
         e.preventDefault();
         break;
+
+      case ' ':
+        // We don't support highlighting, but stop propagation
+        e.stopPropagation();
+        e.preventDefault();
+        break;
     }
   }
 

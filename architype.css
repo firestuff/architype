@@ -264,6 +264,7 @@ body {
 
 .gridLines.highlight {
   --line-color: var(--focus);
+  --line-width: 3;
 }
 
 .gridLinkLabel {

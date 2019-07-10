@@ -6,7 +6,7 @@
 /* <![CDATA[ */
 path.line {
   stroke: var(--line-color, black);
-  stroke-width: 1.5;
+  stroke-width: var(--line-width, 1.5);
   fill: transparent;
   shape-rendering: geometricPrecision;
 }
