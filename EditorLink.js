@@ -6,9 +6,10 @@ class EditorLink extends EditorEntryBase {
     this.elem_.classList.add('link');
 
     let nodeList = document.createElement('div');
-    this.nodes_ = new Editor(nodeList, [Editor.NODE]);
-    this.nodes_.setMinEntries(2);
-    this.nodes_.setMaxEntries(2);
+    this.nodes_ = new Editor(nodeList, [
+      [EditorNode,  [2, 2]],
+      [EditorLabel, [0, 1]],
+    ]);
     this.nodes_.addNodeAfter();
     this.nodes_.addNodeAfter();
     this.elem_.appendChild(nodeList);
@@ -49,21 +50,26 @@ class EditorLink extends EditorEntryBase {
   };
 
   getFrom() {
-    return this.nodes_.getEntries()[0];
+    return this.nodes_.getEntries(EditorNode)[0];
   }
 
   getTo() {
-    return this.nodes_.getEntries()[1];
+    return this.nodes_.getEntries(EditorNode)[1];
   }
 
   getLabel() {
-    // TODO
-    return '';
+    let label = this.nodes_.getEntries(EditorLabel)[0];
+    return label ? label.getLabel() : null;
   }
 
   setLabel(label) {
-    // TODO
-    //this.input_.setAttribute('data-arch-value', this.input_.value);
+    let obj = this.nodes_.getEntries(EditorLabel)[0];
+    if (obj) {
+      obj.setLabel(label);
+    } else {
+      this.nodes_.addLabelBefore();
+      this.setLabel(label);
+    }
   }
 
   getElement() {
@@ -86,8 +92,8 @@ class EditorLink extends EditorEntryBase {
 
   static unserialize(ser) {
     let link = new EditorLink();
-    link.setLabel(ser.label);
     link.nodes_.clear();
+    link.setLabel(ser.label);
     link.nodes_.unserialize([ser.from, ser.to]);
     return link.getElement();
   }

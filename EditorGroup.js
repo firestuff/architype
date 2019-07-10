@@ -6,8 +6,10 @@ class EditorGroup extends EditorEntryBase {
     this.elem_.classList.add('group');
 
     let nodeList = document.createElement('div');
-    this.nodes_ = new Editor(nodeList, [Editor.NODE, Editor.LABEL]);
-    this.nodes_.setMinEntries(1);
+    this.nodes_ = new Editor(nodeList, [
+      [EditorNode,  [1, Number.POSITIVE_INFINITY]],
+      [EditorLabel, [0, 1]],
+    ]);
     this.nodes_.addNodeAfter();
     this.elem_.appendChild(nodeList);
   }
@@ -21,7 +23,7 @@ class EditorGroup extends EditorEntryBase {
     return {
       type: 'group',
       label: this.getLabel(),
-      members: this.nodes_.serialize(),
+      members: this.nodes_.serialize(EditorNode),
     };
   }
 
@@ -45,18 +47,22 @@ class EditorGroup extends EditorEntryBase {
   }
 
   getNodes() {
-    return this.nodes_.getEntries();
+    return this.nodes_.getEntries(EditorNode);
   }
 
   getLabel() {
-    // TODO
-    return '';
+    let label = this.nodes_.getEntries(EditorLabel)[0];
+    return label ? label.getLabel() : null;
   }
 
   setLabel(label) {
-    // TODO
-    //this.input_.value = label;
-    //this.input_.setAttribute('data-arch-value', this.input_.value);
+    let obj = this.nodes_.getEntries(EditorLabel)[0];
+    if (obj) {
+      obj.setLabel(label);
+    } else {
+      this.nodes_.addLabelBefore();
+      this.setLabel(label);
+    }
   }
 
   getElement() {
@@ -79,8 +85,8 @@ class EditorGroup extends EditorEntryBase {
 
   static unserialize(ser) {
     let group = new EditorGroup();
-    group.setLabel(ser.label);
     group.nodes_.clear();
+    group.setLabel(ser.label);
     group.nodes_.unserialize(ser.members);
     return group.getElement();
   }

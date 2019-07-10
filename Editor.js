@@ -1,16 +1,15 @@
 <!--# include file="List.js" -->
 
 class Editor extends List {
-  static NODE = 1;
-  static GROUP = 2;
-  static LINK = 3;
-  static LABEL = 4;
-
-  constructor(container, allowedTypes) {
+  constructor(container, limitsByType) {
     super(container);
 
-    this.allowedTypes_ = new Set(allowedTypes ||
-                                 [Editor.NODE, Editor.GROUP, Editor.LINK]);
+    this.limitsByType_ = new Map(limitsByType || [
+      [EditorNode,  [0, Number.POSITIVE_INFINITY]],
+      [EditorGroup, [0, Number.POSITIVE_INFINITY]],
+      [EditorLink,  [0, Number.POSITIVE_INFINITY]],
+      [EditorLabel, [0, 1]],
+    ]);
 
     this.container_.classList.add('editor');
     // Needs to accept focus to receive keydown, but shouldn't be in the normal
@@ -24,10 +23,10 @@ class Editor extends List {
     this.container_.innerHTML = '';
   }
 
-  serialize() {
+  serialize(type) {
     // Doesn't have a type, only used as part of other objects
     let ret = [];
-    for (let entry of this.getEntries()) {
+    for (let entry of this.getEntries(type)) {
       ret.push(entry.serialize());
     }
     return ret;
@@ -39,60 +38,72 @@ class Editor extends List {
     }
   }
 
-  isAllowed(type) {
-    return this.mayAdd() && this.allowedTypes_.has(type);
+  mayAdd(type) {
+    let limits = this.limitsByType_.get(type);
+    if (!limits) {
+      return false;
+    }
+    return this.getEntries(type).length < limits[1];
+  }
+
+  mayDelete(type) {
+    let limits = this.limitsByType_.get(type);
+    if (!limits) {
+      return false;
+    }
+    return this.getEntries(type).length > limits[0];
   }
 
   addNodeAfter() {
-    if (this.isAllowed(Editor.NODE)) {
+    if (this.mayAdd(EditorNode)) {
       EditorNode.addAfter(this.container_, this.getSelected());
     }
   }
 
   addNodeBefore() {
-    if (this.isAllowed(Editor.NODE)) {
+    if (this.mayAdd(EditorNode)) {
       EditorNode.addBefore(this.container_, this.getSelected());
     }
   }
 
   addLabelBefore() {
-    if (this.isAllowed(Editor.LABEL)) {
+    if (this.mayAdd(EditorLabel)) {
       EditorLabel.addBefore(this.container_, this.getSelected());
     }
   }
 
   addLabelAfter() {
-    if (this.isAllowed(Editor.LABEL)) {
+    if (this.mayAdd(EditorLabel)) {
       EditorLabel.addAfter(this.container_, this.getSelected());
     }
   }
 
   addLinkBefore() {
-    if (this.isAllowed(Editor.LINK)) {
+    if (this.mayAdd(EditorLink)) {
       EditorLink.addBefore(this.container_, this.getSelected());
     }
   }
 
   addLinkAfter() {
-    if (this.isAllowed(Editor.LINK)) {
+    if (this.mayAdd(EditorLink)) {
       EditorLink.addAfter(this.container_, this.getSelected());
     }
   }
 
   addLinkBefore() {
-    if (this.isAllowed(Editor.LINK)) {
+    if (this.mayAdd(EditorLink)) {
       EditorLink.addBefore(this.container_, this.getSelected());
     }
   }
 
   addGroupAfter() {
-    if (this.isAllowed(Editor.GROUP)) {
+    if (this.mayAdd(EditorGroup)) {
       EditorGroup.addAfter(this.container_, this.getSelected());
     }
   }
 
   addGroupBefore() {
-    if (this.isAllowed(Editor.GROUP)) {
+    if (this.mayAdd(EditorGroup)) {
       EditorGroup.addBefore(this.container_, this.getSelected());
     }
   }

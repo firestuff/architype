@@ -1,28 +1,17 @@
 class List {
   constructor(container) {
     this.container_ = container;
-    this.minEntries_ = 0;
-    this.maxEntries_ = Number.MAX_SAFE_INTEGER;
   }
 
-  setMinEntries(min) {
-    this.minEntries_ = min;
-  }
-
-  setMaxEntries(max) {
-    this.maxEntries_ = max;
-  }
-
-  getEntries() {
+  getEntries(type) {
     let ret = [];
     for (let elem of this.container_.children) {
+      if (type && !(elem.xArchObj instanceof type)) {
+        continue;
+      }
       ret.push(elem.xArchObj);
     }
     return ret;
-  }
-
-  mayAdd() {
-    return this.container_.children.length < this.maxEntries_;
   }
 
   getSelected() {
@@ -36,12 +25,13 @@ class List {
     return null;
   }
 
+  mayDelete(type) {
+    return true;
+  }
+
   deleteSelected() {
-    if (this.container_.children.length <= this.minEntries_) {
-      return;
-    }
     let sel = this.getSelected();
-    if (sel) {
+    if (sel && this.mayDelete(sel.xArchObj.constructor)) {
       sel.xArchObj.remove();
     }
   }
@@ -49,6 +39,7 @@ class List {
   deleteSelectedAndAfter() {
     let sel = this.getSelected();
     if (sel) {
+      // TODO: fix to obey mayDelete()
       while (this.container_.lastElementChild != sel &&
              this.container_.children.length > this.minEntries_) {
         this.container_.lastElementChild.xArchObj.remove();
