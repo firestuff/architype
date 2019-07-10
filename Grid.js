@@ -42,7 +42,7 @@ class Grid {
           break;
 
         case 'node':
-          this.drawNode(step.label, step.pos);
+          this.drawNode(step.label, step.pos, step.highlight);
           break;
       }
     }
@@ -122,11 +122,12 @@ class Grid {
     this.toSize_.push(elem);
   }
 
-  drawNode(label, pos) {
+  drawNode(label, pos, highlight) {
     let node = document.createElement('div');
     node.classList.add('gridNode');
     this.container_.appendChild(node);
     node.innerText = label;
+    node.classList.toggle('highlight', highlight);
     node.style.gridColumn = pos[0] + 1;
     node.style.gridRow = pos[1] + 1;
     this.toSize_.push(node);

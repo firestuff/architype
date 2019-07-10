@@ -108,6 +108,7 @@ class GraphNode {
     let node = new GraphNode();
     node.label = item.label;
     node.soft = soft;
+    node.highlight = item.highlight;
     return node;
   }
 }

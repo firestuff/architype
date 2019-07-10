@@ -84,6 +84,14 @@ body {
   background-color: var(--node);
 }
 
+.editor li.node.highlight {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 10px,
+    rgba(255,0,0,0.3) 10px 20px
+  ), var(--node);
+}
+
 .editor li.group {
   background-color: var(--group);
 }
@@ -193,6 +201,11 @@ body {
   border: 1px solid white;
   border-radius: 10%;
   z-index: 3;
+}
+
+.gridNode.highlight {
+  border-color: var(--focus);
+  border-width: 3px;
 }
 
 .gridGraphLabel {

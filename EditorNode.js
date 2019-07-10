@@ -20,6 +20,7 @@ class EditorNode extends EditorEntryBase {
     return {
       type: 'node',
       label: this.getLabel(),
+      highlight: this.elem_.classList.contains('highlight'),
     };
   }
 
@@ -30,6 +31,10 @@ class EditorNode extends EditorEntryBase {
   setLabel(label) {
     this.input_.value = label;
     this.onInput();
+  }
+
+  setHighlight(highlight) {
+    this.elem_.classList.toggle('highlight', highlight);
   }
 
   wantFocus() {
@@ -91,6 +96,13 @@ class EditorNode extends EditorEntryBase {
         e.stopPropagation();
         e.preventDefault();
         break;
+
+      case ' ':
+        this.elem_.classList.toggle('highlight');
+        this.onInput();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
     }
   }
 
@@ -105,6 +117,7 @@ class EditorNode extends EditorEntryBase {
   static unserialize(ser) {
     let node = new EditorNode();
     node.setLabel(ser.label);
+    node.setHighlight(ser.highlight);
     return node.getElement();
   }
 }

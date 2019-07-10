@@ -105,6 +105,7 @@ class LayoutNode {
       type: 'node',
       pos: this.pos,
       label: this.graphNode_.label,
+      highlight: this.graphNode_.highlight,
     };
   }
 }
