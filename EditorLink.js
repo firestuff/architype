@@ -52,10 +52,6 @@ class EditorLink extends EditorEntryBase {
     }
   }
 
-  getElement() {
-    return this.elem_;
-  }
-
   onKeyDown(e) {
     super.onKeyDown(e);
 

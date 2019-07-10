@@ -96,6 +96,38 @@ body {
   background-color: var(--label);
 }
 
+.editor li.help {
+  padding: 10px;
+  font-size: 16px;
+  flex-direction: column;
+}
+
+.editor li.help > div {
+  min-height: 10px;
+}
+
+.editor li.help .key {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  font-size: 20px;
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 3px;
+  overflow: hidden;
+}
+
+.editor li.help .key:empty {
+  visibility: hidden;
+}
+
+.editor li.help .text {
+  margin: 5px;
+}
 
 .editor li:focus {
   border-left: 10px solid var(--focus) !important;

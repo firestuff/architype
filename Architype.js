@@ -33,6 +33,9 @@ class Architype {
     }
 
     this.unserialize(JSON.parse(localStorage.getItem('currentState')));
+    if (this.editor_.getEntries().length == 0) {
+      this.editor_.addHelpAfter();
+    }
     this.editor_.selectNext();
 
     this.observer_ = new MutationObserver(e => { this.onChange(e); });

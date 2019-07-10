@@ -33,6 +33,10 @@ class EditorEntryBase extends ListenUtils {
     return false;
   }
 
+  getElement() {
+    return this.elem_;
+  }
+
   onElemFocus() {
     this.elem_.scrollIntoView({block: 'nearest'});
   }
@@ -59,6 +63,8 @@ class EditorEntryBase extends ListenUtils {
     switch (ser.type) {
       case 'group':
         return EditorGroup.unserialize(ser);
+      case 'help':
+        return EditorHelp.unserialize(ser);
       case 'label':
         return EditorLabel.unserialize(ser);
       case 'link':

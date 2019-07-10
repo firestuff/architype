@@ -33,10 +33,6 @@ class EditorLabel extends EditorEntryBase {
     this.onInput();
   }
 
-  getElement() {
-    return this.elem_;
-  }
-
   wantFocus() {
     return this.getLabel() == '';
   }

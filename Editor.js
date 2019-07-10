@@ -9,7 +9,9 @@ class Editor extends List {
       [EditorGroup, [0, Number.POSITIVE_INFINITY]],
       [EditorLink,  [0, Number.POSITIVE_INFINITY]],
       [EditorLabel, [0, 1]],
+      [EditorHelp,  [0, Number.POSITIVE_INFINITY]],
     ]);
+    // TODO: do something with global EditorLabel
 
     this.container_.classList.add('editor');
     // Needs to accept focus to receive keydown, but shouldn't be in the normal
@@ -34,7 +36,12 @@ class Editor extends List {
 
   unserialize(ser) {
     for (let entry of ser) {
-      this.container_.appendChild(EditorEntryBase.unserialize(entry));
+      let elem = EditorEntryBase.unserialize(entry);
+      if (elem) {
+        this.container_.appendChild(elem);
+      } else {
+        console.log('failed to unserialize', entry);
+      }
     }
   }
 
@@ -107,6 +114,12 @@ class Editor extends List {
       EditorGroup.addBefore(this.container_, this.getSelected());
     }
   }
+
+  addHelpAfter() {
+    if (this.mayAdd(EditorHelp)) {
+      EditorHelp.addAfter(this.container_, this.getSelected());
+    }
+  }
   
   onKeyDown(e) {
     switch (e.key) {
@@ -157,6 +170,12 @@ class Editor extends List {
         e.stopPropagation();
         e.preventDefault();
         return;
+
+      case '?':
+        this.addHelpAfter();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
     }
     
     super.onKeyDown(e);
@@ -165,6 +184,7 @@ class Editor extends List {
 
 <!--# include file="EditorEntryBase.js" -->
 <!--# include file="EditorGroup.js" -->
+<!--# include file="EditorHelp.js" -->
 <!--# include file="EditorLabel.js" -->
 <!--# include file="EditorLink.js" -->
 <!--# include file="EditorNode.js" -->
