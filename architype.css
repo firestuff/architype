@@ -96,6 +96,14 @@ body {
   background-color: var(--group);
 }
 
+.editor li.group.highlight {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 10px,
+    rgba(255,0,0,0.3) 10px 20px
+  ), var(--group);
+}
+
 .editor li.link {
   background-color: var(--link);
 }
@@ -230,6 +238,11 @@ body {
   justify-content: flex-start;
   border: 1px dashed white;
   z-index: 1;
+}
+
+.gridGroup.highlight {
+  border-color: var(--focus);
+  border-width: 3px;
 }
 
 .gridGroupLabel {

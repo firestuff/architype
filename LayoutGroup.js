@@ -89,6 +89,7 @@ class LayoutGroup {
       min: min,
       max: max,
       label: this.graphGroup_.label,
+      highlight: this.graphGroup_.highlight,
     };
   }
 

@@ -30,7 +30,7 @@ class Grid {
           break;
 
         case 'group':
-          this.drawGroup(step.min, step.max, step.label);
+          this.drawGroup(step.min, step.max, step.label, step.highlight);
           break;
 
         case 'line':
@@ -83,12 +83,13 @@ class Grid {
     this.toSize_.push(elem);
   }
 
-  drawGroup(min, max, label) {
+  drawGroup(min, max, label, highlight) {
     let group = document.createElement('div');
     this.container_.appendChild(group);
     group.classList.add('gridGroup');
     group.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     group.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
+    group.classList.toggle('highlight', highlight);
 
     if (label != '') {
       let labelNode = document.createElement('div');

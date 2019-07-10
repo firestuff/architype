@@ -27,6 +27,7 @@ class GraphGroup {
   static process(item) {
     let group = new GraphGroup();
     group.label = item.label;
+    group.highlight = item.highlight;
     group.nodeLabels = new Set();
     for (let member of item.members) {
       if (member.label == '') {
