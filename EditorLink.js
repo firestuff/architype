@@ -29,26 +29,6 @@ class EditorLink extends EditorEntryBase {
     };
   }
 
-  exportGraphviz() {
-    if (this.getFrom().getLabel() == '' || this.getTo().getLabel() == '') {
-      return [];
-    }
-
-    let label = '';
-    if (this.getLabel() != '') {
-      label = ' [label="' + this.getLabel() + '"]';
-    }
-
-    let ret = [];
-    for (let from of this.from) {
-      for (let to of this.to) {
-        ret.push('"' + from.id + '" -> "' + to.id + '"' + label + ';');
-      }
-    }
-
-    return ret;
-  };
-
   getFrom() {
     return this.nodes_.getEntries(EditorNode)[0];
   }

@@ -23,13 +23,6 @@ class EditorNode extends EditorEntryBase {
     };
   }
 
-  exportGraphviz() {
-    if (this.getLabel() == '') {
-      return [];
-    }
-    return ['"' + this.id + '" [label="' + this.getLabel() + '"];'];
-  }
-
   getLabel() {
     return this.input_.value;
   }

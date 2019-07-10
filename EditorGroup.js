@@ -27,25 +27,6 @@ class EditorGroup extends EditorEntryBase {
     };
   }
 
-  exportGraphviz() {
-    let lines = [
-        'subgraph "cluster_' + this.id + '" {',
-    ];
-
-    if (this.getLabel() != '') {
-      lines.push('\tlabel = "' + this.getLabel() + '";');
-    }
-
-    for (let obj of this.nodes) {
-      for (let line of obj.exportGraphviz()) {
-        lines.push('\t' + line);
-      }
-    }
-
-    lines.push('}');
-    return lines;
-  }
-
   getNodes() {
     return this.nodes_.getEntries(EditorNode);
   }

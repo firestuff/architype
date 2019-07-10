@@ -24,10 +24,6 @@ class EditorLabel extends EditorEntryBase {
     };
   }
 
-  exportGraphviz() {
-    return [];
-  }
-
   getLabel() {
     return this.input_.value;
   }

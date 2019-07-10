@@ -4,8 +4,6 @@ class EditorEntryBase extends ListenUtils {
   constructor() {
     super();
 
-    this.id = randStr64();
-
     this.elem_ = document.createElement('li');
     this.elem_.tabIndex = 0;
     this.listen(this.elem_, 'focus', () => this.onElemFocus());
