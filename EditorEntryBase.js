@@ -61,6 +61,8 @@ class EditorEntryBase extends ListenUtils {
     switch (ser.type) {
       case 'group':
         return EditorGroup.unserialize(ser);
+      case 'label':
+        return EditorLabel.unserialize(ser);
       case 'link':
         return EditorLink.unserialize(ser);
       case 'node':

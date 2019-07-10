@@ -102,6 +102,7 @@ class Architype {
     render.postMessage(this.serialized_);
   }
 
+  // TODO: factor out draw/grid code
   onResize(e) {
     this.fixSizes();
   }
@@ -211,10 +212,6 @@ class Architype {
 }
 
 <!--# include file="Editor.js" -->
-<!--# include file="EditorEntryBase.js" -->
-<!--# include file="EditorGroup.js" -->
-<!--# include file="EditorLink.js" -->
-<!--# include file="EditorNode.js" -->
 
 <!--# include file="utils.js" -->
 

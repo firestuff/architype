@@ -6,7 +6,7 @@ class EditorGroup extends EditorEntryBase {
     this.elem_.classList.add('group');
 
     let nodeList = document.createElement('div');
-    this.nodes_ = new Editor(nodeList, [Editor.NODE]);
+    this.nodes_ = new Editor(nodeList, [Editor.NODE, Editor.LABEL]);
     this.nodes_.setMinEntries(1);
     this.nodes_.addNodeAfter();
     this.elem_.appendChild(nodeList);

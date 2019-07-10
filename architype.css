@@ -4,6 +4,7 @@
   --node: #091d2a;
   --group: #092a17;
   --link: #331400;
+  --label: #330025;
   --text: #ffffff;
   --placeholder: rgba(255,255,255,0.2);
   --outline: #323434;
@@ -89,6 +90,12 @@ body {
 .editor li.link {
   background-color: var(--link);
 }
+
+.editor li.label {
+  background-color: var(--label);
+}
+
+
 .editor li:focus {
   border-left: 10px solid var(--focus) !important;
 }

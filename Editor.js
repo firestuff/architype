@@ -4,6 +4,7 @@ class Editor extends List {
   static NODE = 1;
   static GROUP = 2;
   static LINK = 3;
+  static LABEL = 4;
 
   constructor(container, allowedTypes) {
     super(container);
@@ -54,6 +55,24 @@ class Editor extends List {
     }
   }
 
+  addLabelBefore() {
+    if (this.isAllowed(Editor.LABEL)) {
+      EditorLabel.addBefore(this.container_, this.getSelected());
+    }
+  }
+
+  addLabelAfter() {
+    if (this.isAllowed(Editor.LABEL)) {
+      EditorLabel.addAfter(this.container_, this.getSelected());
+    }
+  }
+
+  addLinkBefore() {
+    if (this.isAllowed(Editor.LINK)) {
+      EditorLink.addBefore(this.container_, this.getSelected());
+    }
+  }
+
   addLinkAfter() {
     if (this.isAllowed(Editor.LINK)) {
       EditorLink.addAfter(this.container_, this.getSelected());
@@ -80,6 +99,18 @@ class Editor extends List {
   
   onKeyDown(e) {
     switch (e.key) {
+      case 'a':
+        this.addLabelAfter();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
+      case 'A':
+        this.addLabelBefore();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
       case 'g':
         this.addGroupAfter();
         e.stopPropagation();
@@ -120,3 +151,9 @@ class Editor extends List {
     super.onKeyDown(e);
   }
 }
+
+<!--# include file="EditorEntryBase.js" -->
+<!--# include file="EditorGroup.js" -->
+<!--# include file="EditorLabel.js" -->
+<!--# include file="EditorLink.js" -->
+<!--# include file="EditorNode.js" -->
