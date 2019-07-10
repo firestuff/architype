@@ -3,7 +3,7 @@ class LayoutNode {
     this.graphNode_ = graphNode;
     this.nodesByPos_ = nodesByPos;
     this.pos = pos;
-    this.groups = [];
+    this.groups = new Set();
 
     this.nodesByPos_.set(this.pos, this);
   }

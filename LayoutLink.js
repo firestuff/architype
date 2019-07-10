@@ -117,7 +117,13 @@ class LayoutLink {
     // arguments. That means that any costs applied to nodes must be applied
     // whether the node is from or to. Traversal is double-charged.
     for (let pos of [from, to]) {
-      if (this.nodesByPos_.has(pos)) {
+      let taken = this.nodesByPos_.get(pos);
+      if (taken instanceof LayoutGroup &&
+          (this.from_.groups.has(taken) ||
+           this.to_.groups.has(taken))) {
+        // We're going to or from this group, so traversing it is fine.
+        continue;
+      } else if (taken) {
         // Traversing nodes has higher cost
         cost += 5;
       };

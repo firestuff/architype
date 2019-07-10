@@ -6,7 +6,7 @@ class LayoutGroup {
     this.tension = 0;
 
     for (let node of nodes) {
-      node.groups.push(this);
+      node.groups.add(this);
     }
   }
 

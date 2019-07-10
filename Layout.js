@@ -3,6 +3,7 @@ class Layout {
     this.graph_ = graph;
 
     this.nodes_ = [];
+    // TODO: value should be a set, not a single value, for groups
     this.nodesByPos_ = new StringMap();
     this.nodesByGraphNode_ = new Map();
     this.linksByPos_ = new StringMap();
