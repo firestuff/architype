@@ -1,8 +1,9 @@
 class LayoutLink {
-  constructor(from, to, label, nodesByPos, linksByPos, labelsByPos) {
+  constructor(from, to, label, highlight, nodesByPos, linksByPos, labelsByPos) {
     this.from_ = from;
     this.to_ = to;
     this.label_ = label;
+    this.highlight_ = highlight;
     this.nodesByPos_ = nodesByPos;
     this.linksByPos_ = linksByPos;
     this.labelsByPos_ = labelsByPos;
@@ -223,6 +224,7 @@ class LayoutLink {
       type: 'line',
       pos: Array.from(this.path[0]),
       cls: 's' + this.getOutPoint(this.path[0], this.path[1]),
+      highlight: this.highlight_,
     });
 
     for (let i = 1; i < this.path.length - 1; ++i) {
@@ -232,6 +234,7 @@ class LayoutLink {
         type: 'line',
         pos: Array.from(this.path[i]),
         cls: `i${inPoint}o${outPoint}`,
+        highlight: this.highlight_,
       });
     }
 
@@ -242,12 +245,14 @@ class LayoutLink {
       type: 'line',
       pos: Array.from(this.path[this.path.length - 1]),
       cls: 's' + endInPoint,
+      highlight: this.highlight_,
     });
 
     steps.push({
       type: 'arrow',
       pos: Array.from(this.path[this.path.length - 1]),
       cls: 'a' + endInPoint,
+      highlight: this.highlight_,
     });
 
     if (this.labelPos_) {

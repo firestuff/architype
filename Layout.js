@@ -226,6 +226,7 @@ class Layout {
           from: from,
           to: link.to,
           label: link.label,
+          highlight: link.highlight,
         });
       }
     }
@@ -237,7 +238,7 @@ class Layout {
 
     for (let link of links) {
       this.links_.push(
-          new LayoutLink(link.from, link.to, link.label,
+          new LayoutLink(link.from, link.to, link.label, link.highlight,
                          this.nodesByPos_, this.linksByPos_,
                          this.labelsByPos_));
     }

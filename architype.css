@@ -100,6 +100,14 @@ body {
   background-color: var(--link);
 }
 
+.editor li.link.highlight {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 10px,
+    rgba(255,0,0,0.3) 10px 20px
+  ), var(--link);
+}
+
 .editor li.label {
   background-color: var(--label);
 }
@@ -241,6 +249,10 @@ body {
   --line-color: white;
 }
 
+.gridLines.highlight {
+  --line-color: var(--focus);
+}
+
 .gridLinkLabel {
   max-width: 80%;
   max-height: 80%;
@@ -256,4 +268,8 @@ body {
   height: 100%;
   z-index: 4;
   --arrow-color: white;
+}
+
+.gridArrow.highlight {
+  --arrow-color: var(--focus);
 }

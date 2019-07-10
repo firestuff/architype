@@ -14,6 +14,7 @@ class LayoutNode {
       this.links.push({
         to: nodesByGraphNode.get(link.to),
         label: link.label,
+        highlight: link.highlight,
       });
     }
   }

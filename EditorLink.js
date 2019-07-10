@@ -26,6 +26,7 @@ class EditorLink extends EditorEntryBase {
       label: this.getLabel(),
       from: this.getFrom().serialize(),
       to: this.getTo().serialize(),
+      highlight: this.elem_.classList.contains('highlight'),
     };
   }
 
@@ -52,6 +53,10 @@ class EditorLink extends EditorEntryBase {
     }
   }
 
+  setHighlight(highlight) {
+    this.elem_.classList.toggle('highlight', highlight);
+  }
+
   onKeyDown(e) {
     super.onKeyDown(e);
 
@@ -60,6 +65,13 @@ class EditorLink extends EditorEntryBase {
       case 'ArrowRight':
       case 'l':
         this.nodes_.selectNext();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+
+      case ' ':
+        this.elem_.classList.toggle('highlight');
+        this.elem_.setAttribute('data-arch-value', '');
         e.stopPropagation();
         e.preventDefault();
         break;
@@ -72,6 +84,7 @@ class EditorLink extends EditorEntryBase {
     if (ser.label != null) {
       link.setLabel(ser.label);
     }
+    link.setHighlight(ser.highlight);
     link.nodes_.unserialize([ser.from, ser.to]);
     return link.getElement();
   }

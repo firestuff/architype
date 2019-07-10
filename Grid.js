@@ -22,7 +22,7 @@ class Grid {
           break;
 
         case 'arrow':
-          this.drawArrow(step.pos, step.cls);
+          this.drawArrow(step.pos, step.cls, step.highlight);
           break;
 
         case 'graphLabel':
@@ -34,7 +34,7 @@ class Grid {
           break;
 
         case 'line':
-          this.drawLine(step.pos, step.cls);
+          this.drawLine(step.pos, step.cls, step.highlight);
           break;
 
         case 'linkLabel':
@@ -59,13 +59,14 @@ class Grid {
         size[0] + ')))';
   }
 
-  drawArrow(pos, cls) {
+  drawArrow(pos, cls, highlight) {
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.classList.add('gridArrow');
     svg.classList.add(cls);
     svg.style.gridColumn = pos[0] + 1;
     svg.style.gridRow = pos[1] + 1;
     this.container_.appendChild(svg);
+    svg.classList.toggle('highlight', highlight);
 
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     svg.appendChild(use);
@@ -100,12 +101,13 @@ class Grid {
     }
   }
 
-  drawLine(pos, cls) {
+  drawLine(pos, cls, highlight) {
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.classList.add('gridLines');
     svg.style.gridColumn = pos[0] + 1;
     svg.style.gridRow = pos[1] + 1;
     this.container_.appendChild(svg);
+    svg.classList.toggle('highlight', highlight);
 
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     svg.appendChild(use);

@@ -10,10 +10,12 @@ class GraphLink {
         from.links.push({
           to: to,
           label: this.label,
+          highlight: this.highlight,
         });
         to.linksIn.push({
           from: from,
           label: this.label,
+          highlight: this.highlight,
         });
       }
     }
@@ -30,6 +32,7 @@ class GraphLink {
     link.label = item.label;
     link.fromLabel = item.from.label;
     link.toLabel = item.to.label;
+    link.highlight = item.highlight;
     if (link.fromLabel == '' || link.toLabel == '') {
       return null;
     }
