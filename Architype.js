@@ -9,10 +9,13 @@ class Architype {
     this.container_.classList.add('dark');
 
     addEventListener('resize', (e) => { this.onResize(e); });
+    document.addEventListener('keydown',
+                              (e) => { this.onKeyDown(e); },
+                              { capture: true });
 
-    let editorElem = document.createElement('ul');
-    this.container_.appendChild(editorElem);
-    this.editor_ = new Editor(editorElem);
+    this.editorElem_ = document.createElement('ul');
+    this.container_.appendChild(this.editorElem_);
+    this.editor_ = new Editor(this.editorElem_);
 
     this.grid_ = document.createElement('div');
     this.grid_.classList.add('grid');
@@ -30,9 +33,10 @@ class Architype {
     }
 
     this.unserialize(JSON.parse(localStorage.getItem('currentState')));
+    this.editor_.selectNext();
 
     this.observer_ = new MutationObserver(e => { this.onChange(e); });
-    this.observer_.observe(editorElem, {
+    this.observer_.observe(this.editorElem_, {
       attributes: true,
       attributeFilter: ['data-arch-value'],
       childList: true,
@@ -71,6 +75,17 @@ class Architype {
     this.serialized_ = this.serialize();
     this.startRender();
     localStorage.setItem('currentState', JSON.stringify(this.serialized_));
+  }
+
+  onKeyDown(e) {
+    let elem = document.activeElement;
+    while (elem) {
+      if (elem == this.editorElem_) {
+        return;
+      }
+      elem = elem.parentElement;
+    }
+    this.editor_.onKeyDown(e);
   }
 
   onRender(e) {
