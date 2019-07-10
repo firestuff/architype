@@ -164,6 +164,11 @@ class Layout {
       }
     }
 
+    // handle empty graph
+    if (min[0] == Number.POSITIVE_INFINITY) {
+      min[0] = min[1] = max[0] = max[1] = 0;
+    }
+
     if (this.graph_.label) {
       min[1] -= 1;
     }
