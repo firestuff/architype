@@ -164,8 +164,12 @@ class Layout {
       }
     }
 
+    if (this.graph_.label) {
+      min[0] -= 1;
+    }
+
     // Set a minimum size and center the smaller graph
-    const MIN_SIZE = 6;
+    const MIN_SIZE = 7;
     for (let i of [0, 1]) {
       let expand = MIN_SIZE - (max[i] - min[i] + 1);
       if (expand <= 0) {
@@ -254,6 +258,15 @@ class Layout {
       },
     ];
 
+    if (this.graph_.label) {
+      steps.push({
+        type: 'graphLabel',
+        min: [0, 0],
+        max: [this.size[0] - 1, 0],
+        label: this.graph_.label,
+      });
+    }
+
     let nodes = Array.from(this.nodes_);
     for (let i of [1, 0]) {
       nodes.sort((a, b) => a.pos[i] - b.pos[i]);
@@ -261,12 +274,14 @@ class Layout {
     for (let node of nodes) {
       steps.push(node.getStep());
     }
+
     for (let group of this.groups_) {
       let step = group.getStep();
       if (step) {
         steps.push(step);
       }
     }
+
     for (let link of this.links_) {
       steps.push(...link.getSteps());
     }

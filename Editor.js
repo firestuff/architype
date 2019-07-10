@@ -11,7 +11,6 @@ class Editor extends List {
       [EditorLabel, [0, 1]],
       [EditorHelp,  [0, Number.POSITIVE_INFINITY]],
     ]);
-    // TODO: do something with global EditorLabel
 
     this.container_.classList.add('editor');
     // Needs to accept focus to receive keydown, but shouldn't be in the normal

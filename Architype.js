@@ -139,6 +139,10 @@ class Architype {
           this.drawArrow(step.pos, step.cls);
           break;
 
+        case 'graphLabel':
+          this.drawGraphLabel(step.min, step.max, step.label);
+          break;
+
         case 'group':
           this.drawGroup(step.min, step.max, step.label);
           break;
@@ -178,6 +182,16 @@ class Architype {
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     svg.appendChild(use);
     use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
+  }
+
+  drawGraphLabel(min, max, label) {
+    let elem = document.createElement('div');
+    this.grid_.appendChild(elem);
+    elem.classList.add('gridGraphLabel');
+    elem.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
+    elem.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
+    elem.innerText = label;
+    this.toSize_.push(elem);
   }
 
   drawGroup(min, max, label) {
@@ -232,8 +246,9 @@ class Architype {
 
   fixSizes() {
     for (let node of this.toSize_) {
+      console.log(node, node.scrollHeight, node.clientHeight);
       node.style.fontSize = null;
-      for (let size = 20;
+      for (let size = 30;
            size && (node.scrollWidth > node.clientWidth ||
                     node.scrollHeight > node.clientHeight);
            --size) {

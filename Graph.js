@@ -6,6 +6,7 @@ class Graph {
     this.groups = [];
     this.links = [];
     this.nodes = [];
+    this.label = null;
 
     this.processList(def.editor);
     this.removeSoftNodes();
@@ -30,6 +31,10 @@ class Graph {
         this.processGroup(item);
         break;
 
+      case 'label':
+        this.processLabel(item);
+        break;
+
       case 'link':
         this.processLink(item);
         break;
@@ -47,6 +52,13 @@ class Graph {
     }
     this.groups.push(group);
     this.processList(item.members, true);
+  }
+
+  processLabel(item) {
+    if (item.label == '') {
+      return;
+    }
+    this.label = item.label;
   }
 
   processLink(item) {

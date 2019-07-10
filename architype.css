@@ -172,7 +172,7 @@ body {
   padding: 10px;
 }
 
-.gridNode, .gridGroup, .gridGroupLabel, .gridLinkLabel {
+.gridNode, .gridGraphLabel, .gridGroup, .gridGroupLabel, .gridLinkLabel {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -193,6 +193,13 @@ body {
   border: 1px solid white;
   border-radius: 10%;
   z-index: 3;
+}
+
+.gridGraphLabel {
+  height: 100%;
+  width: 100%;
+  font-size: 30px;
+  text-align: center;
 }
 
 .gridGroup {
