@@ -7,8 +7,14 @@ class GraphLink {
     this.to = nodesByLabel.get(this.toLabel);
     for (let from of this.from) {
       for (let to of this.to) {
-        from.links.push(to);
-        to.linksIn.push(from);
+        from.links.push({
+          to: to,
+          label: this.label,
+        });
+        to.linksIn.push({
+          from: from,
+          label: this.label,
+        });
       }
     }
   }

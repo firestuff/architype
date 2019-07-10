@@ -212,10 +212,11 @@ class Layout {
   drawLinks() {
     let links = [];
     for (let from of this.nodes_) {
-      for (let to of from.links) {
+      for (let link of from.links) {
         links.push({
           from: from,
-          to: to,
+          to: link.to,
+          label: link.label,
         });
       }
     }
@@ -227,8 +228,12 @@ class Layout {
 
     for (let link of links) {
       this.links_.push(
-          new LayoutLink(link.from, link.to,
+          new LayoutLink(link.from, link.to, link.label,
                          this.nodesByPos_, this.linksByPos_));
+    }
+
+    for (let link of this.links_) {
+      link.drawLabel();
     }
   }
 

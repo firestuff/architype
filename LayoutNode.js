@@ -10,8 +10,11 @@ class LayoutNode {
 
   resolveLinks(nodesByGraphNode) {
     this.links = [];
-    for (let to of this.graphNode_.links) {
-      this.links.push(nodesByGraphNode.get(to));
+    for (let link of this.graphNode_.links) {
+      this.links.push({
+        to: nodesByGraphNode.get(link.to),
+        label: link.label,
+      });
     }
   }
 

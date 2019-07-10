@@ -1,7 +1,8 @@
 class LayoutLink {
-  constructor(from, to, nodesByPos, linksByPos) {
+  constructor(from, to, label, nodesByPos, linksByPos) {
     this.from_ = from;
     this.to_ = to;
+    this.label_ = label;
     this.nodesByPos_ = nodesByPos;
     this.linksByPos_ = linksByPos;
     this.bfs();
@@ -176,6 +177,9 @@ class LayoutLink {
 
   getInPoint(from, to) {
     return (this.getOutPoint(from, to) + 4) % 8;
+  }
+
+  drawLabel() {
   }
 
   getSteps() {

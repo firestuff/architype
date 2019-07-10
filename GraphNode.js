@@ -15,8 +15,8 @@ class GraphNode {
     }
     ++this.pageRank;
     visited.add(this);
-    for (let to of this.links) {
-      to.incPageRank(visited);
+    for (let link of this.links) {
+      link.to.incPageRank(visited);
     }
     visited.delete(this);
   }
@@ -28,11 +28,11 @@ class GraphNode {
     }
     this.subgraph = subgraph;
     nodes.delete(this);
-    for (let to of this.links) {
-      to.setSubgraph(subgraph, nodes);
+    for (let link of this.links) {
+      link.to.setSubgraph(subgraph, nodes);
     }
-    for (let from of this.linksIn) {
-      from.setSubgraph(subgraph, nodes);
+    for (let link of this.linksIn) {
+      link.from.setSubgraph(subgraph, nodes);
     }
     for (let group of this.groups) {
       for (let node of group.nodes) {
@@ -76,11 +76,11 @@ class GraphNode {
       }
     }
 
-    for (let to of this.links) {
+    for (let link of this.links) {
       // Stronger affinity for links
       // Prefer to move toward the target instance
-      this.addAffinity(to, d => d <= 2 ? -INF : d * 11);
-      to.addAffinity(this, d => d <= 2 ? -INF : d * 9);
+      this.addAffinity(link.to, d => d <= 2 ? -INF : d * 11);
+      link.to.addAffinity(this, d => d <= 2 ? -INF : d * 9);
     }
 
     // Affinity for groups
