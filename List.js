@@ -38,14 +38,18 @@ class List {
 
   deleteSelectedAndAfter() {
     let sel = this.getSelected();
-    if (sel) {
-      // TODO: fix to obey mayDelete()
-      while (this.container_.lastElementChild != sel &&
-             this.container_.children.length > this.minEntries_) {
-        this.container_.lastElementChild.xArchObj.remove();
-      }
-      this.deleteSelected();
+    if (!sel) {
+      return;
     }
+    let iter = this.container_.lastElementChild;
+    while (iter != sel) {
+      let next = iter.previousElementSibling;
+      if (this.mayDelete(iter.xArchObj.constructor)) {
+        iter.xArchObj.remove();
+      }
+      iter = next;
+    }
+    this.deleteSelected();
   }
 
   selectNext() {
