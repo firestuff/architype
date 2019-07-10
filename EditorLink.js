@@ -69,7 +69,9 @@ class EditorLink extends EditorEntryBase {
   static unserialize(ser) {
     let link = new EditorLink();
     link.nodes_.clear();
-    link.setLabel(ser.label);
+    if (ser.label != null) {
+      link.setLabel(ser.label);
+    }
     link.nodes_.unserialize([ser.from, ser.to]);
     return link.getElement();
   }

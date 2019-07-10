@@ -63,7 +63,9 @@ class EditorGroup extends EditorEntryBase {
   static unserialize(ser) {
     let group = new EditorGroup();
     group.nodes_.clear();
-    group.setLabel(ser.label);
+    if (ser.label != null) {
+      group.setLabel(ser.label);
+    }
     group.nodes_.unserialize(ser.members);
     return group.getElement();
   }
