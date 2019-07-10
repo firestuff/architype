@@ -44,7 +44,7 @@ class EditorHelp extends EditorEntryBase {
     this.addKey('⇧');
     this.addText('+');
     this.addKey('d');
-    this.addText('Delete all');
+    this.addText('Del after ');
   }
 
   addLine() {
