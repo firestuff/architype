@@ -7,6 +7,7 @@ class Layout {
     this.nodesByPos_ = new StringMap();
     this.nodesByGraphNode_ = new Map();
     this.linksByPos_ = new StringMap();
+    this.labelsByPos_ = new StringMap();
     this.links_ = [];
 
     this.setInitialPositions();
@@ -229,7 +230,8 @@ class Layout {
     for (let link of links) {
       this.links_.push(
           new LayoutLink(link.from, link.to, link.label,
-                         this.nodesByPos_, this.linksByPos_));
+                         this.nodesByPos_, this.linksByPos_,
+                         this.labelsByPos_));
     }
 
     for (let link of this.links_) {

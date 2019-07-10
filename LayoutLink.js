@@ -1,10 +1,11 @@
 class LayoutLink {
-  constructor(from, to, label, nodesByPos, linksByPos) {
+  constructor(from, to, label, nodesByPos, linksByPos, labelsByPos) {
     this.from_ = from;
     this.to_ = to;
     this.label_ = label;
     this.nodesByPos_ = nodesByPos;
     this.linksByPos_ = linksByPos;
+    this.labelsByPos_ = labelsByPos;
     this.bfs();
   }
 
@@ -180,6 +181,39 @@ class LayoutLink {
   }
 
   drawLabel() {
+    if (this.label_ == null || this.label_ == '') {
+      return;
+    }
+
+    let minScore = Number.POSITIVE_INFINITY;
+    let labelPos = null;
+
+    for (let i = 1; i < this.path.length - 1; ++i) {
+      let pos = this.path[i];
+      let score = 0;
+
+      if (this.nodesByPos_.has(pos)) {
+        // Never overlap nodes
+        continue;
+      }
+
+      if (this.labelsByPos_.get(pos) == this.label_) {
+        // Already labeled by another link
+        return;
+      }
+
+      // TODO: cheaper if we overlap with other links with the same label?
+
+      if (score < minScore) {
+        minScore = score;
+        labelPos = pos;
+      }
+    }
+
+    if (labelPos) {
+      this.labelPos_ = labelPos;
+      this.labelsByPos_.set(this.labelPos_, this.label_);
+    }
   }
 
   getSteps() {
@@ -215,6 +249,14 @@ class LayoutLink {
       pos: Array.from(this.path[this.path.length - 1]),
       cls: 'a' + endInPoint,
     });
+
+    if (this.labelPos_) {
+      steps.push({
+        type: 'linkLabel',
+        pos: this.labelPos_,
+        label: this.label_,
+      });
+    }
 
     return steps;
   }

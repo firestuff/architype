@@ -12,6 +12,7 @@
   --grid-background: #202020;
   --group-background: rgba(0,0,0,0.5);
   --node-background: #000000;
+  --link-label-background: rgba(0,0,0,0.8);
   --input: rgba(255,255,255,0.2);
   --input-focus: rgba(255,0,0,0.2);
 }
@@ -139,7 +140,7 @@ body {
   padding: 10px;
 }
 
-.gridNode, .gridGroup, .gridGroupLabel {
+.gridNode, .gridGroup, .gridGroupLabel, .gridLinkLabel {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -186,6 +187,16 @@ body {
   height: 100%;
   z-index: 2;
   --line-color: white;
+}
+
+.gridLinkLabel {
+  max-width: 80%;
+  max-height: 80%;
+  font-size: 16px;
+  background: var(--link-label-background);
+  z-index: 3;
+  border-radius: 4px;
+  padding: 3px;
 }
 
 .gridArrow {

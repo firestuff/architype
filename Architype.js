@@ -129,6 +129,10 @@ class Architype {
           this.drawLine(step.pos, step.cls);
           break;
 
+        case 'linkLabel':
+          this.drawLinkLabel(step.pos, step.label);
+          break;
+
         case 'node':
           this.drawNode(step.label, step.pos);
           break;
@@ -186,6 +190,16 @@ class Architype {
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     svg.appendChild(use);
     use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
+  }
+
+  drawLinkLabel(pos, label) {
+    let elem = document.createElement('div');
+    elem.classList.add('gridLinkLabel');
+    this.grid_.appendChild(elem);
+    elem.innerText = label;
+    elem.style.gridColumn = pos[0] + 1;
+    elem.style.gridRow = pos[1] + 1;
+    this.toSize_.push(elem);
   }
 
   drawNode(label, pos) {
