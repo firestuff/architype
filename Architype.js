@@ -259,6 +259,7 @@ class Architype {
 }
 
 <!--# include file="Editor.js" -->
+<!--# include file="Grid.js" -->
 
 <!--# include file="utils.js" -->
 
