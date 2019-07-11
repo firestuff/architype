@@ -44,6 +44,7 @@ class EditorLabel extends EditorEntryBase {
   onInputKeyDown(e) {
     switch (e.key) {
       case 'Enter':
+        e.preventDefault();
         e.stopPropagation();
         if (this.elem_.nextElementSibling &&
             this.elem_.nextElementSibling.xArchObj &&
@@ -55,6 +56,8 @@ class EditorLabel extends EditorEntryBase {
         break;
 
       case 'Escape':
+      case '`':
+        e.preventDefault();
         e.stopPropagation();
         this.stopEdit();
         break;

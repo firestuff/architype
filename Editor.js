@@ -63,115 +63,142 @@ class Editor extends List {
   addNodeAfter(...rest) {
     if (this.mayAdd(EditorNode)) {
       EditorNode.addAfter(this.container_, this.getSelected(), ...rest);
+      return true;
     }
+    return false;
   }
 
   addNodeBefore(...rest) {
     if (this.mayAdd(EditorNode)) {
       EditorNode.addBefore(this.container_, this.getSelected(), ...rest);
+      return true;
     }
+    return false;
   }
 
   addLabelBefore() {
     if (this.mayAdd(EditorLabel)) {
       EditorLabel.addBefore(this.container_, this.getSelected());
+      return true;
     }
+    return false;
   }
 
   addLabelAfter() {
     if (this.mayAdd(EditorLabel)) {
       EditorLabel.addAfter(this.container_, this.getSelected());
+      return true;
     }
+    return false;
   }
 
   addLinkAfter() {
     if (this.mayAdd(EditorLink)) {
       EditorLink.addAfter(this.container_, this.getSelected(),
                           this.queryEntries('.highlight', EditorNode));
+      return true;
     }
+    return false;
   }
 
   addLinkBefore() {
     if (this.mayAdd(EditorLink)) {
       EditorLink.addBefore(this.container_, this.getSelected(),
                            this.queryEntries('.highlight', EditorNode));
+      return true;
     }
+    return false;
   }
 
   addGroupAfter() {
     if (this.mayAdd(EditorGroup)) {
       EditorGroup.addAfter(this.container_, this.getSelected(),
                            this.queryEntries('.highlight', EditorNode));
+      return true;
     }
+    return false
   }
 
   addGroupBefore() {
     if (this.mayAdd(EditorGroup)) {
       EditorGroup.addBefore(this.container_, this.getSelected(),
                             this.queryEntries('.highlight', EditorNode));
+      return true;
     }
+    return false;
   }
 
   addHelpAfter() {
     if (this.mayAdd(EditorHelp)) {
       EditorHelp.addAfter(this.container_, this.getSelected());
+      return true;
     }
+    return false;
   }
   
   onKeyDown(e) {
     switch (e.key) {
       case 'a':
-        this.addLabelAfter();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addLabelAfter()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case 'A':
-        this.addLabelBefore();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addLabelBefore()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case 'g':
-        this.addGroupAfter();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addGroupAfter()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
         
       case 'G':
-        this.addGroupBefore();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addGroupBefore()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case 'i':
-        this.addLinkAfter();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addLinkAfter()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case 'I':
-        this.addLinkBefore();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addLinkBefore()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case 'n':
-        this.addNodeAfter();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addNodeAfter()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case 'N':
-        this.addNodeBefore();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addNodeBefore()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case '?':
-        this.addHelpAfter();
-        e.stopPropagation();
-        e.preventDefault();
+        if (this.addHelpAfter()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
         return;
 
       case 'Escape':
