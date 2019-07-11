@@ -52,6 +52,7 @@ class Architype {
     return {
       version: 1,
       generation: ++this.generation_,
+      nextId: idSource.getId(),
       editor: this.editor_.serialize(),
     };
   }
@@ -64,6 +65,7 @@ class Architype {
     switch (ser.version) {
       case 1:
         this.generation_ = ser.generation;
+        idSource.setId(ser.nextId);
         this.editor_.unserialize(ser.editor);
         break;
 
