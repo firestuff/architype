@@ -177,6 +177,11 @@ class Editor extends List {
         e.stopPropagation();
         e.preventDefault();
         return;
+
+      case 'Escape':
+        for (let entry of this.queryEntries('.highlight')) {
+          entry.getElement().classList.toggle('highlight', false);
+        }
     }
     
     super.onKeyDown(e);
