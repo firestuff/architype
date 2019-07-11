@@ -60,15 +60,15 @@ class Editor extends List {
     return this.getEntries(type).length > limits[0];
   }
 
-  addNodeAfter() {
+  addNodeAfter(...rest) {
     if (this.mayAdd(EditorNode)) {
-      EditorNode.addAfter(this.container_, this.getSelected());
+      EditorNode.addAfter(this.container_, this.getSelected(), ...rest);
     }
   }
 
-  addNodeBefore() {
+  addNodeBefore(...rest) {
     if (this.mayAdd(EditorNode)) {
-      EditorNode.addBefore(this.container_, this.getSelected());
+      EditorNode.addBefore(this.container_, this.getSelected(), ...rest);
     }
   }
 
@@ -104,13 +104,15 @@ class Editor extends List {
 
   addGroupAfter() {
     if (this.mayAdd(EditorGroup)) {
-      EditorGroup.addAfter(this.container_, this.getSelected());
+      EditorGroup.addAfter(this.container_, this.getSelected(),
+                           this.queryEntries('.highlight', EditorNode));
     }
   }
 
   addGroupBefore() {
     if (this.mayAdd(EditorGroup)) {
-      EditorGroup.addBefore(this.container_, this.getSelected());
+      EditorGroup.addBefore(this.container_, this.getSelected(),
+                            this.queryEntries('.highlight', EditorNode));
     }
   }
 

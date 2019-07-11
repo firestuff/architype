@@ -1,5 +1,5 @@
 class EditorGroup extends EditorEntryBase {
-  constructor() {
+  constructor(entries) {
     super();
 
     this.elem_.innerText = '□';
@@ -10,7 +10,13 @@ class EditorGroup extends EditorEntryBase {
       [EditorNode,  [1, Number.POSITIVE_INFINITY]],
       [EditorLabel, [0, 1]],
     ]);
-    this.nodes_.addNodeAfter();
+    if (entries && entries.length) {
+      for (let entry of entries) {
+        this.nodes_.addNodeAfter(entry.getLabel());
+      }
+    } else {
+      this.nodes_.addNodeAfter();
+    }
     this.elem_.appendChild(nodeList);
   }
 

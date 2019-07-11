@@ -47,14 +47,14 @@ class EditorEntryBase extends ListenUtils {
   afterDomAdd() {
   }
 
-  static addBefore(container, elem) {
-    let entry = new this();
+  static addBefore(container, elem, ...rest) {
+    let entry = new this(...rest);
     container.insertBefore(entry.getElement(), elem);
     entry.afterDomAdd();
   }
 
-  static addAfter(container, elem) {
-    let entry = new this();
+  static addAfter(container, elem, ...rest) {
+    let entry = new this(...rest);
     container.insertBefore(entry.getElement(), elem ? elem.nextSibling : null);
     entry.afterDomAdd();
   }

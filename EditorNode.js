@@ -1,5 +1,5 @@
 class EditorNode extends EditorEntryBase {
-  constructor() {
+  constructor(label) {
     super();
 
     this.elem_.classList.add('node');
@@ -10,6 +10,10 @@ class EditorNode extends EditorEntryBase {
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
     this.listen(this.input_, 'input', (e) => this.onInput());
     this.elem_.appendChild(this.input_);
+
+    if (label) {
+      this.setLabel(label);
+    }
   }
 
   afterDomAdd() {

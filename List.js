@@ -14,6 +14,20 @@ class List {
     return ret;
   }
 
+  queryEntries(query, type) {
+    let ret = [];
+    for (let elem of this.container_.querySelectorAll(query)) {
+      if (!elem.xArchObj) {
+        continue;
+      }
+      if (type && !(elem.xArchObj instanceof type)) {
+        continue;
+      }
+      ret.push(elem.xArchObj);
+    }
+    return ret;
+  }
+
   getSelected() {
     let iter = document.activeElement;
     while (iter) {
