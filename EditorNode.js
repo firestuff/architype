@@ -67,7 +67,6 @@ class EditorNode extends EditorEntryBase {
 
   onBlur() {
     if (this.getLabel() != this.lastSnapshotLabel_) {
-      console.log('changed');
       this.lastSnapshotLabel_ = this.getLabel();
       this.elem_.setAttribute('data-arch-snapshot', '');
     }
