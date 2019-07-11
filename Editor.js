@@ -84,21 +84,17 @@ class Editor extends List {
     }
   }
 
-  addLinkBefore() {
-    if (this.mayAdd(EditorLink)) {
-      EditorLink.addBefore(this.container_, this.getSelected());
-    }
-  }
-
   addLinkAfter() {
     if (this.mayAdd(EditorLink)) {
-      EditorLink.addAfter(this.container_, this.getSelected());
+      EditorLink.addAfter(this.container_, this.getSelected(),
+                          this.queryEntries('.highlight', EditorNode));
     }
   }
 
   addLinkBefore() {
     if (this.mayAdd(EditorLink)) {
-      EditorLink.addBefore(this.container_, this.getSelected());
+      EditorLink.addBefore(this.container_, this.getSelected(),
+                           this.queryEntries('.highlight', EditorNode));
     }
   }
 
@@ -179,8 +175,15 @@ class Editor extends List {
         return;
 
       case 'Escape':
-        for (let entry of this.queryEntries('.highlight')) {
-          entry.getElement().classList.toggle('highlight', false);
+        if (!this.container_.parentElement.xArchObj) {
+          for (let entry of this.queryEntries('.highlight')) {
+            entry.getElement().classList.toggle('highlight', false);
+          }
+          // TODO: rename this to data-arch-refresh, make value noop everywhere
+          this.container_.setAttribute('data-arch-value', '');
+          e.stopPropagation();
+          e.preventDefault();
+          return;
         }
     }
     

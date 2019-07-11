@@ -1,5 +1,5 @@
 class EditorLink extends EditorEntryBase {
-  constructor() {
+  constructor(entries) {
     super();
 
     this.elem_.innerText = '↓';
@@ -10,8 +10,10 @@ class EditorLink extends EditorEntryBase {
       [EditorNode,  [2, 2]],
       [EditorLabel, [0, 1]],
     ]);
-    this.nodes_.addNodeAfter();
-    this.nodes_.addNodeAfter();
+    this.nodes_.addNodeAfter(
+        entries && entries[0] ? entries[0].getLabel() : null);
+    this.nodes_.addNodeAfter(
+        entries && entries[1] ? entries[1].getLabel() : null);
     this.elem_.appendChild(nodeList);
   }
 

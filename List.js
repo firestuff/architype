@@ -128,6 +128,8 @@ class List {
         if (this.container_.parentElement.xArchObj) {
           this.container_.parentElement.focus();
         }
+        e.stopPropagation();
+        e.preventDefault();
         break;
 
       case 'd':
