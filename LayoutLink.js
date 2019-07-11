@@ -8,6 +8,19 @@ class LayoutLink {
     this.nodesByPos_ = nodesByPos;
     this.linksByPos_ = linksByPos;
     this.labelsByPos_ = labelsByPos;
+
+    // Mapping to lines.svg clock-style numbering
+    this.outPointLookup_ = new StringMap([
+      [[ 0,-1], 0],
+      [[ 1,-1], 1],
+      [[ 1, 0], 2],
+      [[ 1, 1], 3],
+      [[ 0, 1], 4],
+      [[-1, 1], 5],
+      [[-1, 0], 6],
+      [[-1,-1], 7],
+    ]);
+
     this.bfs();
   }
 
@@ -99,18 +112,6 @@ class LayoutLink {
     }
   }
 
-  // Mapping to lines.svg clock-style numbering
-  outPointLookup = new StringMap([
-    [[ 0,-1], 0],
-    [[ 1,-1], 1],
-    [[ 1, 0], 2],
-    [[ 1, 1], 3],
-    [[ 0, 1], 4],
-    [[-1, 1], 5],
-    [[-1, 0], 6],
-    [[-1,-1], 7],
-  ]);
-
   getCost(from, to) {
     // Only handles adjacent positions
 
@@ -175,7 +176,7 @@ class LayoutLink {
         to[0] - from[0],
         to[1] - from[1],
     ];
-    return this.outPointLookup.get(offset);
+    return this.outPointLookup_.get(offset);
   }
 
   getInPoint(from, to) {

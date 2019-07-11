@@ -1,5 +1,9 @@
 'use strict';
 
+addEventListener('error', (e) => {
+  console.log(e);
+});
+
 class Architype {
   constructor(container) {
     this.container_ = container;
@@ -25,7 +29,7 @@ class Architype {
     this.drawGeneration_ = -1;
 
     this.render_ = [];
-    for (let i = 0; i < navigator.hardwareConcurrency; ++i) {
+    for (let i = 0; i < (navigator.hardwareConcurrency || 2); ++i) {
       let render = new Worker('render.js');
       render.addEventListener('message', (e) => { this.onRender(e); });
       this.render_.push(render);

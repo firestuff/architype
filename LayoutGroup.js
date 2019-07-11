@@ -17,7 +17,7 @@ class LayoutGroup {
     for (let node of this.nodes) {
       for (let i of [0, 1]) {
         this.vec[i] += node.vec[i];
-      };
+      }
     }
   }
 
