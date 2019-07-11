@@ -125,6 +125,7 @@ class List {
       case 'Escape':
       case 'ArrowLeft':
       case 'h':
+      case '`':
         if (this.container_.parentElement.xArchObj) {
           this.container_.parentElement.focus();
         }
