@@ -63,6 +63,22 @@ class EditorLink extends EditorEntryBase {
     this.elem_.classList.toggle('highlight', highlight);
   }
 
+  flip() {
+    let entries = this.nodes_.getEntries(EditorNode);
+    let fromElem = entries[0].getElement();
+    let toElem = entries[1].getElement();
+    let fromHasFocus = document.activeElement == fromElem;
+    let toHasFocus = document.activeElement == toElem;
+
+    toElem.parentElement.insertBefore(toElem, fromElem);
+
+    if (fromHasFocus) {
+      fromElem.focus();
+    } else if (toHasFocus) {
+      toElem.focus();
+    }
+  }
+
   onKeyDown(e) {
     super.onKeyDown(e);
 
@@ -78,6 +94,12 @@ class EditorLink extends EditorEntryBase {
       case ' ':
         this.elem_.classList.toggle('highlight');
         this.elem_.setAttribute('data-arch-refresh', '');
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+
+      case 'f':
+        this.flip();
         e.stopPropagation();
         e.preventDefault();
         break;

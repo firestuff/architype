@@ -49,6 +49,10 @@ class EditorHelp extends EditorEntryBase {
     this.addLine();
     this.addKey('␣');
     this.addText('Highlight       ');
+
+    this.addLine();
+    this.addKey('f');
+    this.addText('Flip link       ');
   }
 
   addLine() {
