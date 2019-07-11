@@ -22,8 +22,9 @@ class EditorGroup extends EditorEntryBase {
 
   afterDomAdd() {
     this.nodes_.selectNext();
-    if (this.nodes_.getSelected().getValue() == '') {
-      this.nodes_.getSelected().xArchObj.startEdit();
+    let node = this.nodes_.getSelected().xArchObj;
+    if (node.getLabel() == '') {
+      node.startEdit();
     }
   }
 
