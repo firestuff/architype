@@ -12,9 +12,7 @@ class Architype {
     // TODO: make theme selectable
     this.container_.classList.add('dark');
 
-    document.addEventListener('keydown',
-                              (e) => { this.onKeyDown(e); },
-                              { capture: true });
+    document.addEventListener('keydown', (e) => { this.onKeyDown(e); });
 
     this.editorElem_ = document.createElement('ul');
     this.container_.appendChild(this.editorElem_);
