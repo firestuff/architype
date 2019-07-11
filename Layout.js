@@ -225,6 +225,7 @@ class Layout {
         links.push({
           from: from,
           to: link.to,
+          id: link.id,
           label: link.label,
           highlight: link.highlight,
         });
@@ -238,7 +239,8 @@ class Layout {
 
     for (let link of links) {
       this.links_.push(
-          new LayoutLink(link.from, link.to, link.label, link.highlight,
+          new LayoutLink(link.from, link.to, link.id, link.label,
+                         link.highlight,
                          this.nodesByPos_, this.linksByPos_,
                          this.labelsByPos_));
     }

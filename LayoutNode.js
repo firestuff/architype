@@ -105,6 +105,7 @@ class LayoutNode {
     return {
       type: 'node',
       pos: this.pos,
+      id: this.graphNode_.id,
       label: this.graphNode_.label,
       highlight: this.graphNode_.highlight,
     };

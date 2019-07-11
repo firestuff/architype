@@ -106,6 +106,7 @@ class GraphNode {
       return null;
     }
     let node = new GraphNode();
+    node.id = item.id;
     node.label = item.label;
     node.soft = soft;
     node.highlight = item.highlight;

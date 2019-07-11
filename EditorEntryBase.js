@@ -6,6 +6,7 @@ class EditorEntryBase extends ListenUtils {
 
     this.elem_ = document.createElement('li');
     this.elem_.tabIndex = 0;
+    this.elem_.id = 'entry' + idSource.getId();
     this.listen(this.elem_, 'focus', () => this.onElemFocus());
     this.listen(this.elem_, 'keydown', (e) => this.onKeyDown(e));
 
@@ -35,6 +36,10 @@ class EditorEntryBase extends ListenUtils {
 
   getElement() {
     return this.elem_;
+  }
+
+  getId() {
+    return this.elem_.id;
   }
 
   onElemFocus() {

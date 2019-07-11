@@ -25,6 +25,7 @@ class EditorLink extends EditorEntryBase {
   serialize() {
     return {
       type: 'link',
+      id: this.getId(),
       label: this.getLabel(),
       from: this.getFrom().serialize(),
       to: this.getTo().serialize(),

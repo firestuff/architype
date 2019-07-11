@@ -23,6 +23,7 @@ class EditorNode extends EditorEntryBase {
   serialize() {
     return {
       type: 'node',
+      id: this.getId(),
       label: this.getLabel(),
       highlight: this.elem_.classList.contains('highlight'),
     };

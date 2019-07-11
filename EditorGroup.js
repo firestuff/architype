@@ -28,6 +28,7 @@ class EditorGroup extends EditorEntryBase {
   serialize() {
     return {
       type: 'group',
+      id: this.getId(),
       label: this.getLabel(),
       members: this.nodes_.serialize(EditorNode),
       highlight: this.elem_.classList.contains('highlight'),

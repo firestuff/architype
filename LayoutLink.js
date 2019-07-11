@@ -1,7 +1,8 @@
 class LayoutLink {
-  constructor(from, to, label, highlight, nodesByPos, linksByPos, labelsByPos) {
+  constructor(from, to, id, label, highlight, nodesByPos, linksByPos, labelsByPos) {
     this.from_ = from;
     this.to_ = to;
+    this.id_ = id;
     this.label_ = label;
     this.highlight_ = highlight;
     this.nodesByPos_ = nodesByPos;
@@ -234,6 +235,7 @@ class LayoutLink {
         type: 'line',
         pos: Array.from(this.path[i]),
         cls: `i${inPoint}o${outPoint}`,
+        id: this.id_,
         highlight: this.highlight_,
       });
     }

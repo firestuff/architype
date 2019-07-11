@@ -121,6 +121,7 @@ class Architype {
 
 <!--# include file="Editor.js" -->
 <!--# include file="Grid.js" -->
+<!--# include file="IdSource.js" -->
 
 <!--# include file="utils.js" -->
 

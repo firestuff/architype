@@ -42,7 +42,7 @@ class Grid {
           break;
 
         case 'node':
-          this.drawNode(step.label, step.pos, step.highlight);
+          this.drawNode(step.id, step.label, step.pos, step.highlight);
           break;
       }
     }
@@ -125,7 +125,7 @@ class Grid {
     this.toSize_.push(elem);
   }
 
-  drawNode(label, pos, highlight) {
+  drawNode(id, label, pos, highlight) {
     let node = document.createElement('div');
     node.classList.add('gridNode');
     this.container_.appendChild(node);
@@ -134,6 +134,12 @@ class Grid {
     node.style.gridColumn = pos[0] + 1;
     node.style.gridRow = pos[1] + 1;
     this.toSize_.push(node);
+
+    node.addEventListener('click', (e) => {
+      let editorElem = document.getElementById(id);
+      editorElem.classList.toggle('highlight');
+      editorElem.setAttribute('data-arch-refresh', '');
+    });
   }
 
   fixSizes() {

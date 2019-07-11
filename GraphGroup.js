@@ -26,6 +26,7 @@ class GraphGroup {
 
   static process(item) {
     let group = new GraphGroup();
+    group.id = item.id;
     group.label = item.label;
     group.highlight = item.highlight;
     group.nodeLabels = new Set();

@@ -9,11 +9,13 @@ class GraphLink {
       for (let to of this.to) {
         from.links.push({
           to: to,
+          id: this.id,
           label: this.label,
           highlight: this.highlight,
         });
         to.linksIn.push({
           from: from,
+          id: this.id,
           label: this.label,
           highlight: this.highlight,
         });
@@ -29,6 +31,7 @@ class GraphLink {
 
   static process(item) {
     let link = new GraphLink();
+    link.id = item.id;
     link.label = item.label;
     link.fromLabel = item.from.label;
     link.toLabel = item.to.label;
