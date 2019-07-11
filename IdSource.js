@@ -7,6 +7,10 @@ class IdSource {
     return ++this.nextId_;
   }
 
+  peekId() {
+    return this.nextId_;
+  }
+
   setId(nextId) {
     this.nextId_ = nextId;
   }

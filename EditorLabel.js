@@ -9,8 +9,11 @@ class EditorLabel extends EditorEntryBase {
     this.input_.type = 'text';
     this.input_.placeholder = 'label';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
-    this.listen(this.input_, 'input', (e) => this.onInput());
+    this.listen(this.input_, 'input', (e) => this.onInput(e));
+    this.listen(this.input_, 'blur', (e) => this.onBlur(e));
     this.elem_.appendChild(this.input_);
+
+    this.lastSnapshotLabel_ = null;
   }
 
   afterDomAdd() {
@@ -30,6 +33,7 @@ class EditorLabel extends EditorEntryBase {
 
   setLabel(label) {
     this.input_.value = label;
+    this.lastSnapshotLabel_ = label;
     this.onInput();
   }
 
@@ -38,7 +42,14 @@ class EditorLabel extends EditorEntryBase {
   }
 
   onInput() {
-    this.input_.setAttribute('data-arch-refresh', '');
+    this.elem_.setAttribute('data-arch-refresh', '');
+  }
+
+  onBlur() {
+    if (this.getLabel() != this.lastSnapshotLabel_) {
+      this.lastSnapshotLabel_ = this.getLabel();
+      this.elem_.setAttribute('data-arch-snapshot', '');
+    }
   }
 
   onInputKeyDown(e) {

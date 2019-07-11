@@ -33,28 +33,56 @@ class Architype {
       this.render_.push(render);
     }
 
-    this.unserialize(JSON.parse(localStorage.getItem('currentState')));
+    addEventListener('hashchange', (e) => { this.onHashChange(e); });
+
+    let fixUrl = false;
+    if (location.hash.length > 1) {
+      this.unserialize(JSON.parse(atob(location.hash.substring(1))));
+    } else {
+      this.unserialize(JSON.parse(localStorage.getItem('currentState')));
+      fixUrl = true;
+    }
     if (this.editor_.getEntries().length == 0) {
       this.editor_.addHelpAfter();
     }
     this.editor_.selectNext();
 
     this.observer_ = new MutationObserver(e => { this.onChange(e); });
+    this.observer2_ = new MutationObserver(e => { this.snapshot(e); });
+    this.observe();
+
+    this.saveAndRender();
+
+    if (fixUrl) {
+      history.replaceState(null, null, '#' + btoa(this.serializedStr_));
+    }
+  }
+
+  observe() {
     this.observer_.observe(this.editorElem_, {
       attributes: true,
       attributeFilter: ['data-arch-refresh'],
       childList: true,
       subtree: true,
     });
+    this.observer2_.observe(this.editorElem_, {
+      attributes: true,
+      attributeFilter: ['data-arch-snapshot'],
+      childList: true,
+      subtree: true,
+    });
+  }
 
-    this.onChange();
+  unobserve() {
+    this.observer_.disconnect();
+    this.observer2_.disconnect();
   }
 
   serialize() {
     return {
       version: 1,
-      generation: ++this.generation_,
-      nextId: idSource.getId(),
+      generation: this.generation_,
+      nextId: idSource.peekId(),
       editor: this.editor_.serialize(),
     };
   }
@@ -63,6 +91,9 @@ class Architype {
     if (!ser) {
       return;
     }
+
+    this.renderGeneration_ = -1;
+    this.drawGeneration_ = -1;
 
     switch (ser.version) {
       case 1:
@@ -77,10 +108,35 @@ class Architype {
     }
   }
 
-  onChange(e) {
+  overwrite(ser) {
+    this.unobserve();
+    this.editor_.clear();
+    this.unserialize(ser);
+    this.observe();
+    this.editor_.selectNext();
+    this.saveAndRender();
+  }
+
+  onHashChange() {
+    if (location.hash.length > 1) {
+      this.overwrite(JSON.parse(atob(location.hash.substring(1))));
+    }
+  }
+
+  onChange() {
+    ++this.generation_;
+    this.saveAndRender();
+  }
+
+  snapshot() {
+    history.pushState(null, null, '#' + btoa(this.serializedStr_));
+  }
+
+  saveAndRender() {
     this.serialized_ = this.serialize();
     this.startRender();
-    localStorage.setItem('currentState', JSON.stringify(this.serialized_));
+    this.serializedStr_ = JSON.stringify(this.serialized_);
+    localStorage.setItem('currentState', this.serializedStr_);
   }
 
   onKeyDown(e) {

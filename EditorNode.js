@@ -8,8 +8,11 @@ class EditorNode extends EditorEntryBase {
     this.input_.type = 'text';
     this.input_.placeholder = 'node name';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
-    this.listen(this.input_, 'input', (e) => this.onInput());
+    this.listen(this.input_, 'input', (e) => this.onInput(e));
+    this.listen(this.input_, 'blur', (e) => this.onBlur(e));
     this.elem_.appendChild(this.input_);
+
+    this.lastSnapshotLabel_ = null;
 
     if (label) {
       this.setLabel(label);
@@ -35,6 +38,7 @@ class EditorNode extends EditorEntryBase {
 
   setLabel(label) {
     this.input_.value = label;
+    this.lastSnapshotLabel_ = label;
     this.onInput();
   }
 
@@ -58,7 +62,15 @@ class EditorNode extends EditorEntryBase {
   }
 
   onInput() {
-    this.input_.setAttribute('data-arch-refresh', '');
+    this.elem_.setAttribute('data-arch-refresh', '');
+  }
+
+  onBlur() {
+    if (this.getLabel() != this.lastSnapshotLabel_) {
+      console.log('changed');
+      this.lastSnapshotLabel_ = this.getLabel();
+      this.elem_.setAttribute('data-arch-snapshot', '');
+    }
   }
 
   onInputKeyDown(e) {
