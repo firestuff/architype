@@ -73,7 +73,7 @@ class EditorLink extends EditorEntryBase {
 
       case ' ':
         this.elem_.classList.toggle('highlight');
-        this.elem_.setAttribute('data-arch-value', '');
+        this.elem_.setAttribute('data-arch-refresh', '');
         e.stopPropagation();
         e.preventDefault();
         break;

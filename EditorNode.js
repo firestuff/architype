@@ -57,7 +57,7 @@ class EditorNode extends EditorEntryBase {
   }
 
   onInput() {
-    this.input_.setAttribute('data-arch-value', this.input_.value);
+    this.input_.setAttribute('data-arch-refresh', '');
   }
 
   onInputKeyDown(e) {

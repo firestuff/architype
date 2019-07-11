@@ -179,8 +179,7 @@ class Editor extends List {
           for (let entry of this.queryEntries('.highlight')) {
             entry.getElement().classList.toggle('highlight', false);
           }
-          // TODO: rename this to data-arch-refresh, make value noop everywhere
-          this.container_.setAttribute('data-arch-value', '');
+          this.container_.setAttribute('data-arch-refresh', '');
           e.stopPropagation();
           e.preventDefault();
           return;

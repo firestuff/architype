@@ -40,7 +40,7 @@ class Architype {
     this.observer_ = new MutationObserver(e => { this.onChange(e); });
     this.observer_.observe(this.editorElem_, {
       attributes: true,
-      attributeFilter: ['data-arch-value'],
+      attributeFilter: ['data-arch-refresh'],
       childList: true,
       subtree: true,
     });
