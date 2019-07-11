@@ -12,7 +12,7 @@ class EditorNode extends EditorEntryBase {
     this.listen(this.input_, 'blur', (e) => this.onBlur(e));
     this.elem_.appendChild(this.input_);
 
-    this.lastSnapshotLabel_ = null;
+    this.lastSnapshotLabel_ = '';
 
     if (label) {
       this.setLabel(label);
