@@ -155,6 +155,17 @@ Lines and arrows are drawn using sprited SVGs. Line curves are pre-generated in
 a limited sprite set, and sprites are selected based on transitions between
 adjacent grid squares.
 
+### Browsers
+
+We intend to support:
+
+* Chrome
+* Chrome Android (tablets)
+* Edge Webkit
+* Firefox
+* Safari
+* Safari iOS (iPad)
+
 ## Author
 
 Ian Gulliver  
