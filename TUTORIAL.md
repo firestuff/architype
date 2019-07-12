@@ -59,7 +59,8 @@ copy of each in the diagram. Let's clean that up.
 1. While in the group sublist, press `a` to create a l**a**bel
 1. Set the content to `us-east1`
 1. Note the label text on the group in the diagram
-1. Navigate to the **cloudflare** -> **frontend1** link
+1. Navigate to the **cloudflare** -> **frontend1** link sublist  
+   Tip: Press `right` or `enter` to move into the sublist
 1. Add a label with the content `HTTPS`
 1. Note the label text on the link in the diagram
 1. Label the **frontend1** -> **backend1** link **gRPC**
