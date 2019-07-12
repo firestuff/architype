@@ -157,14 +157,20 @@ adjacent grid squares.
 
 ### Browsers
 
-We intend to support:
+We test and support:
 
 * Chrome
-* Chrome Android (tablets)
-* Edge Webkit
 * Firefox
 * Safari
 * Safari iOS (iPad)
+
+We intend to test in future:
+
+* Chrome Android (tablet)
+
+Known broken:
+
+* Edge WebKit
 
 ## Author
 
