@@ -13,7 +13,7 @@
   --group-background: rgba(255,255,255,0.5);
   --node-background: #f8f8f8;
   --link-label-background: rgba(240,240,240,0.9);
-  --input: rgba(0,0,0,0.2);
+  --input: rgba(0,0,0,0.1);
   --input-focus: rgba(255,0,0,0.2);
   --line: #000000;
 }
