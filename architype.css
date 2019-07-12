@@ -1,4 +1,24 @@
-.dark {
+.theme-light {
+  --focus: #ff0000;
+  --nonfocus: #eeeeee;
+  --node: #c0def2;
+  --group: #c0f2d5;
+  --link: #ffd1b3;
+  --label: #ffb3eb;
+  --text: #000000;
+  --placeholder: rgba(0,0,0,0.2);
+  --outline: #323434;
+  --editor-background: #ffffff;
+  --grid-background: #ffffff;
+  --group-background: rgba(255,255,255,0.5);
+  --node-background: #f8f8f8;
+  --link-label-background: rgba(240,240,240,0.9);
+  --input: rgba(0,0,0,0.2);
+  --input-focus: rgba(255,0,0,0.2);
+  --line: #000000;
+}
+
+.theme-dark {
   --focus: #ff0000;
   --nonfocus: #000000;
   --node: #091d2a;
@@ -15,6 +35,7 @@
   --link-label-background: rgba(0,0,0,0.8);
   --input: rgba(255,255,255,0.2);
   --input-focus: rgba(255,0,0,0.2);
+  --line: #ffffff;
 }
 
 :root {
@@ -138,7 +159,7 @@ body {
   align-items: center;
   vertical-align: middle;
   font-size: 20px;
-  border: 1px solid white;
+  border: 1px solid var(--text);
   border-radius: 5px;
   padding: 5px;
   margin: 3px;
@@ -214,7 +235,7 @@ body {
   height: 85%;
   background: var(--node-background);
   justify-content: center;
-  border: 1px solid white;
+  border: 1px solid var(--line);
   border-radius: 10%;
   z-index: 3;
 }
@@ -236,7 +257,7 @@ body {
   height: 100%;
   background: var(--group-background);
   justify-content: flex-start;
-  border: 1px dashed white;
+  border: 1px dashed var(--line);
   z-index: 1;
   pointer-events: none;
 }
@@ -262,7 +283,7 @@ body {
   height: 100%;
   z-index: 2;
   pointer-events: none;
-  --line-color: white;
+  --line-color: var(--line);
 }
 
 .gridLines.highlight {
@@ -286,7 +307,7 @@ body {
   height: 100%;
   z-index: 4;
   pointer-events: none;
-  --arrow-color: white;
+  --arrow-color: var(--line);
 }
 
 .gridArrow.highlight {

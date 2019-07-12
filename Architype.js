@@ -9,8 +9,9 @@ class Architype {
     this.container_ = container;
 
     this.container_.classList.add('architype');
-    // TODO: make theme selectable
-    this.container_.classList.add('dark');
+
+    this.themes_ = ['light', 'dark'];
+    this.setTheme(localStorage.getItem('theme') || 'dark');
 
     document.addEventListener('keydown', (e) => { this.onKeyDown(e); });
 
@@ -159,8 +160,47 @@ class Architype {
     localStorage.setItem('currentState', this.serializedStr_);
   }
 
+  setTheme(theme) {
+    this.container_.classList.remove('theme-' + this.getTheme());
+    this.container_.classList.add('theme-' + theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  getTheme() {
+    let classes = Array.from(this.container_.classList);
+    for (let cls of this.container_.classList) {
+      if (cls.startsWith('theme-')) {
+        return cls.substring(6);
+      }
+    }
+  }
+
+  nextTheme() {
+    let cur = this.themes_.indexOf(this.getTheme());
+    this.setTheme(this.themes_[(cur + 1) % this.themes_.length]);
+  }
+
+  prevTheme() {
+    let cur = this.themes_.indexOf(this.getTheme());
+    let num = this.themes_.length;
+    let next = (((cur - 1) % num) + num) % num;
+    this.setTheme(this.themes_[next]);
+  }
+
   onKeyDown(e) {
     switch (e.key) {
+      case 'm':
+        this.nextTheme();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
+      case 'M':
+        this.prevTheme();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
       case 'u':
         // Stop us from backing up out of the page
         if (!this.first_) {

@@ -63,6 +63,10 @@ class EditorHelp extends EditorEntryBase {
     this.addText('+');
     this.addKey('u');
     this.addText('Redo      ');
+
+    this.addLine();
+    this.addKey('m');
+    this.addText('Next theme      ');
   }
 
   addLine() {
