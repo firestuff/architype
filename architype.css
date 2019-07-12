@@ -1,10 +1,12 @@
 .theme-light {
+  /* Background colors are 85% luminosity */
   --focus: #ff0000;
   --nonfocus: #eeeeee;
   --node: #c0def2;
   --group: #c0f2d5;
   --link: #ffd1b3;
   --label: #ffb3eb;
+  --help: #ffb3b3;
   --text: #000000;
   --placeholder: rgba(0,0,0,0.2);
   --outline: #323434;
@@ -19,12 +21,14 @@
 }
 
 .theme-dark {
+  /* Background colors are 10% luminosity */
   --focus: #ff0000;
   --nonfocus: #000000;
   --node: #091d2a;
   --group: #092a17;
   --link: #331400;
   --label: #330025;
+  --help: #330000;
   --text: #ffffff;
   --placeholder: rgba(255,255,255,0.2);
   --outline: #323434;
@@ -141,6 +145,7 @@ body {
   padding: 10px;
   font-size: 16px;
   flex-direction: column;
+  background-color: var(--help);
 }
 
 .editor li.help > div {

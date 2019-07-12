@@ -31,6 +31,10 @@ class EditorHelp extends EditorEntryBase {
     this.addText('Label');
 
     this.addLine();
+    this.addKey('?');
+    this.addText('Help            ');
+
+    this.addLine();
     this.addKey('⇧');
     this.addText('+');
     this.addKey('n');
