@@ -195,7 +195,7 @@ class LayoutLink {
       let pos = this.path[i];
       let score = 0;
 
-      if (this.nodesByPos_.has(pos)) {
+      if (this.nodesByPos_.get(pos) instanceof LayoutNode) {
         // Never overlap nodes
         continue;
       }
