@@ -231,12 +231,13 @@ body {
 }
 
 .gridNode {
-  width: 85%;
-  height: 85%;
+  width: 81%;
+  height: 81%;
   background: var(--node-background);
   justify-content: center;
   border: 1px solid var(--line);
   border-radius: 10%;
+  padding: 2%;
   z-index: 3;
 }
 
