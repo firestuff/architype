@@ -38,7 +38,6 @@ copy of each in the diagram. Let's clean that up.
 # Another link
 
 1. Navigate to the **frontend1** node inside the link
-
    Tip: You can use `left`/`right` or `enter`/`escape` to move in and out of
    sublists
 1. Press `space` to highlight the node
