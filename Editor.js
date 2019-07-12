@@ -207,8 +207,8 @@ class Editor extends List {
           for (let entry of this.queryEntries('.highlight')) {
             entry.getElement().classList.toggle('highlight', false);
           }
-          this.container_.setAttribute('data-arch-snapshot', '');
           this.container_.setAttribute('data-arch-refresh', '');
+          this.container_.setAttribute('data-arch-snapshot', '');
           e.stopPropagation();
           e.preventDefault();
           return;

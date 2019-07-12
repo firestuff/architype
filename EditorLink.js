@@ -93,8 +93,8 @@ class EditorLink extends EditorEntryBase {
 
       case ' ':
         this.elem_.classList.toggle('highlight');
-        this.elem_.setAttribute('data-arch-snapshot', '');
         this.elem_.setAttribute('data-arch-refresh', '');
+        this.elem_.setAttribute('data-arch-snapshot', '');
         e.stopPropagation();
         e.preventDefault();
         break;
