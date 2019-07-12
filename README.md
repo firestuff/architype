@@ -20,7 +20,7 @@ The screen is divided into two panels:
 
 * A *node* is the fundamental unit in Architype, usually representing a server,
   service, or process step.
-* A *link* is connects nodes together. All links in Architype are directional,
+* A *link* connects nodes together. All links in Architype are directional,
   i.e. they have an arrow at exactly one end.
 * A *group* is a collection of nodes that are physically together.
 * A *label* is an optional description of another object, e.g. a link or a
@@ -33,7 +33,7 @@ functions, for some meaning of "opposite". For example, lowercase `n` creates a
 new node line below the current line, while uppercase `N` (`shift` + `n`)
 creates a new node line above the current line.
 
-Limited vi key mappings are supported. Keys behavior is expected to match user
+Limited vi key mappings are supported. Key behavior is expected to match user
 expectation across contexts in the UI.
 
 #### Navigation
@@ -68,3 +68,87 @@ expectation across contexts in the UI.
   done since then)
 * `m` Select the next theme (light/dark)
 * `M` Select the previous theme (light/dark)
+* `?` Add a help section below the current line
+
+Note that it is possible to delete the help section with the normal delete
+command `d`.
+
+#### Highlight object creation
+
+Groups and links can be created for existing nodes by highlighting the nodes
+(using `␣`), then creating the group/link normally (`g`/`i`). When nodes are
+highlighted, they are used to automatically populate the new group/link object.
+
+#### Visualization
+
+It is not possible to directly edit the position of items in the visualization.
+This is a deliberate tradeoff for flexibility and speed of graph editing.
+
+The visualization does support limited interaction: clicking/touching nodes
+highlights the node and its corresponding editor entry.
+
+## Storage & processing
+
+Editor contents are stored in
+[localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
+They can be expected to survive browser and system restarts, but are not copied
+from your machine and are not long-term durable.
+
+The full description of a graph is stored in the URL. To store the graph
+long-term or to share it with others, copy/paste/record/share the full URL.
+
+All Architype processing is local to the client machine. The is no server, no
+data is sent, and the page contains no ads or third-party content.
+
+## Development
+
+### License
+
+Licensed under the [Apache License 2.0](LICENSE).
+
+### Structure
+
+The code is organized into general categories:
+
+* `Architype`
+  * Initialization
+  * Creation of the Editor and Grid
+  * Launching background Workers
+  * Serialization/deserialization
+  * URL handling
+  * localStorage
+  * Undo/redo
+* `Editor`
+  * Runs in the UI thread
+  * Interactive elements for graph description
+* `Grid`
+  * Runs in the UI thread
+  * Interpreting commands from Layout
+  * Drawing onto the CSS grid for visualization
+* `Graph`
+  * Runs in background Worker
+  * Parsing the Editor serialization
+  * Internal representation of the directed graph
+* `Layout`
+  * Runs in background Worker
+  * Uses Graph data as input
+  * Iterative spring model (with complex weighting) for nodes
+  * Bidirectional weighted breadth-first search for links
+  * Emit drawing commands for Grid
+* Misc
+  * IdSource
+  * MinHeap
+  * StringMap
+  * utils
+
+### Line drawing
+
+Lines and arrows are drawn using sprited SVGs. Line curves are pre-generated in
+a limited sprite set, and sprites are selected based on transitions between
+adjacent grid squares.
+
+## Author
+
+Ian Gulliver
+[architype@flamingcow.io](mailto:architype@flamingcow.io)
+[firestuff.org](https://firestuff.org/)
