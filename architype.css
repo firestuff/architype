@@ -178,6 +178,7 @@ body {
 
 .editor li.help a {
   color: var(--text);
+  margin: 8px;
 }
 
 .editor li:focus {

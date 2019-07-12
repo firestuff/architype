@@ -76,6 +76,9 @@ class EditorHelp extends EditorEntryBase {
 
     this.addLine();
     this.addLink(
+        'Tutorial',
+        'https://github.com/firestuff/architype/blob/master/TUTORIAL.md');
+    this.addLink(
         'GitHub',
         'https://github.com/firestuff/architype/blob/master/README.md');
   }
@@ -105,6 +108,7 @@ class EditorHelp extends EditorEntryBase {
     let a = document.createElement('a');
     a.href = href;
     a.innerText = text;
+    a.target = '_blank';
     this.line_.appendChild(a);
   }
 
