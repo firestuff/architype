@@ -47,7 +47,7 @@ expectation across contexts in the UI.
 * `→` `l` `⏎` Enter (edit) the current list or item
 * `←` `h` `␛` Exit the current list or item
 
-`\`` is mapped to `␛` for convenience on some keyboards, e.g. iPads.
+`` ` `` is mapped to `␛` for convenience on some keyboards, e.g. iPads.
 
 #### New objects
 
