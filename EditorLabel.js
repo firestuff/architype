@@ -1,7 +1,7 @@
 // TODO: Factor out common code with EditorNode
 class EditorLabel extends EditorEntryBase {
-  constructor() {
-    super();
+  constructor(id) {
+    super(id);
 
     this.elem_.classList.add('label');
 
@@ -23,6 +23,7 @@ class EditorLabel extends EditorEntryBase {
   serialize() {
     return {
       type: 'label',
+      id: this.getId(),
       label: this.getLabel(),
     };
   }
@@ -113,7 +114,7 @@ class EditorLabel extends EditorEntryBase {
   }
 
   static unserialize(ser) {
-    let label = new EditorLabel();
+    let label = new EditorLabel(ser.id);
     label.setLabel(ser.label);
     return label.getElement();
   }

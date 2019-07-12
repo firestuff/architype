@@ -1,6 +1,6 @@
 class EditorNode extends EditorEntryBase {
-  constructor(label) {
-    super();
+  constructor(id, label) {
+    super(id);
 
     this.elem_.classList.add('node');
 
@@ -134,7 +134,7 @@ class EditorNode extends EditorEntryBase {
   }
 
   static unserialize(ser) {
-    let node = new EditorNode();
+    let node = new EditorNode(ser.id);
     node.setLabel(ser.label);
     node.setHighlight(ser.highlight);
     return node.getElement();

@@ -1,6 +1,6 @@
 class EditorLink extends EditorEntryBase {
-  constructor(entries) {
-    super();
+  constructor(id, entries) {
+    super(id);
 
     this.elem_.innerText = '↓';
     this.elem_.classList.add('link');
@@ -107,7 +107,7 @@ class EditorLink extends EditorEntryBase {
   }
 
   static unserialize(ser) {
-    let link = new EditorLink();
+    let link = new EditorLink(ser.id);
     link.nodes_.clear();
     if (ser.label != null) {
       link.setLabel(ser.label);

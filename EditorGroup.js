@@ -1,6 +1,6 @@
 class EditorGroup extends EditorEntryBase {
-  constructor(entries) {
-    super();
+  constructor(id, entries) {
+    super(id);
 
     this.elem_.innerText = '□';
     this.elem_.classList.add('group');
@@ -83,7 +83,7 @@ class EditorGroup extends EditorEntryBase {
   }
 
   static unserialize(ser) {
-    let group = new EditorGroup();
+    let group = new EditorGroup(ser.id);
     group.nodes_.clear();
     if (ser.label != null) {
       group.setLabel(ser.label);

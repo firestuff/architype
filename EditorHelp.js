@@ -1,6 +1,6 @@
 class EditorHelp extends EditorEntryBase {
-  constructor() {
-    super();
+  constructor(id) {
+    super(id);
 
     this.elem_.classList.add('help');
 
@@ -93,11 +93,12 @@ class EditorHelp extends EditorEntryBase {
   serialize() {
     return {
       type: 'help',
+      id: this.getId(),
     };
   }
 
   static unserialize(ser) {
-    return (new EditorHelp()).getElement();
+    return (new EditorHelp(ser.id)).getElement();
   }
 }
 

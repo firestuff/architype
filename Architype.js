@@ -45,7 +45,6 @@ class Architype {
     if (this.editor_.getEntries().length == 0) {
       this.editor_.addHelpAfter();
     }
-    this.editor_.selectNext();
 
     this.observer_ = new MutationObserver(e => { this.onChange(e); });
     this.observer2_ = new MutationObserver(e => { this.snapshot(e); });
@@ -77,12 +76,22 @@ class Architype {
   }
 
   serialize() {
-    // TODO: include selected element info
+    let selected = null;
+    let iter = document.activeElement;
+    while (iter) {
+      if (iter.xArchObj && iter.id) {
+        selected = iter.id;
+        break;
+      }
+      iter = iter.parentElement;
+    }
+
     return {
       version: 1,
       generation: this.generation_,
       nextId: idSource.peekId(),
       editor: this.editor_.serialize(),
+      selected: selected,
     };
   }
 
@@ -99,6 +108,14 @@ class Architype {
         this.generation_ = ser.generation;
         idSource.setId(ser.nextId);
         this.editor_.unserialize(ser.editor);
+        if (ser.selected) {
+          let elem = document.getElementById(ser.selected);
+          if (elem) {
+            elem.focus();
+          }
+        } else {
+          this.editor_.selectNext();
+        }
         break;
 
       default:
@@ -112,7 +129,6 @@ class Architype {
     this.editor_.clear();
     this.unserialize(ser);
     this.observe();
-    this.editor_.selectNext();
     this.saveAndRender();
   }
 

@@ -1,12 +1,12 @@
 <!--# include file="ListenUtils.js" -->
 
 class EditorEntryBase extends ListenUtils {
-  constructor() {
+  constructor(id) {
     super();
 
     this.elem_ = document.createElement('li');
     this.elem_.tabIndex = 0;
-    this.elem_.id = 'entry' + idSource.getId();
+    this.elem_.id = (id || ('entry' + idSource.getId()));
     this.listen(this.elem_, 'focus', () => this.onElemFocus());
     this.listen(this.elem_, 'keydown', (e) => this.onKeyDown(e));
 
