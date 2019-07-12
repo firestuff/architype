@@ -47,7 +47,9 @@ expectation across contexts in the UI.
 * `→` `l` `⏎` Enter (edit) the current list or item
 * `←` `h` `␛` Exit the current list or item
 
-`` ` `` is mapped to `␛` for convenience on some keyboards, e.g. iPads.
+`` ` `` (backtick) is mapped to `␛` for convenience on some keyboards, e.g.
+iPads. This makes it impossible to use a backtick in a node or label, which is
+considered a reasonable tradeoff.
 
 #### New objects
 
@@ -65,7 +67,7 @@ expectation across contexts in the UI.
 * `d` Delete the current line
 * `shift` + `d` Delete the current line and all lines after it
 * `␣` (`space`) Toggle highlighting of the current line
-* `f` [link only] Flip the directional of the current link
+* `f` [link only] Flip the direction of the current link
 
 #### Misc
 
@@ -156,5 +158,7 @@ adjacent grid squares.
 ## Author
 
 Ian Gulliver
+
 [architype@flamingcow.io](mailto:architype@flamingcow.io)
+
 [firestuff.org](https://firestuff.org/)
