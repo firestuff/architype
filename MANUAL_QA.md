@@ -62,3 +62,20 @@
   * Load [naked domain](https://architype.org/) in same tab
     * Verify editor content matches previous
     * Verify grid content matches previous
+* Test: Themes
+  * Open new incognito/private window
+  * Load [test page](https://architype.io/#eyJ2ZXJzaW9uIjoxLCJnZW5lcmF0aW9uIjo1OSwibmV4dElkIjoyMiwiZWRpdG9yIjpbeyJ0eXBlIjoibGluayIsImlkIjoiZW50cnk0IiwibGFiZWwiOiJ0ZXN0MiIsImZyb20iOnsidHlwZSI6Im5vZGUiLCJpZCI6ImVudHJ5NSIsImxhYmVsIjoiMSIsImhpZ2hsaWdodCI6ZmFsc2V9LCJ0byI6eyJ0eXBlIjoibm9kZSIsImlkIjoiZW50cnk2IiwibGFiZWwiOiIyIiwiaGlnaGxpZ2h0IjpmYWxzZX0sImhpZ2hsaWdodCI6dHJ1ZX0seyJ0eXBlIjoibGluayIsImlkIjoiZW50cnk3IiwibGFiZWwiOiJ0ZXN0MSIsImZyb20iOnsidHlwZSI6Im5vZGUiLCJpZCI6ImVudHJ5OSIsImxhYmVsIjoiMiIsImhpZ2hsaWdodCI6ZmFsc2V9LCJ0byI6eyJ0eXBlIjoibm9kZSIsImlkIjoiZW50cnk4IiwibGFiZWwiOiIxIiwiaGlnaGxpZ2h0IjpmYWxzZX0sImhpZ2hsaWdodCI6ZmFsc2V9LHsidHlwZSI6Imdyb3VwIiwiaWQiOiJlbnRyeTEwIiwibGFiZWwiOiJ0ZXN0MyIsIm1lbWJlcnMiOlt7InR5cGUiOiJub2RlIiwiaWQiOiJlbnRyeTExIiwibGFiZWwiOiJhIiwiaGlnaGxpZ2h0IjpmYWxzZX0seyJ0eXBlIjoibm9kZSIsImlkIjoiZW50cnkxMiIsImxhYmVsIjoiYiIsImhpZ2hsaWdodCI6dHJ1ZX0seyJ0eXBlIjoibm9kZSIsImlkIjoiZW50cnkxMyIsImxhYmVsIjoiYyIsImhpZ2hsaWdodCI6dHJ1ZX0seyJ0eXBlIjoibm9kZSIsImlkIjoiZW50cnkxNCIsImxhYmVsIjoiZCIsImhpZ2hsaWdodCI6ZmFsc2V9XSwiaGlnaGxpZ2h0IjpmYWxzZX0seyJ0eXBlIjoiZ3JvdXAiLCJpZCI6ImVudHJ5MTkiLCJsYWJlbCI6bnVsbCwibWVtYmVycyI6W3sidHlwZSI6Im5vZGUiLCJpZCI6ImVudHJ5MjAiLCJsYWJlbCI6IngiLCJoaWdobGlnaHQiOmZhbHNlfSx7InR5cGUiOiJub2RlIiwiaWQiOiJlbnRyeTIxIiwibGFiZWwiOiJ5IiwiaGlnaGxpZ2h0Ijp0cnVlfSx7InR5cGUiOiJub2RlIiwiaWQiOiJlbnRyeTIyIiwibGFiZWwiOiJ6IiwiaGlnaGxpZ2h0IjpmYWxzZX1dLCJoaWdobGlnaHQiOnRydWV9LHsidHlwZSI6ImxhYmVsIiwiaWQiOiJlbnRyeTE4IiwibGFiZWwiOiJ0ZXN0NCJ9XSwic2VsZWN0ZWQiOiJlbnRyeTIxIn0=)
+    * Verify grid structure:
+      * test4
+      * test1: 2 -> 1
+      * test2: 1 -> 2
+      * test3: (a,b,c,d)
+      * (x,y,z)
+      * Highlights: test2, b, c, y, (x,y,z)
+  * `m` to cycle themes
+    * Verify light and dark themes
+    * In each theme:
+      * Verify all editor objects visible
+      * Verify all editor highlights visible
+      * Verify all grid objects visible
+      * Verify all grid highlights visible
