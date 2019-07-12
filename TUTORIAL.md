@@ -4,8 +4,8 @@ We'll be building a simple system diagram. You can see the result [here](https:/
 
 ## Start clean
 
-1. Select (clicking, touching, or with the arrow keys) the help box and delete it by pressing `d`. You can bring it back any time by pressing `?`.
-1. Delete any other objects you've created by pressing `d`.
+1. Select (clicking, touching, or with the arrow keys) the help box and delete it by pressing `d`. You can bring it back any time by pressing `?`
+1. Delete any other objects you've created by pressing `d`
 
 # Nodes
 
@@ -14,3 +14,12 @@ We'll be building a simple system diagram. You can see the result [here](https:/
 1. Create another node by pressing `n`
 1. Label it **frontend1** then press Enter to finish editing
 1. You should see both nodes in the diagram
+
+# Links
+
+1. Navigate to the **cloudflare** node
+1. Press `space` to highlight the node
+1. Navigate to the **frontend1** node
+1. Press `space` to highlight the node
+1. Press `i` to create a l*i*nk
+1. You should see a link between the nodes in the diagram
