@@ -144,6 +144,7 @@ body {
 }
 
 .editor li.help > div {
+  margin-top: 2px;
   min-height: 10px;
 }
 
@@ -168,6 +169,10 @@ body {
 
 .editor li.help .text {
   margin: 5px;
+}
+
+.editor li.help a {
+  color: var(--text);
 }
 
 .editor li:focus {

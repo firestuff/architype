@@ -67,6 +67,13 @@ class EditorHelp extends EditorEntryBase {
     this.addLine();
     this.addKey('m');
     this.addText('Next theme      ');
+
+    this.addLine();
+
+    this.addLine();
+    this.addLink(
+        'GitHub',
+        'https://github.com/firestuff/architype/blob/master/README.md');
   }
 
   addLine() {
@@ -88,6 +95,13 @@ class EditorHelp extends EditorEntryBase {
       key.innerText = symbol;
       this.line_.appendChild(key);
     }
+  }
+
+  addLink(text, href) {
+    let a = document.createElement('a');
+    a.href = href;
+    a.innerText = text;
+    this.line_.appendChild(a);
   }
 
   afterDomAdd() {
