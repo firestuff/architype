@@ -7,14 +7,18 @@ Try it live at [architype.io](https://architype.io)
 
 ## Interface
 
+### Input
+
 Architype is designed to be used on devices with keyboards (hence the "type")
-and optionally mice/touchscreens. It can be used completely without the latter.
+and optionally pointing devices. It can be used completely without the latter.
+
+### Overview
 
 The screen is divided into two panels:
 
 * The editor, on the left, where you interactively define the components of your
-  graph.
-* The visualization, on the right, where the results are displayed.
+  graph
+* The visualization, on the right, where the results are displayed
 
 ### Object types
 
@@ -22,7 +26,7 @@ The screen is divided into two panels:
   service, or process step.
 * A *link* connects nodes together. All links in Architype are directional,
   i.e. they have an arrow at exactly one end.
-* A *group* is a collection of nodes that are physically together.
+* A *group* is a collection of nodes that are shown physically together.
 * A *label* is an optional description of another object, e.g. a link or a
   group.
 
@@ -42,6 +46,8 @@ expectation across contexts in the UI.
 * `↑` `k` Move up the current list
 * `→` `l` `⏎` Enter (edit) the current list or item
 * `←` `h` `␛` Exit the current list or item
+
+`\`` is mapped to `␛` for convenience on some keyboards, e.g. iPads.
 
 #### New objects
 
