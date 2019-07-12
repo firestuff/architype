@@ -44,3 +44,36 @@ copy of each in the diagram. Let's clean that up.
 1. Press `i` to create a link
 1. Navigate to the blank second node in the link
 1. Label it **backend1**
+1. Note the new node and link in the diagram
+
+# Groups
+
+1. Press `escape` repeatedly to navigate to the top level and clear highlighting
+1. Highlight one **frontend1** and one **backend1** node (one of each, any will do)
+1. Press `g` to create a group
+1. Note the outline and physical grouping in the diagram
+
+# Labels
+
+1. While in the group sublist, press `a` to create a l**a**bel
+1. Set the content to `us-east1`
+1. Note the label text on the group in the diagram
+1. Navigate to the **cloudflare** -> **frontend1** link
+1. Add a label with the content `HTTPS`
+1. Note the label text on the link in the diagram
+1. Label the **frontend1** -> **backend1** link **gRPC**
+
+# Finishing up
+
+1. Create links:
+  1. **cloudflare** -> **frontend2** (labeled **HTTPS**)
+  1. **frontend2** -> **backend2** (labeled **gRPC**)
+  1. **backend1** -> **database**
+  1. **backend2** -> **database**
+1. Create groups:
+  1. **frontend2** + **backend2** (labeled **us-west1**)
+
+# You're done!
+
+Try out `u` (undo), `U` (redo), and `m` (change theme). Then close & reopen the
+site to see the peristent storage in action.
