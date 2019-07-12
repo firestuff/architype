@@ -4,13 +4,13 @@ We'll be building a simple system diagram. You can see the result [here](https:/
 
 ## Start clean
 
-1 Select (clicking, touching, or with the arrow keys) the help box and delete it by pressing `d`. You can bring it back any time by pressing `?`.
-1 Delete any other objects you've created by pressing `d`.
+1. Select (clicking, touching, or with the arrow keys) the help box and delete it by pressing `d`. You can bring it back any time by pressing `?`.
+1. Delete any other objects you've created by pressing `d`.
 
 # Nodes
 
-1 Create a node by pressing `n`
-1 Label it **cloudflare**, then press Enter to finish editing
-1 Create another node by pressing `n`
-1 Label it **frontend1**, then press Enter to finish editing
-1 You should see both nodes in the diagram
+1. Create a node by pressing `n`
+1. Label it **cloudflare** then press Enter to finish editing
+1. Create another node by pressing `n`
+1. Label it **frontend1** then press Enter to finish editing
+1. You should see both nodes in the diagram
