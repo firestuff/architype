@@ -157,8 +157,6 @@ adjacent grid squares.
 
 ## Author
 
-Ian Gulliver
-
-[architype@flamingcow.io](mailto:architype@flamingcow.io)
-
+Ian Gulliver  
+[architype@flamingcow.io](mailto:architype@flamingcow.io)  
 [firestuff.org](https://firestuff.org/)
