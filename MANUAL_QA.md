@@ -1,15 +1,22 @@
 * Test: First load
   * Steps
     * Open incognito/private window
-    * Load [https://architype.io/]
+    * Load [naked domain](https://architype.io/)
+      * Verify editor help text appears
     * `n` for node
-    * Name node "1"
+      * Verify grid node does not appear
+    * Name node **1**
+      * Verify grid node appears with label
+    * `␣` to highlight node
+      * Verify editor node highlight background appears
+      * Verify grid node highlight border appears
     * `i` for link
-    * Link from "1"
-    * Link to "2"
+      * Verify grid link does not appear
+    * Link to **2**
+      * Verify grid link appears
+    * Click/touch **2** in visualization
+      * Verify grid node highlight border appears
+      * Verify editor node highlight background appears
     * `u` to undo back to just help page
-  * Verify
-    * Initial page load
-    * Help text appears
-    * Each step renders properly
-    * Undo reverts back to initial state but not further
+      * Verify undo to each step
+      * Verify no undo past initial help text
