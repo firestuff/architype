@@ -21,5 +21,27 @@ We'll be building a simple system diagram. You can see the result [here](https:/
 1. Press `space` to highlight the node
 1. Navigate to the **frontend1** node
 1. Press `space` to highlight the node
-1. Press `i` to create a l*i*nk
+1. Press `i` to create a l**i**nk
 1. You should see a link between the nodes in the diagram
+
+# Deletion
+
+There are now two copies of each node in the editor list: one standalone, and
+one inside the link. Architype treats these as references, so there's only one
+copy of each in the diagram. Let's clean that up.
+
+1. Navigate to the **cloudflare** standalone node (node the one inside the link)
+1. Press `d` to delete it
+1. Do the same to the **frontend1** standalone node
+1. Note that the diagram is unchanged
+
+# Another link
+
+1. Navigate to the **frontend1** node inside the link
+
+   Tip: You can use `left`/`right` or `enter`/`escape` to move in and out of
+   sublists
+1. Press `space` to highlight the node
+1. Press `i` to create a link
+1. Navigate to the blank second node in the link
+1. Label it **backend1**
