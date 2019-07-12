@@ -194,18 +194,6 @@ class Editor extends List {
         }
         return;
 
-      case 'u':
-        history.back();
-        e.stopPropagation();
-        e.preventDefault();
-        return;
-
-      case 'U':
-        history.forward();
-        e.stopPropagation();
-        e.preventDefault();
-        return;
-
       case '?':
         if (this.addHelpAfter()) {
           e.stopPropagation();

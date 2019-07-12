@@ -34,13 +34,13 @@ class Architype {
     }
 
     addEventListener('hashchange', (e) => { this.onHashChange(e); });
+    addEventListener('popstate', (e) => { this.onPopState(e); });
+    this.first_ = true;
 
-    let fixUrl = false;
     if (location.hash.length > 1) {
       this.unserialize(JSON.parse(atob(location.hash.substring(1))));
     } else {
       this.unserialize(JSON.parse(localStorage.getItem('currentState')));
-      fixUrl = true;
     }
     if (this.editor_.getEntries().length == 0) {
       this.editor_.addHelpAfter();
@@ -53,9 +53,7 @@ class Architype {
 
     this.saveAndRender();
 
-    if (fixUrl) {
-      history.replaceState(null, null, '#' + btoa(this.serializedStr_));
-    }
+    history.replaceState('first', null, '#' + btoa(this.serializedStr_));
   }
 
   observe() {
@@ -79,6 +77,7 @@ class Architype {
   }
 
   serialize() {
+    // TODO: include selected element info
     return {
       version: 1,
       generation: this.generation_,
@@ -123,6 +122,10 @@ class Architype {
     }
   }
 
+  onPopState(e) {
+    this.first_ = (e.state == 'first');
+  }
+
   onChange() {
     ++this.generation_;
     this.saveAndRender();
@@ -130,6 +133,7 @@ class Architype {
 
   snapshot() {
     history.pushState(null, null, '#' + btoa(this.serializedStr_));
+    this.first_ = false;
   }
 
   saveAndRender() {
@@ -140,6 +144,23 @@ class Architype {
   }
 
   onKeyDown(e) {
+    switch (e.key) {
+      case 'u':
+        // Stop us from backing up out of the page
+        if (!this.first_) {
+          history.back();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+
+      case 'U':
+        history.forward();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+    }
+
     let elem = document.activeElement;
     while (elem) {
       if (elem == this.editorElem_) {
