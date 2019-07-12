@@ -30,7 +30,8 @@ There are now two copies of each node in the editor list: one standalone, and
 one inside the link. Architype treats these as references, so there's only one
 copy of each in the diagram. Let's clean that up.
 
-1. Navigate to the **cloudflare** standalone node (not the one inside the link)
+1. Navigate to the **cloudflare** standalone node (not the one inside the link)  
+   Tip: Press `left` or `escape` to exit the link sublist
 1. Press `d` to delete it
 1. Do the same to the **frontend1** standalone node
 1. Note that the diagram is unchanged
