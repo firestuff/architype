@@ -79,10 +79,6 @@ body {
   background: var(--editor-background);
 }
 
-.editor:focus {
-  outline: none;
-}
-
 .editor li {
   display: flex;
   flex-direction: row;
