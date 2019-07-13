@@ -7,15 +7,6 @@ function getOrSet(container, key, newValue) {
   return val;
 }
 
-function intersects(set1, set2) {
-  for (let item of set1) {
-    if (set2.has(item)) {
-      return true;
-    }
-  }
-  return false;
-}
-
 function asymDifference(set1, set2) {
   let ret = new Set();
   for (let item of set1) {

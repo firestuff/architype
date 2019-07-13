@@ -106,7 +106,7 @@ class LayoutNode {
       for (let i of [0, 1]) {
         vec[i] = aff.node.pos[i] - this.pos[i];
         vecsum += Math.abs(vec[i]);
-      };
+      }
       // Avoid calling sqrt(), since the results are used relatively
       let distanceSquared = vec[0] * vec[0] + vec[1] * vec[1];
       let weight = aff.distanceToWeight(distanceSquared, vec, aff.node.pos);

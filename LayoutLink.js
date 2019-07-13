@@ -27,9 +27,6 @@ class LayoutLink {
   bfs() {
     let bestByPos = new StringMap();
 
-    // shortcut to save the lookup
-    let cheapestCostToGoal = null;
-
     // BFS work queue
     let queue = new MinHeap((a) => a.cost);
     queue.push(...[
@@ -132,7 +129,7 @@ class LayoutLink {
       } else if (taken) {
         // Traversing nodes has higher cost
         cost += 5;
-      };
+      }
     }
 
     // Overlapping links have cost, but not if they are from or to the same
