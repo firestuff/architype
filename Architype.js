@@ -186,6 +186,10 @@ class Architype {
 
     let label = this.editor_.addLabelAfter();
     label.setLabel('Example');
+
+    node1.remove();
+    node2.remove();
+    node3.remove();
   }
 
   setTheme(theme) {
