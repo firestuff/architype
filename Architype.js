@@ -44,7 +44,7 @@ class Architype {
       this.unserialize(JSON.parse(localStorage.getItem('currentState')));
     }
     if (this.editor_.getEntries().length == 0) {
-      this.editor_.addHelpAfter();
+      this.addDefaultEntries();
     }
 
     this.observer_ = new MutationObserver(e => { this.onChange(e); });
@@ -158,6 +158,34 @@ class Architype {
     this.startRender();
     this.serializedStr_ = JSON.stringify(this.serialized_);
     localStorage.setItem('currentState', this.serializedStr_);
+  }
+
+  addDefaultEntries() {
+    this.editor_.addHelpAfter();
+
+    let node1 = this.editor_.addNodeAfter();
+    node1.setLabel('node1');
+
+    let node2 = this.editor_.addNodeAfter();
+    node2.setLabel('node2');
+
+    node1.setHighlight(true);
+    node2.setHighlight(true);
+    let link = this.editor_.addLinkAfter();
+    link.setLabel('link1');
+    node1.setHighlight(false);
+    node2.setHighlight(false);
+
+    let node3 = this.editor_.addNodeAfter();
+    node3.setLabel('node3');
+
+    node2.setHighlight(true);
+    node3.setHighlight(true);
+    let group = this.editor_.addGroupAfter();
+    group.setLabel('group1');
+
+    let label = this.editor_.addLabelAfter();
+    label.setLabel('Example');
   }
 
   setTheme(theme) {

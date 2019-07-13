@@ -62,78 +62,69 @@ class Editor extends List {
 
   addNodeAfter(...rest) {
     if (this.mayAdd(EditorNode)) {
-      EditorNode.addAfter(this.container_, this.getSelected(), ...rest);
-      return true;
+      return EditorNode.addAfter(this.container_, this.getSelected(), ...rest);
     }
-    return false;
+    return null;
   }
 
   addNodeBefore(...rest) {
     if (this.mayAdd(EditorNode)) {
-      EditorNode.addBefore(this.container_, this.getSelected(), ...rest);
-      return true;
+      return EditorNode.addBefore(this.container_, this.getSelected(), ...rest);
     }
-    return false;
+    return null;
   }
 
   addLabelBefore() {
     if (this.mayAdd(EditorLabel)) {
-      EditorLabel.addBefore(this.container_, this.getSelected());
-      return true;
+      return EditorLabel.addBefore(this.container_, this.getSelected());
     }
-    return false;
+    return null;
   }
 
   addLabelAfter() {
     if (this.mayAdd(EditorLabel)) {
-      EditorLabel.addAfter(this.container_, this.getSelected());
-      return true;
+      return EditorLabel.addAfter(this.container_, this.getSelected());
     }
-    return false;
+    return null;
   }
 
   addLinkAfter() {
     if (this.mayAdd(EditorLink)) {
-      EditorLink.addAfter(this.container_, this.getSelected(),
-                          this.queryEntries('.highlight', EditorNode));
-      return true;
+      return EditorLink.addAfter(this.container_, this.getSelected(),
+                                 this.queryEntries('.highlight', EditorNode));
     }
-    return false;
+    return null;
   }
 
   addLinkBefore() {
     if (this.mayAdd(EditorLink)) {
-      EditorLink.addBefore(this.container_, this.getSelected(),
-                           this.queryEntries('.highlight', EditorNode));
-      return true;
+      return EditorLink.addBefore(this.container_, this.getSelected(),
+                                  this.queryEntries('.highlight', EditorNode));
     }
-    return false;
+    return null;
   }
 
   addGroupAfter() {
     if (this.mayAdd(EditorGroup)) {
-      EditorGroup.addAfter(this.container_, this.getSelected(),
-                           this.queryEntries('.highlight', EditorNode));
-      return true;
+      return EditorGroup.addAfter(this.container_, this.getSelected(),
+                                  this.queryEntries('.highlight', EditorNode));
     }
-    return false
+    return null;
   }
 
   addGroupBefore() {
     if (this.mayAdd(EditorGroup)) {
-      EditorGroup.addBefore(this.container_, this.getSelected(),
-                            this.queryEntries('.highlight', EditorNode));
-      return true;
+      return EditorGroup.addBefore(this.container_, this.getSelected(),
+                                   this.queryEntries('.highlight', EditorNode));
     }
-    return false;
+    return null;
   }
 
   addHelpAfter() {
     if (this.mayAdd(EditorHelp)) {
-      EditorHelp.addAfter(this.container_, this.getSelected());
-      return true;
+      return EditorHelp.addAfter(this.container_, this.getSelected());
     }
-    return false;
+    return null;
   }
   
   onKeyDown(e) {

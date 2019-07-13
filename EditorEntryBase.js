@@ -56,12 +56,14 @@ class EditorEntryBase extends ListenUtils {
     let entry = new this(null, ...rest);
     container.insertBefore(entry.getElement(), elem);
     entry.afterDomAdd();
+    return entry;
   }
 
   static addAfter(container, elem, ...rest) {
     let entry = new this(null, ...rest);
     container.insertBefore(entry.getElement(), elem ? elem.nextSibling : null);
     entry.afterDomAdd();
+    return entry;
   }
 
   static unserialize(ser) {
