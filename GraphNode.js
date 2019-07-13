@@ -46,15 +46,6 @@ class GraphNode {
     const INF = 999999;
 
     for (let node of nodes) {
-      // Weak affinity full mesh
-      // Keep unassociated subgroups together
-      this.addAffinity(node, d => d);
-
-      // Keep one space between subgraphs
-      if (this.subgraph != node.subgraph && this.label != node.label) {
-        this.addAffinity(node, d => d <= 2 ? -INF : 0);
-      }
-
       // Am I in any labeled groups that node is not?
       // If so, preserve one space above the group
       let labeled = new Set(Array.from(this.groups).filter(g => g.label != ''));
