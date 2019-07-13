@@ -12,7 +12,7 @@ class Layout {
     this.setInitialPositions();
     this.resolveGroups();
     this.resolveLinks();
-    this.resolveAffinity();
+    this.setAffinity();
     while (this.iterate());
     this.addGroupPos();
     this.drawLinks();
@@ -74,9 +74,9 @@ class Layout {
     }
   }
 
-  resolveAffinity() {
+  setAffinity() {
     for (let node of this.nodes_) {
-      node.resolveAffinity(this.nodesByGraphNode_);
+      node.setAffinity(this.nodesByGraphNode_);
     }
   }
 

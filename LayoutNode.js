@@ -25,17 +25,8 @@ class LayoutNode {
     }
   }
 
-  resolveAffinity(nodesByGraphNode) {
+  setAffinity(nodesByGraphNode) {
     const INF = 999999;
-
-    // TODO: remove
-    // Transitional: copy GraphNode affinity
-    for (let aff of this.graphNode_.affinity) {
-      this.affinity_.push({
-        node: nodesByGraphNode.get(aff.node),
-        distanceToWeight: aff.distanceToWeight,
-      });
-    }
 
     for (let node of nodesByGraphNode.values()) {
       // Weak affinity full mesh
@@ -76,6 +67,23 @@ class LayoutNode {
           node: node,
           distanceToWeight: (d, v, p) => group.isContained(p) ? -INF : 0,
         });
+      }
+    }
+
+    for (let link of this.links) {
+      // Stronger affinity for links
+      // Prefer to move toward the target instance
+      this.addAffinity(link.to, d => d <= 2 ? -INF : d * 11);
+      link.to.addAffinity(this, d => d <= 2 ? -INF : d * 9);
+    }
+
+    // Affinity for groups
+    for (let group of this.groups) {
+      if (!group.hasGraphGroup()) {
+        continue;
+      }
+      for (let node of group.nodes) {
+        this.addAffinity(node, d => d * 100);
       }
     }
   }

@@ -16,7 +16,6 @@ class Graph {
     this.setPageRank();
     this.setSubgraph();
     this.bucketNodes();
-    this.setAffinity();
   }
 
   processList(list, soft=false) {
@@ -132,12 +131,6 @@ class Graph {
     for (let nodes of this.nodesByPageRank.values()) {
       // Ensure deterministic sort order
       nodes.sort();
-    }
-  }
-
-  setAffinity() {
-    for (let node of this.nodes) {
-      node.setAffinity(this.nodes);
     }
   }
 }
