@@ -39,7 +39,7 @@ class List {
     return null;
   }
 
-  mayDelete(type) {
+  mayDelete() {
     return true;
   }
 

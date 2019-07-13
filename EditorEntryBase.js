@@ -46,7 +46,7 @@ class EditorEntryBase extends ListenUtils {
     this.elem_.scrollIntoView({block: 'nearest'});
   }
 
-  onKeyDown(e) {
+  onKeyDown() {
   }
 
   afterDomAdd() {

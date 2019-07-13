@@ -7,7 +7,7 @@ class Grid {
     addEventListener('resize', (e) => { this.onResize(e); });
   }
 
-  onResize(e) {
+  onResize() {
     this.fixSizes();
   }
 
@@ -135,7 +135,7 @@ class Grid {
     node.style.gridRow = pos[1] + 1;
     this.toSize_.push(node);
 
-    node.addEventListener('click', (e) => {
+    node.addEventListener('click', () => {
       let editorElem = document.getElementById(id);
       editorElem.classList.toggle('highlight');
       editorElem.setAttribute('data-arch-refresh', '');

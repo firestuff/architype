@@ -19,7 +19,6 @@ class EditorNode extends EditorInputBase {
 
   isSoft() {
     // Nested nodes are presumed to be references to other nodes if they exist
-    let iter = this.elem_.parentElement;
     for (let iter = this.elem_.parentElement; iter; iter = iter.parentElement) {
       if (iter.xArchObj) {
         return true;

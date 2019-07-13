@@ -291,6 +291,4 @@ class Architype {
 <!--# include file="Grid.js" -->
 <!--# include file="IdSource.js" -->
 
-<!--# include file="utils.js" -->
-
 new Architype(document.getElementById('architype'));
