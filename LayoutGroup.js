@@ -5,6 +5,8 @@ class LayoutGroup {
     this.nodes = new Set(nodes);
     this.tension = 0;
 
+    this.label = this.graphGroup_ ? this.graphGroup_.label : null;
+
     for (let node of nodes) {
       node.groups.add(this);
     }

@@ -46,25 +46,6 @@ class GraphNode {
     const INF = 999999;
 
     for (let node of nodes) {
-      // Am I in any labeled groups that node is not?
-      // If so, preserve one space above the group
-      let labeled = new Set(Array.from(this.groups).filter(g => g.label != ''));
-      if (asymDifference(labeled, node.groups).size) {
-        node.addAffinity(this, (d, v) =>
-                         (v[0] == 0 && v[1] > 0 && v[1] < 2) ? -INF : 0);
-      }
-
-      // Try to stack nodes with the same label
-      if (node.label == this.label) {
-        this.addAffinity(node, (d, v) => v[0] == 0 ? 200 : 500);
-      }
-
-      // Try to preserve pagerank left-to-right flow from initial positions
-      let rankSign = Math.sign(node.pageRank - this.pageRank);
-      if (rankSign != 0) {
-        this.addAffinity(node, (d, v) =>
-                         [Math.sign(v[0]) == rankSign ? 0 : -1000, 0]);
-      }
     }
 
     for (let link of this.links) {
