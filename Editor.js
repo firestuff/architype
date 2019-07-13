@@ -211,6 +211,7 @@ class Editor extends List {
 }
 
 <!--# include file="EditorEntryBase.js" -->
+<!--# include file="EditorInputBase.js" -->
 <!--# include file="EditorGroup.js" -->
 <!--# include file="EditorHelp.js" -->
 <!--# include file="EditorLabel.js" -->
