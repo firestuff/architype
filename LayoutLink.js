@@ -126,8 +126,9 @@ class LayoutLink {
       if (taken instanceof LayoutGroup &&
           (this.from_.groups.has(taken) ||
            this.to_.groups.has(taken))) {
-        // We're going to or from this group, so traversing it is fine.
-        continue;
+        // We're going to or from this group, so traversing it is only slightly
+        // discouraged.
+        cost += 0.1;
       } else if (taken) {
         // Traversing nodes has higher cost
         cost += 5;
@@ -195,9 +196,13 @@ class LayoutLink {
       let pos = this.path[i];
       let score = 0;
 
-      if (this.nodesByPos_.get(pos) instanceof LayoutNode) {
+      let nodeByPos = this.nodesByPos_.get(pos);
+      if (nodeByPos instanceof LayoutNode) {
         // Never overlap nodes
         continue;
+      } else if (nodeByPos) {
+        // Slight preference to not be over a group
+        score += 1;
       }
 
       if (this.labelsByPos_.get(pos) == this.label_) {
