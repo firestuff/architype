@@ -269,6 +269,7 @@ class Layout {
     if (this.graph_.label) {
       steps.push({
         type: 'graphLabel',
+        id: this.graph_.labelId,
         min: [0, 0],
         max: [this.size[0] - 1, 0],
         label: this.graph_.label,

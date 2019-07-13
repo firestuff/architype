@@ -9,6 +9,7 @@ class EditorLabel extends EditorInputBase {
   serialize() {
     return super.serialize({
       type: 'label',
+      id: this.getId(),
     });
   }
 

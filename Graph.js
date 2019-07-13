@@ -58,6 +58,7 @@ class Graph {
       return;
     }
     this.label = item.label;
+    this.labelId = item.id;
   }
 
   processLink(item) {

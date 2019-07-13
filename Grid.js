@@ -1,9 +1,7 @@
 class Grid {
-  constructor(container, elementsById) {
+  constructor(container) {
     this.container_ = container;
     this.container_.classList.add('grid');
-
-    this.elementsById_ = elementsById;
 
     this.toSize_ = [];
     addEventListener('resize', (e) => { this.onResize(e); });
@@ -15,7 +13,6 @@ class Grid {
 
   draw(steps) {
     this.container_.innerHTML = '';
-    this.elementsById_.clear();
     this.toSize_.length = 0;
 
     for (let step of steps) {
@@ -51,8 +48,6 @@ class Grid {
       }
     }
 
-    console.log(this.elementsById_);
-
     this.fixSizes();
   }
 
@@ -67,12 +62,11 @@ class Grid {
 
   drawArrow(id, pos, cls, highlight) {
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    getOrSet(this.elementsById_, id, []).push(svg);
+    this.container_.appendChild(svg);
     svg.classList.add('gridArrow');
-    svg.classList.add(cls);
+    svg.classList.add('grid-' + id);
     svg.style.gridColumn = pos[0] + 1;
     svg.style.gridRow = pos[1] + 1;
-    this.container_.appendChild(svg);
     svg.classList.toggle('highlight', highlight);
 
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
@@ -82,9 +76,9 @@ class Grid {
 
   drawGraphLabel(id, min, max, label) {
     let elem = document.createElement('div');
-    getOrSet(this.elementsById_, id, []).push(elem);
     this.container_.appendChild(elem);
     elem.classList.add('gridGraphLabel');
+    elem.classList.add('grid-' + id);
     elem.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     elem.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
     elem.innerText = label;
@@ -93,9 +87,9 @@ class Grid {
 
   drawGroup(id, min, max, label, highlight) {
     let group = document.createElement('div');
-    getOrSet(this.elementsById_, id, []).push(group);
     this.container_.appendChild(group);
     group.classList.add('gridGroup');
+    group.classList.add('grid-' + id);
     group.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     group.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
     group.classList.toggle('highlight', highlight);
@@ -104,6 +98,7 @@ class Grid {
       let labelNode = document.createElement('div');
       this.container_.appendChild(labelNode);
       labelNode.classList.add('gridGroupLabel');
+      labelNode.classList.add('grid-' + id);
       labelNode.innerText = label;
       labelNode.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
       labelNode.style.gridRow = min[1] + 1;
@@ -113,11 +108,11 @@ class Grid {
 
   drawLine(id, pos, cls, highlight) {
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    getOrSet(this.elementsById_, id, []).push(svg);
+    this.container_.appendChild(svg);
     svg.classList.add('gridLines');
+    svg.classList.add('grid-' + id);
     svg.style.gridColumn = pos[0] + 1;
     svg.style.gridRow = pos[1] + 1;
-    this.container_.appendChild(svg);
     svg.classList.toggle('highlight', highlight);
 
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
@@ -127,9 +122,9 @@ class Grid {
 
   drawLinkLabel(id, pos, label) {
     let elem = document.createElement('div');
-    getOrSet(this.elementsById_, id, []).push(elem);
-    elem.classList.add('gridLinkLabel');
     this.container_.appendChild(elem);
+    elem.classList.add('gridLinkLabel');
+    elem.classList.add('grid-' + id);
     elem.innerText = label;
     elem.style.gridColumn = pos[0] + 1;
     elem.style.gridRow = pos[1] + 1;
@@ -138,9 +133,9 @@ class Grid {
 
   drawNode(id, label, pos, highlight) {
     let node = document.createElement('div');
-    getOrSet(this.elementsById_, id, []).push(node);
-    node.classList.add('gridNode');
     this.container_.appendChild(node);
+    node.classList.add('gridNode');
+    node.classList.add('grid-' + id);
     node.innerText = label;
     node.classList.toggle('highlight', highlight);
     node.style.gridColumn = pos[0] + 1;
