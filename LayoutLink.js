@@ -247,7 +247,7 @@ class LayoutLink {
     }
 
     let endInPoint = this.getInPoint(this.path[this.path.length - 2],
-                                     this.path[this.path.length - 1])
+                                     this.path[this.path.length - 1]);
 
     steps.push({
       type: 'line',

@@ -199,7 +199,6 @@ class Architype {
   }
 
   getTheme() {
-    let classes = Array.from(this.container_.classList);
     for (let cls of this.container_.classList) {
       if (cls.startsWith('theme-')) {
         return cls.substring(6);
