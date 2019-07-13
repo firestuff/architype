@@ -15,13 +15,15 @@ class Architype {
 
     document.addEventListener('keydown', (e) => { this.onKeyDown(e); });
 
+    let gridElementsById = new Map();
+
     this.editorElem_ = document.createElement('ul');
     this.container_.appendChild(this.editorElem_);
-    this.editor_ = new Editor(this.editorElem_);
+    this.editor_ = new Editor(this.editorElem_, gridElementsById);
 
     this.gridElem_ = document.createElement('div');
     this.container_.appendChild(this.gridElem_);
-    this.grid_ = new Grid(this.gridElem_);
+    this.grid_ = new Grid(this.gridElem_, gridElementsById);
 
     this.generation_ = 0;
     this.renderGeneration_ = -1;
@@ -290,5 +292,7 @@ class Architype {
 <!--# include file="Editor.js" -->
 <!--# include file="Grid.js" -->
 <!--# include file="IdSource.js" -->
+
+<!--# include file="utils.js" -->
 
 new Architype(document.getElementById('architype'));

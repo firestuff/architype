@@ -1,7 +1,9 @@
 class Grid {
-  constructor(container) {
+  constructor(container, elementsById) {
     this.container_ = container;
     this.container_.classList.add('grid');
+
+    this.elementsById_ = elementsById;
 
     this.toSize_ = [];
     addEventListener('resize', (e) => { this.onResize(e); });
@@ -13,7 +15,8 @@ class Grid {
 
   draw(steps) {
     this.container_.innerHTML = '';
-    this.toSize_ = [];
+    this.elementsById_.clear();
+    this.toSize_.length = 0;
 
     for (let step of steps) {
       switch (step.type) {
@@ -22,23 +25,24 @@ class Grid {
           break;
 
         case 'arrow':
-          this.drawArrow(step.pos, step.cls, step.highlight);
+          this.drawArrow(step.id, step.pos, step.cls, step.highlight);
           break;
 
         case 'graphLabel':
-          this.drawGraphLabel(step.min, step.max, step.label);
+          this.drawGraphLabel(step.id, step.min, step.max, step.label);
           break;
 
         case 'group':
-          this.drawGroup(step.min, step.max, step.label, step.highlight);
+          this.drawGroup(step.id, step.min, step.max, step.label,
+                         step.highlight);
           break;
 
         case 'line':
-          this.drawLine(step.pos, step.cls, step.highlight);
+          this.drawLine(step.id, step.pos, step.cls, step.highlight);
           break;
 
         case 'linkLabel':
-          this.drawLinkLabel(step.pos, step.label);
+          this.drawLinkLabel(step.id, step.pos, step.label);
           break;
 
         case 'node':
@@ -46,6 +50,8 @@ class Grid {
           break;
       }
     }
+
+    console.log(this.elementsById_);
 
     this.fixSizes();
   }
@@ -59,8 +65,9 @@ class Grid {
         size[0] + ')))';
   }
 
-  drawArrow(pos, cls, highlight) {
+  drawArrow(id, pos, cls, highlight) {
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    getOrSet(this.elementsById_, id, []).push(svg);
     svg.classList.add('gridArrow');
     svg.classList.add(cls);
     svg.style.gridColumn = pos[0] + 1;
@@ -73,8 +80,9 @@ class Grid {
     use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
   }
 
-  drawGraphLabel(min, max, label) {
+  drawGraphLabel(id, min, max, label) {
     let elem = document.createElement('div');
+    getOrSet(this.elementsById_, id, []).push(elem);
     this.container_.appendChild(elem);
     elem.classList.add('gridGraphLabel');
     elem.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
@@ -83,8 +91,9 @@ class Grid {
     this.toSize_.push(elem);
   }
 
-  drawGroup(min, max, label, highlight) {
+  drawGroup(id, min, max, label, highlight) {
     let group = document.createElement('div');
+    getOrSet(this.elementsById_, id, []).push(group);
     this.container_.appendChild(group);
     group.classList.add('gridGroup');
     group.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
@@ -102,8 +111,9 @@ class Grid {
     }
   }
 
-  drawLine(pos, cls, highlight) {
+  drawLine(id, pos, cls, highlight) {
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    getOrSet(this.elementsById_, id, []).push(svg);
     svg.classList.add('gridLines');
     svg.style.gridColumn = pos[0] + 1;
     svg.style.gridRow = pos[1] + 1;
@@ -115,8 +125,9 @@ class Grid {
     use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + cls);
   }
 
-  drawLinkLabel(pos, label) {
+  drawLinkLabel(id, pos, label) {
     let elem = document.createElement('div');
+    getOrSet(this.elementsById_, id, []).push(elem);
     elem.classList.add('gridLinkLabel');
     this.container_.appendChild(elem);
     elem.innerText = label;
@@ -127,6 +138,7 @@ class Grid {
 
   drawNode(id, label, pos, highlight) {
     let node = document.createElement('div');
+    getOrSet(this.elementsById_, id, []).push(node);
     node.classList.add('gridNode');
     this.container_.appendChild(node);
     node.innerText = label;

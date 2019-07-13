@@ -19,6 +19,7 @@ class LayoutNode {
     for (let link of this.graphNode_.links) {
       this.links.push({
         to: nodesByGraphNode.get(link.to),
+        id: link.id,
         label: link.label,
         highlight: link.highlight,
       });

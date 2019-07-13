@@ -226,6 +226,7 @@ class LayoutLink {
 
     steps.push({
       type: 'line',
+      id: this.id_,
       pos: Array.from(this.path[0]),
       cls: 's' + this.getOutPoint(this.path[0], this.path[1]),
       highlight: this.highlight_,
@@ -236,9 +237,9 @@ class LayoutLink {
       let outPoint = this.getOutPoint(this.path[i], this.path[i + 1]);
       steps.push({
         type: 'line',
+        id: this.id_,
         pos: Array.from(this.path[i]),
         cls: `i${inPoint}o${outPoint}`,
-        id: this.id_,
         highlight: this.highlight_,
       });
     }
@@ -248,6 +249,7 @@ class LayoutLink {
 
     steps.push({
       type: 'line',
+      id: this.id_,
       pos: Array.from(this.path[this.path.length - 1]),
       cls: 's' + endInPoint,
       highlight: this.highlight_,
@@ -255,6 +257,7 @@ class LayoutLink {
 
     steps.push({
       type: 'arrow',
+      id: this.id_,
       pos: Array.from(this.path[this.path.length - 1]),
       cls: 'a' + endInPoint,
       highlight: this.highlight_,
@@ -263,6 +266,7 @@ class LayoutLink {
     if (this.labelPos_) {
       steps.push({
         type: 'linkLabel',
+        id: this.id_,
         pos: this.labelPos_,
         label: this.label_,
       });
