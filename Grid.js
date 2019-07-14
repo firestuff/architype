@@ -158,7 +158,11 @@ class Grid {
 
     elem.addEventListener('click', () => {
       let editorElem = document.getElementById(id);
+      if (!editorElem) {
+        return;
+      }
       editorElem.xArchObj.toggleHighlight();
+      editorElem.focus();
     });
   }
 
