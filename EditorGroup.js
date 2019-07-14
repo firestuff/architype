@@ -75,6 +75,10 @@ class EditorGroup extends EditorEntryBase {
   }
 
   static unserialize(ser) {
+    //// Backwards compat
+    // 3bdb240
+    ser.labelObj = ser.labelObj || {};
+
     let group = new EditorGroup(ser.id);
     group.nodes_.clear();
     if (ser.label != null) {
