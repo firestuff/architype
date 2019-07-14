@@ -183,6 +183,13 @@ class Layout {
       min[1] -= 1;
     }
 
+    for (let tag of this.tags_) {
+      if (tag.label) {
+        max[1] += 1;
+        break;
+      }
+    }
+
     // Set a minimum size and center the smaller graph
     const MIN_SIZE = 7;
     for (let i of [0, 1]) {
@@ -299,6 +306,14 @@ class Layout {
 
     for (let link of this.links_) {
       steps.push(...link.getSteps());
+    }
+
+    let nextTagLabelPos = [
+        this.size[0] - 1,
+        this.size[1] - 1,
+    ];
+    for (let tag of this.tags_) {
+      steps.push(...tag.getSteps(nextTagLabelPos));
     }
 
     return steps;

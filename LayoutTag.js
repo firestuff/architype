@@ -13,8 +13,18 @@ class LayoutTag {
     }
   }
 
-  getSteps() {
+  getSteps(nextLabelPos) {
     let steps = [];
+    if (this.label) {
+      steps.push({
+        type: 'tagLabel',
+        id: this.graphTag_.labelId,
+        pos: Array.from(nextLabelPos),
+        label: this.label,
+        tag: this.idx_,
+      });
+      nextLabelPos[1] -= 1;
+    }
     return steps;
   }
 }

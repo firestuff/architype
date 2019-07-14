@@ -48,6 +48,10 @@ class Grid {
         case 'node':
           this.drawNode(step.id, step.label, step.pos, step.tags);
           break;
+
+        case 'tagLabel':
+          this.drawTagLabel(step.id, step.pos, step.label, step.tag);
+          break;
       }
     }
 
@@ -146,6 +150,18 @@ class Grid {
       node.classList.add('tag' + tag);
     }
     this.linkToEditor(node, id, true);
+  }
+
+  drawTagLabel(id, pos, label, tag) {
+    let elem = document.createElement('div');
+    this.container_.appendChild(elem);
+    elem.classList.add('gridTagLabel');
+    elem.classList.add('grid-' + id);
+    elem.innerText = label;
+    elem.style.gridColumn = pos[0] + 1;
+    elem.style.gridRow = pos[1] + 1;
+    elem.classList.add('tag' + tag);
+    this.linkToEditor(elem, id, true);
   }
 
   linkToEditor(elem, id, copyLabel) {

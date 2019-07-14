@@ -246,7 +246,8 @@ body {
   padding: 10px;
 }
 
-.gridNode, .gridGraphLabel, .gridGroup, .gridGroupLabel, .gridLinkLabel {
+.gridNode, .gridGraphLabel, .gridGroup, .gridGroupLabel, .gridLinkLabel,
+    .gridTagLabel {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -270,27 +271,27 @@ body {
   z-index: 3;
 }
 
-.gridNode.tag0 {
+.tag0 {
   background: var(--tag0);
 }
 
-.gridNode.tag1 {
+.tag1 {
   background: var(--tag1);
 }
 
-.gridNode.tag2 {
+.tag2 {
   background: var(--tag2);
 }
 
-.gridNode.tag3 {
+.tag3 {
   background: var(--tag3);
 }
 
-.gridNode.tag4 {
+.tag4 {
   background: var(--tag4);
 }
 
-.gridNode.tag5 {
+.tag5 {
   background: var(--tag5);
 }
 
@@ -414,4 +415,13 @@ body {
 
 .gridArrow.highlight {
   --arrow-color: var(--focus);
+}
+
+.gridTagLabel {
+  max-width: 80%;
+  max-height: 80%;
+  font-size: 16px;
+  z-index: 3;
+  border-radius: 4px;
+  padding: 3px;
 }
