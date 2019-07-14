@@ -33,7 +33,7 @@ class GraphLink {
     let link = new GraphLink();
     link.id = item.id;
     link.label = item.label;
-    link.labelId = item.labelObj.id;
+    link.labelId = item.labelObj ? item.labelObj.id : null;
     link.fromLabel = item.from.label;
     link.toLabel = item.to.label;
     if (link.fromLabel == '' || link.toLabel == '') {

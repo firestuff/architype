@@ -32,7 +32,7 @@ class EditorGroup extends EditorEntryBase {
     return super.serialize({
       type: 'group',
       label: this.getLabel(),
-      labelObj: this.getLabelObj().serialize(),
+      labelObj: this.getLabelObj() ? this.getLabelObj().serialize() : null,
       members: this.nodes_.serialize(EditorNode),
     });
   }

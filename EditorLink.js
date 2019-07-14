@@ -30,7 +30,7 @@ class EditorLink extends EditorEntryBase {
     return super.serialize({
       type: 'link',
       label: this.getLabel(),
-      labelObj: this.getLabelObj().serialize(),
+      labelObj: this.getLabelObj() ? this.getLabelObj().serialize() : null,
       from: this.getFrom().serialize(),
       to: this.getTo().serialize(),
     });
