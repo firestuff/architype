@@ -31,8 +31,10 @@ class EditorHelp extends EditorEntryBase {
     this.addText('Label');
 
     this.addLine();
+    this.addKey('t');
+    this.addText('Tag   ');
     this.addKey('?');
-    this.addText('Help            ');
+    this.addText('Help ');
 
     this.addLine();
     this.addKey('⇧');

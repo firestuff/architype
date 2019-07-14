@@ -6,12 +6,14 @@ class Graph {
     this.groups = [];
     this.links = [];
     this.nodes = [];
+    this.tags = [];
     this.label = null;
 
     this.processList(def.editor);
     this.removeSoftNodes();
     this.resolveLinks();
     this.resolveGroups();
+    this.resolveTags();
     this.flattenNodes();
     this.setPageRank();
     this.setSubgraph();
@@ -40,6 +42,10 @@ class Graph {
 
       case 'node':
         this.processNode(item, soft);
+        break;
+
+      case 'tag':
+        this.processTag(item);
         break;
     }
   }
@@ -79,6 +85,15 @@ class Graph {
     getOrSet(this.nodesByLabel, node.label, []).push(node);
   }
 
+  processTag(item) {
+    let tag = GraphTag.process(item);
+    if (!tag) {
+      return;
+    }
+    this.tags.push(tag);
+    this.processList(item.members, true);
+  }
+
   removeSoftNodes() {
     for (let nodes of this.nodesByLabel.values()) {
       for (let i = nodes.length - 1; i >= 0 && nodes.length > 1; --i) {
@@ -98,6 +113,12 @@ class Graph {
   resolveGroups() {
     for (let group of this.groups) {
       group.resolve(this.nodesByLabel);
+    }
+  }
+
+  resolveTags() {
+    for (let tag of this.tags) {
+      tag.resolve(this.nodesByLabel);
     }
   }
 
@@ -139,3 +160,4 @@ class Graph {
 <!--# include file="GraphGroup.js" -->
 <!--# include file="GraphLink.js" -->
 <!--# include file="GraphNode.js" -->
+<!--# include file="GraphTag.js" -->

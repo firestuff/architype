@@ -104,6 +104,8 @@ class EditorEntryBase extends ListenUtils {
         return EditorLink.unserialize(ser);
       case 'node':
         return EditorNode.unserialize(ser);
+      case 'tag':
+        return EditorTag.unserialize(ser);
     }
   }
 }

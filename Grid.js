@@ -46,7 +46,7 @@ class Grid {
           break;
 
         case 'node':
-          this.drawNode(step.id, step.label, step.pos);
+          this.drawNode(step.id, step.label, step.pos, step.tags);
           break;
       }
     }
@@ -134,7 +134,7 @@ class Grid {
     this.linkToEditor(elem, id, true);
   }
 
-  drawNode(id, label, pos) {
+  drawNode(id, label, pos, tags) {
     let node = document.createElement('div');
     this.container_.appendChild(node);
     node.classList.add('gridNode');
@@ -142,6 +142,9 @@ class Grid {
     node.innerText = label;
     node.style.gridColumn = pos[0] + 1;
     node.style.gridRow = pos[1] + 1;
+    for (let tag of tags) {
+      node.classList.add('tag' + tag);
+    }
     this.linkToEditor(node, id, true);
   }
 

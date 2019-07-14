@@ -12,6 +12,7 @@ class Layout {
     this.setInitialPositions();
     this.resolveGroups();
     this.resolveLinks();
+    this.resolveTags();
     this.setAffinity();
     while (this.iterate());
     this.addGroupPos();
@@ -71,6 +72,15 @@ class Layout {
   resolveLinks() {
     for (let node of this.nodes_) {
       node.resolveLinks(this.nodesByGraphNode_);
+    }
+  }
+
+  resolveTags() {
+    this.tags_ = [];
+    for (let i = 0; i < this.graph_.tags.length; ++i) {
+      let tag = this.graph_.tags[i];
+      let nodes = this.nodesFromGraphNodes(tag.nodes);
+      this.tags_.push(new LayoutTag(tag, nodes, i));
     }
   }
 
@@ -298,3 +308,4 @@ class Layout {
 <!--# include file="LayoutGroup.js" -->
 <!--# include file="LayoutLink.js" -->
 <!--# include file="LayoutNode.js" -->
+<!--# include file="LayoutTag.js" -->

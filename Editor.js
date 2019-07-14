@@ -8,6 +8,7 @@ class Editor extends List {
       [EditorNode,  [0, Number.POSITIVE_INFINITY]],
       [EditorGroup, [0, Number.POSITIVE_INFINITY]],
       [EditorLink,  [0, Number.POSITIVE_INFINITY]],
+      [EditorTag,   [0, Number.POSITIVE_INFINITY]],
       [EditorLabel, [0, 1]],
       [EditorHelp,  [0, Number.POSITIVE_INFINITY]],
     ]);
@@ -143,6 +144,24 @@ class Editor extends List {
     }
     return null;
   }
+
+  addTagAfter(...rest) {
+    if (this.mayAdd(EditorTag)) {
+      return EditorTag.addAfter(this.container_, this.getSelected(),
+                                this.queryEntries('.highlight', EditorNode),
+                                ...rest);
+    }
+    return null;
+  }
+
+  addTagBefore(...rest) {
+    if (this.mayAdd(EditorTag)) {
+      return EditorTag.addBefore(this.container_, this.getSelected(),
+                                 this.queryEntries('.highlight', EditorNode),
+                                 ...rest);
+    }
+    return null;
+  }
   
   onKeyDown(e) {
     switch (e.key) {
@@ -202,6 +221,21 @@ class Editor extends List {
         }
         return;
 
+      case 't':
+      case '#':
+        if (this.addTagAfter()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        return;
+
+      case 'T':
+        if (this.addTagBefore()) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        return;
+
       case '?':
         if (this.addHelpAfter()) {
           e.stopPropagation();
@@ -233,3 +267,4 @@ class Editor extends List {
 <!--# include file="EditorLabel.js" -->
 <!--# include file="EditorLink.js" -->
 <!--# include file="EditorNode.js" -->
+<!--# include file="EditorTag.js" -->

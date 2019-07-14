@@ -5,6 +5,7 @@ class LayoutNode {
     this.pos = pos;
 
     this.groups = new Set();
+    this.tags = new Set();
     this.affinity_ = [];
 
     this.label = this.graphNode_.label;
@@ -161,6 +162,7 @@ class LayoutNode {
       pos: this.pos,
       id: this.graphNode_.id,
       label: this.graphNode_.label,
+      tags: Array.from(this.tags),
     };
   }
 }
