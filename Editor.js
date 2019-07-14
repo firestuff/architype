@@ -60,6 +60,19 @@ class Editor extends List {
     return this.getEntries(type).length > limits[0];
   }
 
+  deleteSelected() {
+    let highlight = this.queryEntries('.highlight', EditorNode);
+    if (highlight.length == 0) {
+      return super.deleteSelected();
+    }
+
+    for (let obj of highlight) {
+      if (this.mayDelete(obj.constructor)) {
+        obj.remove();
+      }
+    }
+  }
+
   addNodeAfter(...rest) {
     if (this.mayAdd(EditorNode)) {
       return EditorNode.addAfter(this.container_, this.getSelected(), ...rest);
