@@ -171,7 +171,7 @@ class Architype {
   }
 
   addDefaultEntries() {
-    this.editor_.addHelpAfter();
+    let help = this.editor_.addHelpAfter();
 
     let node1 = this.editor_.addNodeAfter();
     node1.setLabel('node1');
@@ -200,6 +200,8 @@ class Architype {
     node1.remove();
     node2.remove();
     node3.remove();
+
+    help.getElement().focus();
   }
 
   setTheme(theme) {
