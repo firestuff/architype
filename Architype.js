@@ -193,6 +193,15 @@ class Architype {
     node3.setHighlight(true);
     let group = this.editor_.addGroupAfter();
     group.setLabel('group1');
+    node2.setHighlight(false);
+    node3.setHighlight(false);
+
+    node1.setHighlight(true);
+    node3.setHighlight(true);
+    let tag = this.editor_.addTagAfter();
+    tag.setLabel('tag1');
+    node1.setHighlight(false);
+    node3.setHighlight(false);
 
     let label = this.editor_.addLabelAfter();
     label.setLabel('Example');
