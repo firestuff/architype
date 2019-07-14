@@ -13,6 +13,12 @@ class EditorEntryBase extends ListenUtils {
     this.elem_.xArchObj = this;
   }
 
+  serialize(base) {
+    base.id = this.getId();
+    base.highlight = this.elem_.classList.contains('highlight');
+    return base;
+  }
+
   remove() {
     if (document.activeElement == this.elem_ ||
         document.activeElement == document.body) {
@@ -42,11 +48,31 @@ class EditorEntryBase extends ListenUtils {
     return this.elem_.id;
   }
 
+  setHighlight(highlight) {
+    this.elem_.classList.toggle('highlight', highlight);
+    for (let elem of document.getElementsByClassName('grid-' + this.getId())) {
+      elem.classList.toggle('highlight', highlight);
+    }
+    // Do NOT refresh: this bypasses the rendering pipeline
+    this.elem_.setAttribute('data-arch-snapshot', '');
+  }
+
+  toggleHighlight() {
+    this.setHighlight(!this.elem_.classList.contains('highlight'));
+  }
+
   onElemFocus() {
     this.elem_.scrollIntoView({block: 'nearest'});
   }
 
-  onKeyDown() {
+  onKeyDown(e) {
+    switch (e.key) {
+      case ' ':
+        this.toggleHighlight();
+        e.stopPropagation();
+        e.preventDefault();
+        break;
+    }
   }
 
   afterDomAdd() {

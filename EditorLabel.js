@@ -9,25 +9,13 @@ class EditorLabel extends EditorInputBase {
   serialize() {
     return super.serialize({
       type: 'label',
-      id: this.getId(),
     });
-  }
-
-  onKeyDown(e) {
-    super.onKeyDown(e);
-
-    switch (e.key) {
-      case ' ':
-        // We don't support highlighting, but stop propagation
-        e.stopPropagation();
-        e.preventDefault();
-        break;
-    }
   }
 
   static unserialize(ser) {
     let label = new EditorLabel(ser.id);
     label.setLabel(ser.label);
+    label.setHighlight(ser.highlight);
     return label.getElement();
   }
 }

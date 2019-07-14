@@ -117,10 +117,9 @@ class EditorHelp extends EditorEntryBase {
   }
 
   serialize() {
-    return {
+    return super.serialize({
       type: 'help',
-      id: this.getId(),
-    };
+    });
   }
 
   static unserialize(ser) {

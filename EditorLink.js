@@ -26,14 +26,12 @@ class EditorLink extends EditorEntryBase {
   }
 
   serialize() {
-    return {
+    return super.serialize({
       type: 'link',
-      id: this.getId(),
       label: this.getLabel(),
       from: this.getFrom().serialize(),
       to: this.getTo().serialize(),
-      highlight: this.elem_.classList.contains('highlight'),
-    };
+    });
   }
 
   getFrom() {
@@ -57,10 +55,6 @@ class EditorLink extends EditorEntryBase {
       this.nodes_.addLabelBefore();
       this.setLabel(label);
     }
-  }
-
-  setHighlight(highlight) {
-    this.elem_.classList.toggle('highlight', highlight);
   }
 
   flip() {
@@ -87,14 +81,6 @@ class EditorLink extends EditorEntryBase {
       case 'ArrowRight':
       case 'l':
         this.nodes_.selectNext();
-        e.stopPropagation();
-        e.preventDefault();
-        break;
-
-      case ' ':
-        this.elem_.classList.toggle('highlight');
-        this.elem_.setAttribute('data-arch-refresh', '');
-        this.elem_.setAttribute('data-arch-snapshot', '');
         e.stopPropagation();
         e.preventDefault();
         break;

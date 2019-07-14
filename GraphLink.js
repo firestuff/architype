@@ -11,13 +11,11 @@ class GraphLink {
           to: to,
           id: this.id,
           label: this.label,
-          highlight: this.highlight,
         });
         to.linksIn.push({
           from: from,
           id: this.id,
           label: this.label,
-          highlight: this.highlight,
         });
       }
     }
@@ -35,7 +33,6 @@ class GraphLink {
     link.label = item.label;
     link.fromLabel = item.from.label;
     link.toLabel = item.to.label;
-    link.highlight = item.highlight;
     if (link.fromLabel == '' || link.toLabel == '') {
       return null;
     }

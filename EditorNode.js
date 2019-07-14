@@ -9,12 +9,7 @@ class EditorNode extends EditorInputBase {
   serialize() {
     return super.serialize({
       type: 'node',
-      highlight: this.elem_.classList.contains('highlight'),
     });
-  }
-
-  setHighlight(highlight) {
-    this.elem_.classList.toggle('highlight', highlight);
   }
 
   isSoft() {
@@ -25,20 +20,6 @@ class EditorNode extends EditorInputBase {
       }
     }
     return false;
-  }
-
-  onKeyDown(e) {
-    super.onKeyDown(e);
-
-    switch (e.key) {
-      case ' ':
-        this.elem_.classList.toggle('highlight');
-        this.elem_.setAttribute('data-arch-snapshot', '');
-        this.onInput();
-        e.stopPropagation();
-        e.preventDefault();
-        break;
-    }
   }
 
   static unserialize(ser) {

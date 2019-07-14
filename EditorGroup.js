@@ -29,13 +29,11 @@ class EditorGroup extends EditorEntryBase {
   }
 
   serialize() {
-    return {
+    return super.serialize({
       type: 'group',
-      id: this.getId(),
       label: this.getLabel(),
       members: this.nodes_.serialize(EditorNode),
-      highlight: this.elem_.classList.contains('highlight'),
-    };
+    });
   }
 
   getNodes() {
@@ -57,10 +55,6 @@ class EditorGroup extends EditorEntryBase {
     }
   }
 
-  setHighlight(highlight) {
-    this.elem_.classList.toggle('highlight', highlight);
-  }
-
   onKeyDown(e) {
     super.onKeyDown(e);
 
@@ -69,14 +63,6 @@ class EditorGroup extends EditorEntryBase {
       case 'ArrowRight':
       case 'l':
         this.nodes_.selectNext();
-        e.stopPropagation();
-        e.preventDefault();
-        break;
-
-      case ' ':
-        this.elem_.classList.toggle('highlight');
-        this.elem_.setAttribute('data-arch-refresh', '');
-        this.elem_.setAttribute('data-arch-snapshot', '');
         e.stopPropagation();
         e.preventDefault();
         break;

@@ -196,10 +196,8 @@ class Editor extends List {
       case '`':
         if (!this.container_.parentElement.xArchObj) {
           for (let entry of this.queryEntries('.highlight')) {
-            entry.getElement().classList.toggle('highlight', false);
+            entry.setHighlight(false);
           }
-          this.container_.setAttribute('data-arch-refresh', '');
-          this.container_.setAttribute('data-arch-snapshot', '');
           e.stopPropagation();
           e.preventDefault();
           return;

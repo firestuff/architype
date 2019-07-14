@@ -47,19 +47,18 @@ class Architype {
       this.addDefaultEntries();
     }
 
-    this.observer_ = new MutationObserver(e => { this.onChange(e); });
-    this.observer2_ = new MutationObserver(e => { this.snapshot(e); });
+    this.observer_ = new MutationObserver(e => { this.onChange(); });
+    this.observer2_ = new MutationObserver(e => { this.snapshot(false); });
     this.observe();
 
-    this.saveAndRender();
-
-    history.replaceState('first', null, '#' + btoa(this.serializedStr_));
+    this.render();
+    this.snapshot(true);
   }
 
   observe() {
     this.observer_.observe(this.editorElem_, {
       attributes: true,
-      attributeFilter: ['data-arch-refresh'],
+      attributeFilter: ['data-arch-render'],
       childList: true,
       subtree: true,
     });
@@ -130,7 +129,7 @@ class Architype {
     this.editor_.clear();
     this.unserialize(ser);
     this.observe();
-    this.saveAndRender();
+    this.render();
   }
 
   onHashChange() {
@@ -145,19 +144,25 @@ class Architype {
 
   onChange() {
     ++this.generation_;
-    this.saveAndRender();
+    this.render();
   }
 
-  snapshot() {
-    history.pushState(null, null, '#' + btoa(this.serializedStr_));
-    this.first_ = false;
-  }
-
-  saveAndRender() {
+  snapshot(first) {
     this.serialized_ = this.serialize();
-    this.startRender();
     this.serializedStr_ = JSON.stringify(this.serialized_);
     localStorage.setItem('currentState', this.serializedStr_);
+    this.first_ = first || false;
+    let hash = '#' + btoa(this.serializedStr_);
+    if (first) {
+      history.replaceState('first', null, hash);
+    } else {
+      history.pushState(null, null, hash);
+    }
+  }
+
+  render() {
+    this.serialized_ = this.serialize();
+    this.startRender();
   }
 
   addDefaultEntries() {

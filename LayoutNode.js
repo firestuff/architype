@@ -21,7 +21,6 @@ class LayoutNode {
         to: nodesByGraphNode.get(link.to),
         id: link.id,
         label: link.label,
-        highlight: link.highlight,
       });
     }
   }
@@ -161,7 +160,6 @@ class LayoutNode {
       pos: this.pos,
       id: this.graphNode_.id,
       label: this.graphNode_.label,
-      highlight: this.graphNode_.highlight,
     };
   }
 }

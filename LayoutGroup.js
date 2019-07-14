@@ -92,7 +92,6 @@ class LayoutGroup {
       max: max,
       id: this.graphGroup_.id,
       label: this.graphGroup_.label,
-      highlight: this.graphGroup_.highlight,
     };
   }
 

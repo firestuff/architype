@@ -21,7 +21,7 @@ class EditorInputBase extends EditorEntryBase {
   }
 
   serialize(base) {
-    base.id = this.getId();
+    super.serialize(base);
     base.label = this.getLabel();
     return base;
   }
@@ -41,7 +41,7 @@ class EditorInputBase extends EditorEntryBase {
   }
 
   onInput() {
-    this.elem_.setAttribute('data-arch-refresh', '');
+    this.elem_.setAttribute('data-arch-render', '');
   }
 
   onBlur() {
