@@ -1,36 +1,19 @@
-class EditorLink extends EditorEntryBase {
+class EditorLink extends EditorSublistBase {
   constructor(id, entries) {
-    super(id);
-
-    this.elem_.innerText = '↓';
-    this.elem_.classList.add('link');
-
-    let nodeList = document.createElement('div');
-    this.nodes_ = new Editor(nodeList, [
+    super(id, '↓', 'link', [
       [EditorNode,  [2, 2]],
       [EditorLabel, [0, 1]],
     ]);
+
     this.nodes_.addNodeAfter(
         entries && entries[0] ? entries[0].getLabel() : null);
     this.nodes_.addNodeAfter(
         entries && entries[1] ? entries[1].getLabel() : null);
-    this.elem_.appendChild(nodeList);
   }
 
-  afterDomAdd() {
-    this.nodes_.selectNext();
-    let node = this.nodes_.getSelected().xArchObj;
-    if (node.getLabel() == '') {
-      node.startEdit();
-    }
-  }
-
-  // TODO: factor out common base code with EditorGroup
   serialize() {
     return super.serialize({
       type: 'link',
-      label: this.getLabel(),
-      labelObj: this.getLabelObj() ? this.getLabelObj().serialize() : null,
       from: this.getFrom().serialize(),
       to: this.getTo().serialize(),
     });
@@ -42,25 +25,6 @@ class EditorLink extends EditorEntryBase {
 
   getTo() {
     return this.nodes_.getEntries(EditorNode)[1];
-  }
-
-  getLabel() {
-    let label = this.getLabelObj();
-    return label ? label.getLabel() : null;
-  }
-
-  setLabel(label, labelId) {
-    let obj = this.getLabelObj();
-    if (obj) {
-      obj.setLabel(label);
-    } else {
-      this.nodes_.addLabelBefore(labelId);
-      this.setLabel(label);
-    }
-  }
-
-  getLabelObj() {
-    return this.nodes_.getEntries(EditorLabel)[0];
   }
 
   flip() {
@@ -83,14 +47,6 @@ class EditorLink extends EditorEntryBase {
     super.onKeyDown(e);
 
     switch (e.key) {
-      case 'Enter':
-      case 'ArrowRight':
-      case 'l':
-        this.nodes_.selectNext();
-        e.stopPropagation();
-        e.preventDefault();
-        break;
-
       case 'f':
         this.flip();
         e.stopPropagation();
