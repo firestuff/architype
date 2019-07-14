@@ -21,12 +21,16 @@ class Architype {
     this.renderGeneration_ = -1;
     this.drawGeneration_ = -1;
 
+    // Work around a Chrome cache bug(?) by only starting one render thread at
+    // first, then starting the rest on first response from that thread. This
+    // avoids downloading render.js once for each thread.
     this.render_ = [];
-    for (let i = 0; i < (navigator.hardwareConcurrency || 2); ++i) {
-      let render = new Worker('render.js');
-      render.addEventListener('message', (e) => { this.onRender(e); });
-      this.render_.push(render);
-    }
+    this.renderThreadsToStart_ =
+        Math.min(8, navigator.hardwareConcurrency || 2);
+    this.renderThreadStart();
+    this.render_[0].postMessage({
+      command: 'ping',
+    });
 
     addEventListener('hashchange', (e) => { this.onHashChange(e); });
     addEventListener('popstate', (e) => { this.onPopState(e); });
@@ -47,6 +51,13 @@ class Architype {
 
     this.render();
     this.snapshot(true);
+  }
+
+  renderThreadStart() {
+    let render = new Worker('render.js');
+    render.addEventListener('message', (e) => { this.onRender(e); });
+    this.render_.push(render);
+    --this.renderThreadsToStart_;
   }
 
   observe() {
@@ -258,6 +269,14 @@ class Architype {
   }
 
   onRender(e) {
+    while (this.renderThreadsToStart_) {
+      this.renderThreadStart();
+    }
+
+    if (e.data.command == 'pong') {
+      return;
+    }
+
     this.render_.push(e.target);
 
     if (e.data.generation > this.drawGeneration_) {
