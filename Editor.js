@@ -62,7 +62,7 @@ class Editor extends List {
   }
 
   deleteSelected() {
-    let highlight = this.queryEntries('.highlight', EditorNode);
+    let highlight = this.queryEntries('.highlight');
     if (highlight.length == 0) {
       return super.deleteSelected();
     }
