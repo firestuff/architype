@@ -47,8 +47,8 @@ class Architype {
       this.addDefaultEntries();
     }
 
-    this.observer_ = new MutationObserver(e => { this.onChange(); });
-    this.observer2_ = new MutationObserver(e => { this.snapshot(false); });
+    this.observer_ = new MutationObserver(() => { this.onChange(); });
+    this.observer2_ = new MutationObserver(() => { this.snapshot(false); });
     this.observe();
 
     this.render();
