@@ -42,6 +42,11 @@ class EditorInputBase extends EditorEntryBase {
 
   onInput() {
     this.elem_.setAttribute('data-arch-render', '');
+    let objs = document.getElementsByClassName('grid-' + this.getId());
+    if (objs.length == 1) {
+      objs[0].innerText = this.getLabel();
+      objs[0].xArchFixSize();
+    }
   }
 
   onBlur() {

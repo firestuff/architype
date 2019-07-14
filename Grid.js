@@ -68,9 +68,9 @@ class Grid {
     this.container_.appendChild(svg);
     svg.classList.add('gridArrow');
     svg.classList.add('grid-' + id);
-    this.maybeHighlight(svg, id);
     svg.style.gridColumn = pos[0] + 1;
     svg.style.gridRow = pos[1] + 1;
+    this.linkToEditor(svg, id, false);
 
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     svg.appendChild(use);
@@ -82,11 +82,10 @@ class Grid {
     this.container_.appendChild(elem);
     elem.classList.add('gridGraphLabel');
     elem.classList.add('grid-' + id);
-    this.maybeHighlight(elem, id);
     elem.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     elem.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
     elem.innerText = label;
-    this.toSize_.push(elem);
+    this.linkToEditor(elem, id, true);
   }
 
   drawGroup(id, min, max) {
@@ -94,9 +93,9 @@ class Grid {
     this.container_.appendChild(group);
     group.classList.add('gridGroup');
     group.classList.add('grid-' + id);
-    this.maybeHighlight(group, id);
     group.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     group.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
+    this.linkToEditor(group, id, false);
   }
 
   drawGroupLabel(id, min, max, label) {
@@ -104,11 +103,10 @@ class Grid {
     this.container_.appendChild(elem);
     elem.classList.add('gridGroupLabel');
     elem.classList.add('grid-' + id);
-    this.maybeHighlight(elem, id);
     elem.innerText = label;
     elem.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     elem.style.gridRow = min[1] + 1;
-    this.toSize_.push(elem);
+    this.linkToEditor(elem, id, true);
   }
 
   drawLine(id, pos, cls) {
@@ -116,9 +114,9 @@ class Grid {
     this.container_.appendChild(svg);
     svg.classList.add('gridLines');
     svg.classList.add('grid-' + id);
-    this.maybeHighlight(svg, id);
     svg.style.gridColumn = pos[0] + 1;
     svg.style.gridRow = pos[1] + 1;
+    this.linkToEditor(svg, id, false);
 
     let use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     svg.appendChild(use);
@@ -130,11 +128,10 @@ class Grid {
     this.container_.appendChild(elem);
     elem.classList.add('gridLinkLabel');
     elem.classList.add('grid-' + id);
-    this.maybeHighlight(elem, id);
     elem.innerText = label;
     elem.style.gridColumn = pos[0] + 1;
     elem.style.gridRow = pos[1] + 1;
-    this.toSize_.push(elem);
+    this.linkToEditor(elem, id, true);
   }
 
   drawNode(id, label, pos) {
@@ -142,19 +139,26 @@ class Grid {
     this.container_.appendChild(node);
     node.classList.add('gridNode');
     node.classList.add('grid-' + id);
-    this.maybeHighlight(node, id);
     node.innerText = label;
     node.style.gridColumn = pos[0] + 1;
     node.style.gridRow = pos[1] + 1;
-    this.toSize_.push(node);
+    this.linkToEditor(node, id, true);
   }
 
-  maybeHighlight(elem, id) {
+  linkToEditor(elem, id, copyLabel) {
     let source = document.getElementById(id);
     if (!source) {
       return;
     }
+
     elem.classList.toggle('highlight', source.classList.contains('highlight'));
+    if (copyLabel) {
+      elem.innerText = source.xArchObj.getLabel();
+      elem.xArchFixSize = () => {
+        this.fixSize(elem);
+      };
+      this.toSize_.push(elem);
+    }
 
     elem.addEventListener('click', () => {
       let editorElem = document.getElementById(id);
@@ -166,15 +170,19 @@ class Grid {
     });
   }
 
+  fixSize(elem) {
+    elem.style.fontSize = null;
+    for (let size = 30;
+         size && (elem.scrollWidth > elem.clientWidth ||
+                  elem.scrollHeight > elem.clientHeight);
+         --size) {
+      elem.style.fontSize = size + 'px';
+    }
+  }
+
   fixSizes() {
     for (let node of this.toSize_) {
-      node.style.fontSize = null;
-      for (let size = 30;
-           size && (node.scrollWidth > node.clientWidth ||
-                    node.scrollHeight > node.clientHeight);
-           --size) {
-        node.style.fontSize = size + 'px';
-      }
+      node.xArchFixSize();
     }
   }
 }
