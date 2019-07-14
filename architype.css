@@ -6,6 +6,7 @@
   --group: #c0f2d5;
   --link: #ffd1b3;
   --label: #ffb3eb;
+  --tag: #fff2b3;
   --help: #ffb3b3;
   --text: #000000;
   --placeholder: rgba(0,0,0,0.2);
@@ -35,6 +36,7 @@
   --group: #092a17;
   --link: #331400;
   --label: #330025;
+  --tag: #332b00;
   --help: #330000;
   --text: #ffffff;
   --placeholder: rgba(255,255,255,0.2);
@@ -161,6 +163,18 @@ body {
     transparent 0 10px,
     rgba(255,0,0,0.3) 10px 20px
   ), var(--label);
+}
+
+.editor li.tag {
+  background-color: var(--tag);
+}
+
+.editor li.tag.highlight {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 10px,
+    rgba(255,0,0,0.3) 10px 20px
+  ), var(--tag);
 }
 
 .editor li.help {
@@ -424,4 +438,8 @@ body {
   z-index: 3;
   border-radius: 4px;
   padding: 3px;
+}
+
+.gridTagLabel.highlight {
+  border: 3px solid var(--focus);
 }
