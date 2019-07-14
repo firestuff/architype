@@ -1,9 +1,3 @@
-'use strict';
-
-addEventListener('error', (e) => {
-  console.log(e);
-});
-
 class Architype {
   constructor(container) {
     this.container_ = container;
@@ -295,7 +289,3 @@ class Architype {
 <!--# include file="Editor.js" -->
 <!--# include file="Grid.js" -->
 <!--# include file="IdSource.js" -->
-
-<!--# include file="utils.js" -->
-
-new Architype(document.getElementById('architype'));
