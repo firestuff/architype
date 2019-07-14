@@ -80,19 +80,30 @@ class LayoutGroup {
             pos[1] >= min[1] && pos[1] <= max[1]);
   }
 
-  getStep() {
+  getSteps() {
     if (!this.graphGroup_) {
-      return null;
+      return [];
     }
 
     let [min, max] = this.getMinMax();
-    return {
+    let steps = [{
       type: 'group',
       min: min,
       max: max,
       id: this.graphGroup_.id,
-      label: this.graphGroup_.label,
-    };
+    }];
+
+    if (this.label) {
+      steps.push({
+        type: 'groupLabel',
+        min: [min[0], min[1]],
+        max: [max[0], min[1]],
+        id: this.graphGroup_.labelId,
+        label: this.graphGroup_.label,
+      });
+    }
+
+    return steps;
   }
 
   hasGraphGroup() {

@@ -11,11 +11,13 @@ class GraphLink {
           to: to,
           id: this.id,
           label: this.label,
+          labelId: this.labelId,
         });
         to.linksIn.push({
           from: from,
           id: this.id,
           label: this.label,
+          labelId: this.labelId,
         });
       }
     }
@@ -31,6 +33,7 @@ class GraphLink {
     let link = new GraphLink();
     link.id = item.id;
     link.label = item.label;
+    link.labelId = item.labelObj.id;
     link.fromLabel = item.from.label;
     link.toLabel = item.to.label;
     if (link.fromLabel == '' || link.toLabel == '') {

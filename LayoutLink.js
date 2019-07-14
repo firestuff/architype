@@ -1,9 +1,11 @@
 class LayoutLink {
-  constructor(from, to, id, label, nodesByPos, linksByPos, labelsByPos) {
+  constructor(from, to, id, label, labelId, nodesByPos, linksByPos,
+              labelsByPos) {
     this.from_ = from;
     this.to_ = to;
     this.id_ = id;
     this.label_ = label;
+    this.labelId_ = labelId;
     this.nodesByPos_ = nodesByPos;
     this.linksByPos_ = linksByPos;
     this.labelsByPos_ = labelsByPos;
@@ -261,7 +263,7 @@ class LayoutLink {
     if (this.labelPos_) {
       steps.push({
         type: 'linkLabel',
-        id: this.id_,
+        id: this.labelId_,
         pos: this.labelPos_,
         label: this.label_,
       });

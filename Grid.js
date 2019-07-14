@@ -30,7 +30,11 @@ class Grid {
           break;
 
         case 'group':
-          this.drawGroup(step.id, step.min, step.max, step.label);
+          this.drawGroup(step.id, step.min, step.max);
+          break;
+
+        case 'groupLabel':
+          this.drawGroupLabel(step.id, step.min, step.max, step.label);
           break;
 
         case 'line':
@@ -85,7 +89,7 @@ class Grid {
     this.toSize_.push(elem);
   }
 
-  drawGroup(id, min, max, label) {
+  drawGroup(id, min, max) {
     let group = document.createElement('div');
     this.container_.appendChild(group);
     group.classList.add('gridGroup');
@@ -93,19 +97,18 @@ class Grid {
     this.maybeHighlight(group, id);
     group.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
     group.style.gridRow = (min[1] + 1) + ' / ' + (max[1] + 2);
+  }
 
-    if (label != '') {
-      // TODO: split this into its own draw step type
-      let labelNode = document.createElement('div');
-      this.container_.appendChild(labelNode);
-      labelNode.classList.add('gridGroupLabel');
-      labelNode.classList.add('grid-' + id);
-      this.maybeHighlight(labelNode, id);
-      labelNode.innerText = label;
-      labelNode.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
-      labelNode.style.gridRow = min[1] + 1;
-      this.toSize_.push(labelNode);
-    }
+  drawGroupLabel(id, min, max, label) {
+    let elem = document.createElement('div');
+    this.container_.appendChild(elem);
+    elem.classList.add('gridGroupLabel');
+    elem.classList.add('grid-' + id);
+    this.maybeHighlight(elem, id);
+    elem.innerText = label;
+    elem.style.gridColumn = (min[0] + 1) + ' / ' + (max[0] + 2);
+    elem.style.gridRow = min[1] + 1;
+    this.toSize_.push(elem);
   }
 
   drawLine(id, pos, cls) {

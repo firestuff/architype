@@ -28,6 +28,7 @@ class GraphGroup {
     let group = new GraphGroup();
     group.id = item.id;
     group.label = item.label;
+    group.labelId = item.labelObj.id;
     group.nodeLabels = new Set();
     for (let member of item.members) {
       if (member.label == '') {

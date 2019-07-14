@@ -21,6 +21,7 @@ class LayoutNode {
         to: nodesByGraphNode.get(link.to),
         id: link.id,
         label: link.label,
+        labelId: link.labelId,
       });
     }
   }

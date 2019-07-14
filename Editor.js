@@ -74,55 +74,59 @@ class Editor extends List {
     return null;
   }
 
-  addLabelBefore() {
+  addLabelBefore(...rest) {
     if (this.mayAdd(EditorLabel)) {
-      return EditorLabel.addBefore(this.container_, this.getSelected());
+      return EditorLabel.addBefore(this.container_, this.getSelected(), ...rest);
     }
     return null;
   }
 
-  addLabelAfter() {
+  addLabelAfter(...rest) {
     if (this.mayAdd(EditorLabel)) {
-      return EditorLabel.addAfter(this.container_, this.getSelected());
+      return EditorLabel.addAfter(this.container_, this.getSelected(), ...rest);
     }
     return null;
   }
 
-  addLinkAfter() {
+  addLinkAfter(...rest) {
     if (this.mayAdd(EditorLink)) {
       return EditorLink.addAfter(this.container_, this.getSelected(),
-                                 this.queryEntries('.highlight', EditorNode));
+                                 this.queryEntries('.highlight', EditorNode),
+                                 ...rest);
     }
     return null;
   }
 
-  addLinkBefore() {
+  addLinkBefore(...rest) {
     if (this.mayAdd(EditorLink)) {
       return EditorLink.addBefore(this.container_, this.getSelected(),
-                                  this.queryEntries('.highlight', EditorNode));
+                                  this.queryEntries('.highlight', EditorNode),
+                                  ...rest);
     }
     return null;
   }
 
-  addGroupAfter() {
+  addGroupAfter(...rest) {
     if (this.mayAdd(EditorGroup)) {
       return EditorGroup.addAfter(this.container_, this.getSelected(),
-                                  this.queryEntries('.highlight', EditorNode));
+                                  this.queryEntries('.highlight', EditorNode),
+                                  ...rest);
     }
     return null;
   }
 
-  addGroupBefore() {
+  addGroupBefore(...rest) {
     if (this.mayAdd(EditorGroup)) {
       return EditorGroup.addBefore(this.container_, this.getSelected(),
-                                   this.queryEntries('.highlight', EditorNode));
+                                   this.queryEntries('.highlight', EditorNode),
+                                   ...rest);
     }
     return null;
   }
 
-  addHelpAfter() {
+  addHelpAfter(...rest) {
     if (this.mayAdd(EditorHelp)) {
-      return EditorHelp.addAfter(this.container_, this.getSelected());
+      return EditorHelp.addAfter(this.container_, this.getSelected(), ...rest);
     }
     return null;
   }

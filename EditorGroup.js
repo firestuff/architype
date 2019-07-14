@@ -32,6 +32,7 @@ class EditorGroup extends EditorEntryBase {
     return super.serialize({
       type: 'group',
       label: this.getLabel(),
+      labelObj: this.getLabelObj().serialize(),
       members: this.nodes_.serialize(EditorNode),
     });
   }
@@ -41,18 +42,22 @@ class EditorGroup extends EditorEntryBase {
   }
 
   getLabel() {
-    let label = this.nodes_.getEntries(EditorLabel)[0];
+    let label = this.getLabelObj();
     return label ? label.getLabel() : null;
   }
 
-  setLabel(label) {
+  setLabel(label, labelId) {
     let obj = this.nodes_.getEntries(EditorLabel)[0];
     if (obj) {
       obj.setLabel(label);
     } else {
-      this.nodes_.addLabelBefore();
+      this.nodes_.addLabelBefore(labelId);
       this.setLabel(label);
     }
+  }
+
+  getLabelObj() {
+    return this.nodes_.getEntries(EditorLabel)[0];
   }
 
   onKeyDown(e) {
@@ -73,7 +78,8 @@ class EditorGroup extends EditorEntryBase {
     let group = new EditorGroup(ser.id);
     group.nodes_.clear();
     if (ser.label != null) {
-      group.setLabel(ser.label);
+      group.setLabel(ser.label, ser.labelObj.id);
+      group.getLabelObj().setHighlight(ser.labelObj.highlight);
     }
     group.setHighlight(ser.highlight);
     group.nodes_.unserialize(ser.members);

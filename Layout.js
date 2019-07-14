@@ -227,6 +227,7 @@ class Layout {
           to: link.to,
           id: link.id,
           label: link.label,
+          labelId: link.labelId,
         });
       }
     }
@@ -238,7 +239,7 @@ class Layout {
 
     for (let link of links) {
       this.links_.push(
-          new LayoutLink(link.from, link.to, link.id, link.label,
+          new LayoutLink(link.from, link.to, link.id, link.label, link.labelId,
                          this.nodesByPos_, this.linksByPos_,
                          this.labelsByPos_));
     }
@@ -283,10 +284,7 @@ class Layout {
     }
 
     for (let group of this.groups_) {
-      let step = group.getStep();
-      if (step) {
-        steps.push(step);
-      }
+      steps.push(...group.getSteps());
     }
 
     for (let link of this.links_) {

@@ -25,10 +25,12 @@ class EditorLink extends EditorEntryBase {
     }
   }
 
+  // TODO: factor out common base code with EditorGroup
   serialize() {
     return super.serialize({
       type: 'link',
       label: this.getLabel(),
+      labelObj: this.getLabelObj().serialize(),
       from: this.getFrom().serialize(),
       to: this.getTo().serialize(),
     });
@@ -43,18 +45,22 @@ class EditorLink extends EditorEntryBase {
   }
 
   getLabel() {
-    let label = this.nodes_.getEntries(EditorLabel)[0];
+    let label = this.getLabelObj();
     return label ? label.getLabel() : null;
   }
 
-  setLabel(label) {
-    let obj = this.nodes_.getEntries(EditorLabel)[0];
+  setLabel(label, labelId) {
+    let obj = this.getLabelObj();
     if (obj) {
       obj.setLabel(label);
     } else {
-      this.nodes_.addLabelBefore();
+      this.nodes_.addLabelBefore(labelId);
       this.setLabel(label);
     }
+  }
+
+  getLabelObj() {
+    return this.nodes_.getEntries(EditorLabel)[0];
   }
 
   flip() {
@@ -97,7 +103,8 @@ class EditorLink extends EditorEntryBase {
     let link = new EditorLink(ser.id);
     link.nodes_.clear();
     if (ser.label != null) {
-      link.setLabel(ser.label);
+      link.setLabel(ser.label, ser.labelObj.id);
+      link.getLabelObj().setHighlight(ser.labelObj.highlight);
     }
     link.setHighlight(ser.highlight);
     link.nodes_.unserialize([ser.from, ser.to]);
