@@ -136,10 +136,16 @@ class Architype {
       if ((item.type == 'link' || item.type == 'group') &&
           item.label != null &&
           item.labelObj == undefined) {
-        console.log('backwards compat 3bdb240', item);
+        console.log('backward compat 3bdb240', item);
         item.labelObj = {
           highlight: false,
         };
+      }
+
+      // highlight
+      if (item.highlight == undefined) {
+        console.log('backward compat highlight', item);
+        item.highlight = false;
       }
     }
   }
