@@ -110,6 +110,7 @@ class Architype {
 
     switch (ser.version) {
       case 1:
+        this.backwardCompat1(ser);
         this.generation_ = ser.generation;
         idSource.setId(ser.nextId);
         this.editor_.unserialize(ser.editor);
@@ -126,6 +127,20 @@ class Architype {
       default:
         console.log('unrecognized localStorage.currentState version', ser);
         break;
+    }
+  }
+
+  backwardCompat1(ser) {
+    for (let item of ser.editor) {
+      // 3bdb240
+      if ((item.type == 'link' || item.type == 'group') &&
+          item.label != null &&
+          item.labelObj == undefined) {
+        console.log('backwards compat 3bdb240', item);
+        item.labelObj = {
+          highlight: false,
+        };
+      }
     }
   }
 
