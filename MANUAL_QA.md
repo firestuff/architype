@@ -2,6 +2,11 @@
   * Open new incognito/private window
   * Load [prod](https://architype.io/) / [dev](https://dev.firestuff.org/architype/)
     * Verify editor help text appears
+    * Verify default diagram:
+      * Graph label: Example
+      * node1
+      * group1: {node2, node3}
+      * link1: node1 -> node2
   * `n` for node
     * Verify editor node appears
     * Verify NOT grid node appears
@@ -20,9 +25,9 @@
   * Click/touch **2** in visualization
     * Verify grid node highlight border appears
     * Verify editor node highlight background appears
-  * `u` to undo back to just help page
+  * `u` to undo back to just help page + initial diagram
     * Verify undo to each step
-    * Verify NOT undo past initial help text
+    * Verify NOT undo past initial state
 * Test: Undo & redo
   * Open new incognito/private window
   * Load [hackernews](https://news.ycombinator.com/)
@@ -59,7 +64,7 @@
       * x <-> y
   * Load [hackernews](https://news.ycombinator.com/) in same tab
     * Verify some page load
-  * Load [naked domain](https://architype.org/) in same tab
+  * Load [prod](https://architype.org/) / [dev](https://dev.firestuff.org/architype/) in same tab
     * Verify editor content matches previous
     * Verify grid content matches previous
 * Test: Themes
