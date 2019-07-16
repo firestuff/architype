@@ -40,6 +40,10 @@ class LayoutGroup {
 
   restorePos() {
     this.vec = this.savedVec_;
+    // Fix up nodesByPos, as intra-group collisions may have corrupted it
+    for (let node of this.nodes) {
+      this.nodesByPos_.set(node.pos, node);
+    }
   }
 
   moveBy(offset) {

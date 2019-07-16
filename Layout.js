@@ -56,15 +56,24 @@ class Layout {
   resolveGroups() {
     this.groups_ = [];
     for (let group of this.graph_.groups) {
+      if (group.length < 2) {
+        continue;
+      }
       let nodes = this.nodesFromGraphNodes(group.nodes);
       this.groups_.push(new LayoutGroup(group, this.nodesByPos_, nodes, 'group'));
     }
     for (let subgraph of this.graph_.nodesBySubgraph.values()) {
+      if (subgraph.length < 2) {
+        continue;
+      }
       let nodes = this.nodesFromGraphNodes(subgraph);
       this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes,
                                         'subgraph'));
     }
     for (let labelGroup of this.graph_.nodesByLabel.values()) {
+      if (labelGroup.length < 2) {
+        continue;
+      }
       let nodes = this.nodesFromGraphNodes(labelGroup);
       this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes,
                                         'labelgroup'));
