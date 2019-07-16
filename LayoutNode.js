@@ -49,6 +49,10 @@ class LayoutNode {
           (v[0] >= -1 && v[0] <= 1 && v[1] < 0 && v[1] >= -2) ? -INF : 0);
       }
 
+      if (asymDifference(this.groups, node.groups).size) {
+        this.addAffinity(node, d => d <= 2 ? -INF : 0);
+      }
+
       // Try to stack nodes with the same label
       if (node.label == this.label) {
         this.addAffinity(node, (d, v) => v[0] == 0 ? 200 : 500);
