@@ -35,18 +35,11 @@ class LayoutGroup {
   }
 
   savePos() {
-    for (let node of this.nodes) {
-      node.savePos();
-    }
+    this.savedVec_ = Array.from(this.vec);
   }
 
   restorePos() {
-    for (let node of this.nodes) {
-      node.restorePos();
-    }
-    for (let node of this.nodes) {
-      this.nodesByPos_.set(node.pos, node);
-    }
+    this.vec = this.savedVec_;
   }
 
   moveBy(offset) {

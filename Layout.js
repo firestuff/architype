@@ -125,11 +125,15 @@ class Layout {
         if (obj.offsetCollides(offset)) {
           continue;
         }
-        obj.savePos();
+        for (let obj of objects) {
+          obj.savePos();
+        }
         obj.moveBy(offset);
         this.setTension(objects);
         let testTension = this.getTotalTension(objects);
-        obj.restorePos();
+        for (let obj of objects) {
+          obj.restorePos();
+        }
         if (testTension < baseTension) {
           obj.moveBy(offset);
           return true;

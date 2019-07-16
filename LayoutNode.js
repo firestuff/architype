@@ -132,10 +132,12 @@ class LayoutNode {
 
   savePos() {
     this.savedPos_ = this.pos;
+    this.savedVec_ = Array.from(this.vec);
   }
 
   restorePos() {
     this.moveTo(this.savedPos_);
+    this.vec = this.savedVec_;
   }
 
   getStep() {
