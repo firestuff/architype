@@ -59,13 +59,6 @@ class LayoutNode {
         this.addAffinity(node, (d, v) => v[0] == 0 ? 200 : 500);
       }
 
-      // Try to preserve pagerank left-to-right flow from initial positions
-      let rankSign = Math.sign(node.pageRank - this.pageRank);
-      if (rankSign != 0) {
-        this.addAffinity(node, (d, v) =>
-                         [Math.sign(v[0]) == rankSign ? 0 : -1000, 0]);
-      }
-
       for (let group of this.groups) {
         // Ensure groups do not overlap
         if (group.nodes.has(node)) {
