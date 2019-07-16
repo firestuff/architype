@@ -41,15 +41,16 @@ class LayoutNode {
       }
 
       // Am I in any labeled groups that node is not?
-      // If so, preserve one space above the group
-      let labeled = new Set(Array.from(this.groups).filter(g => !!g.label));
-      if (asymDifference(labeled, node.groups).size) {
+      // If so, preserve two spaces above the group
+      if (asymDifference(this.labelGroups(this.groups), node.groups).size) {
         this.addAffinity(node,
           (d, v) =>
           (v[0] >= -1 && v[0] <= 1 && v[1] < 0 && v[1] >= -2) ? -INF : 0);
       }
 
-      if (asymDifference(this.groups, node.groups).size) {
+      // Preserve one space all around the group
+      if (asymDifference(this.graphGroups(this.groups),
+                         this.graphGroups(node.groups)).size) {
         this.addAffinity(node, d => d <= 2 ? -INF : 0);
       }
 
@@ -90,6 +91,14 @@ class LayoutNode {
         this.addAffinity(node, d => d * 100);
       }
     }
+  }
+
+  graphGroups(groups) {
+    return new Set(Array.from(groups).filter(g => g.hasGraphGroup()));
+  }
+
+  labelGroups(groups) {
+    return new Set(Array.from(groups).filter(g => !!g.label));
   }
 
   addAffinity(node, distanceToWeight) {
