@@ -57,15 +57,17 @@ class Layout {
     this.groups_ = [];
     for (let group of this.graph_.groups) {
       let nodes = this.nodesFromGraphNodes(group.nodes);
-      this.groups_.push(new LayoutGroup(group, this.nodesByPos_, nodes));
+      this.groups_.push(new LayoutGroup(group, this.nodesByPos_, nodes, 'group'));
     }
     for (let subgraph of this.graph_.nodesBySubgraph.values()) {
       let nodes = this.nodesFromGraphNodes(subgraph);
-      this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes));
+      this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes,
+                                        'subgraph'));
     }
     for (let labelGroup of this.graph_.nodesByLabel.values()) {
       let nodes = this.nodesFromGraphNodes(labelGroup);
-      this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes));
+      this.groups_.push(new LayoutGroup(null, this.nodesByPos_, nodes,
+                                        'labelgroup'));
     }
   }
 
@@ -223,7 +225,7 @@ class Layout {
 
   addGroupPos() {
     for (let group of this.groups_) {
-      if (!group.hasGraphGroup()) {
+      if (!group.isType('group')) {
         continue;
       }
       let [min, max] = group.getMinMax();

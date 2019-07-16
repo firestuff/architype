@@ -35,63 +35,41 @@ class LayoutNode {
       // Keep unassociated subgroups together
       this.addAffinity(node, d => d);
 
-      // Keep one space between subgraphs
-      if (this.subgraph != node.subgraph && this.label != node.label) {
-        this.addAffinity(node, d => d <= 2 ? -INF : 0);
-      }
-
-      // Am I in any labeled groups that node is not?
-      // If so, preserve two spaces above the group
-      if (asymDifference(this.labelGroups(this.groups), node.groups).size) {
-        this.addAffinity(node,
-          (d, v) =>
-          (v[0] >= -1 && v[0] <= 1 && v[1] < 0 && v[1] >= -2) ? -INF : 0);
-      }
-
-      // Preserve one space all around the group
-      if (asymDifference(this.graphGroups(this.groups),
-                         this.graphGroups(node.groups)).size) {
-        this.addAffinity(node, d => d <= 2 ? -INF : 0);
-      }
-
       // Try to stack nodes with the same label
       if (node.label == this.label) {
         this.addAffinity(node, (d, v) => v[0] == 0 ? 200 : 500);
       }
 
       for (let group of this.groups) {
-        // Ensure groups do not overlap
+        if (!group.isType('group') && !group.isType('subgraph')) {
+          continue;
+        }
+
+        // Ensure groups do not overlap, with border
         if (group.nodes.has(node)) {
           continue;
         }
-        this.addAffinity(node, (d, v, p) => group.isContained(p) ? -INF : 0);
+        this.addAffinity(node,
+          (d, v, p) => group.isContainedWithMargin(p) ? -INF : 0);
       }
     }
 
     for (let link of this.links) {
       // Stronger affinity for links
       // Prefer to move toward the target instance
-      this.addAffinity(link.to, d => d <= 2 ? -INF : d * 11);
-      link.to.addAffinity(this, d => d <= 2 ? -INF : d * 9);
+      this.addAffinity(link.to, d => d <= 2 ? -INF : d * 40);
+      link.to.addAffinity(this, d => d <= 2 ? -INF : d * 35);
     }
 
-    // Affinity for groups
+    // Affinity within groups
     for (let group of this.groups) {
-      if (!group.hasGraphGroup()) {
+      if (!group.isType('group')) {
         continue;
       }
       for (let node of group.nodes) {
         this.addAffinity(node, d => d * 100);
       }
     }
-  }
-
-  graphGroups(groups) {
-    return new Set(Array.from(groups).filter(g => g.hasGraphGroup()));
-  }
-
-  labelGroups(groups) {
-    return new Set(Array.from(groups).filter(g => !!g.label));
   }
 
   addAffinity(node, distanceToWeight) {

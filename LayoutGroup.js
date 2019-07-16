@@ -1,8 +1,9 @@
 class LayoutGroup {
-  constructor(graphGroup, nodesByPos, nodes) {
+  constructor(graphGroup, nodesByPos, nodes, type) {
     this.graphGroup_ = graphGroup;
     this.nodesByPos_ = nodesByPos;
     this.nodes = new Set(nodes);
+    this.type = type;
     this.tension = 0;
 
     this.label = this.graphGroup_ ? this.graphGroup_.label : null;
@@ -74,10 +75,15 @@ class LayoutGroup {
     return [min, max];
   }
 
-  isContained(pos) {
+  // border is [left, right, top, bottom]
+  isContained(pos, border=[0,0,0,0]) {
     let [min, max] = this.getMinMax();
-    return (pos[0] >= min[0] && pos[0] <= max[0] &&
-            pos[1] >= min[1] && pos[1] <= max[1]);
+    return (pos[0] >= (min[0] - border[0]) && pos[0] <= (max[0] + border[1]) &&
+            pos[1] >= (min[1] - border[2]) && pos[1] <= (max[1] + border[3]));
+  }
+
+  isContainedWithMargin(pos) {
+    return this.isContained(pos, [1, 1, this.label ? 2 : 1, 1]);
   }
 
   getSteps() {
@@ -106,7 +112,7 @@ class LayoutGroup {
     return steps;
   }
 
-  hasGraphGroup() {
-    return this.graphGroup_ != null;
+  isType(type) {
+    return this.type == type;
   }
 }
