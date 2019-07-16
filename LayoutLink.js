@@ -209,6 +209,7 @@ class LayoutLink {
       }
 
       // TODO: cheaper if we overlap with other links with the same label?
+      // TODO: don't overlap with links not with the same label
 
       if (score < minScore) {
         minScore = score;
