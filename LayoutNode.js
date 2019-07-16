@@ -44,8 +44,9 @@ class LayoutNode {
       // If so, preserve one space above the group
       let labeled = new Set(Array.from(this.groups).filter(g => !!g.label));
       if (asymDifference(labeled, node.groups).size) {
-        this.addAffinity(node, (d, v) =>
-                         (v[0] == 0 && v[1] > 0 && v[1] < 2) ? -INF : 0);
+        this.addAffinity(node,
+          (d, v) =>
+          (v[0] >= -1 && v[0] <= 1 && v[1] < 0 && v[1] >= -2) ? -INF : 0);
       }
 
       // Try to stack nodes with the same label
