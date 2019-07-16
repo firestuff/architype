@@ -54,7 +54,8 @@ class EditorEntryBase extends ListenUtils {
       elem.classList.toggle('highlight', highlight);
     }
     // Do NOT refresh: this bypasses the rendering pipeline
-    this.elem_.setAttribute('data-arch-snapshot', '');
+    this.elem_.dispatchEvent(
+        new CustomEvent('snapshotRequest', { bubbles: true }));
   }
 
   toggleHighlight() {
@@ -76,6 +77,11 @@ class EditorEntryBase extends ListenUtils {
   }
 
   afterDomAdd() {
+  }
+
+  requestRender() {
+    this.elem_.dispatchEvent(
+        new CustomEvent('renderRequest', { bubbles: true }));
   }
 
   static addBefore(container, elem, ...rest) {

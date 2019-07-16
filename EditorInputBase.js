@@ -41,7 +41,7 @@ class EditorInputBase extends EditorEntryBase {
   }
 
   onInput() {
-    this.elem_.setAttribute('data-arch-render', '');
+    this.requestRender();
     let objs = document.getElementsByClassName('grid-' + this.getId());
     if (objs.length == 1) {
       objs[0].innerText = this.getLabel();
@@ -52,7 +52,8 @@ class EditorInputBase extends EditorEntryBase {
   onBlur() {
     if (this.getLabel() != this.lastSnapshotLabel_) {
       this.lastSnapshotLabel_ = this.getLabel();
-      this.elem_.setAttribute('data-arch-snapshot', '');
+      this.elem_.dispatchEvent(
+          new CustomEvent('snapshotRequest', { bubbles: true }));
     }
   }
 

@@ -46,8 +46,12 @@ class Architype {
     }
 
     this.observer_ = new MutationObserver(() => { this.onChange(); });
-    this.observer2_ = new MutationObserver(() => { this.snapshot(false); });
     this.observe();
+
+    this.container_.addEventListener('renderRequest',
+                                     () => { this.onRenderRequest(); });
+    this.container_.addEventListener('snapshotRequest',
+                                     () => { this.onSnapshotRequest(); });
 
     this.render();
     this.snapshot(true);
@@ -62,14 +66,6 @@ class Architype {
 
   observe() {
     this.observer_.observe(this.editorElem_, {
-      attributes: true,
-      attributeFilter: ['data-arch-render'],
-      childList: true,
-      subtree: true,
-    });
-    this.observer2_.observe(this.editorElem_, {
-      attributes: true,
-      attributeFilter: ['data-arch-snapshot'],
       childList: true,
       subtree: true,
     });
@@ -77,7 +73,6 @@ class Architype {
 
   unobserve() {
     this.observer_.disconnect();
-    this.observer2_.disconnect();
   }
 
   serialize() {
@@ -168,9 +163,18 @@ class Architype {
     this.first_ = (e.state == 'first');
   }
 
-  onChange() {
+  onRenderRequest() {
     ++this.generation_;
     this.render();
+  }
+
+  onSnapshotRequest() {
+    this.snapshot(false);
+  }
+
+  onChange() {
+    this.onRenderRequest();
+    this.onSnapshotRequest();
   }
 
   snapshot(first) {
