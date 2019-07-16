@@ -22,6 +22,22 @@ class EditorNode extends EditorInputBase {
     return false;
   }
 
+  updateLabel() {
+    if (this.ctrlKey_) {
+      this.elem_.dispatchEvent(new CustomEvent(
+          'updateNodesRequest',
+          {
+            bubbles: true,
+            detail: {
+              oldLabel: this.lastLabel_,
+              newLabel: this.getLabel(),
+            },
+          }));
+    }
+
+    super.updateLabel();
+  }
+
   static unserialize(ser) {
     let node = new EditorNode(ser.id);
     node.setLabel(ser.label);

@@ -5,10 +5,11 @@ class EditorInputBase extends EditorEntryBase {
     this.input_ = document.createElement('input');
     this.input_.type = 'text';
     this.listen(this.input_, 'keydown', (e) => this.onInputKeyDown(e));
-    this.listen(this.input_, 'input', (e) => this.onInput(e));
+    this.listen(this.input_, 'input', () => this.onInput());
     this.listen(this.input_, 'blur', (e) => this.onBlur(e));
     this.elem_.appendChild(this.input_);
 
+    this.lastLabel_ = '';
     this.lastSnapshotLabel_ = '';
 
     if (label) {
@@ -33,20 +34,26 @@ class EditorInputBase extends EditorEntryBase {
   setLabel(label) {
     this.input_.value = label;
     this.lastSnapshotLabel_ = label;
-    this.onInput();
+    this.updateLabel();
   }
 
   wantFocus() {
     return this.getLabel() == '';
   }
 
-  onInput() {
-    this.requestRender();
+  updateLabel() {
+    this.lastLabel_ = this.getLabel();
+
     let objs = document.getElementsByClassName('grid-' + this.getId());
     if (objs.length == 1) {
       objs[0].innerText = this.getLabel();
       objs[0].xArchFixSize();
     }
+  }
+
+  onInput() {
+    this.updateLabel();
+    this.requestRender();
   }
 
   onBlur() {
@@ -95,6 +102,7 @@ class EditorInputBase extends EditorEntryBase {
     switch (e.key) {
       case 'ArrowRight':
       case 'Enter':
+        this.ctrlKey_ = e.ctrlKey;
         this.startEdit();
         e.stopPropagation();
         e.preventDefault();

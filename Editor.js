@@ -18,6 +18,8 @@ class Editor extends List {
     // tab flow.
     this.container_.tabIndex = 99999;
     this.container_.addEventListener('keydown', e => { this.onKeyDown(e); });
+    this.container_.addEventListener('updateNodesRequest',
+                                     e => { this.onUpdateNodesRequest(e); });
     this.container_.focus();
   }
 
@@ -161,6 +163,19 @@ class Editor extends List {
                                  ...rest);
     }
     return null;
+  }
+
+  updateNodes(oldLabel, newLabel) {
+    let nodes = this.queryEntries('[data-arch-class="EditorNode"]', EditorNode);
+    for (let node of nodes) {
+      if (node.getLabel() == oldLabel) {
+        node.setLabel(newLabel);
+      }
+    }
+  }
+
+  onUpdateNodesRequest(e) {
+    this.updateNodes(e.detail.oldLabel, e.detail.newLabel);
   }
   
   onKeyDown(e) {

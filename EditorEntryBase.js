@@ -11,6 +11,7 @@ class EditorEntryBase extends ListenUtils {
     this.listen(this.elem_, 'keydown', (e) => this.onKeyDown(e));
 
     this.elem_.xArchObj = this;
+    this.elem_.setAttribute('data-arch-class', this.constructor.name);
   }
 
   serialize(base) {

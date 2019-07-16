@@ -27,6 +27,8 @@ The screen is divided into two panels:
 * A *link* connects nodes together. All links in Architype are directional,
   i.e. they have an arrow at exactly one end.
 * A *group* is a collection of nodes that are shown physically together.
+* A *tag* is a collection of nodes that are shown with a common highlight, e.g.
+  color.
 * A *label* is an optional description of another object, e.g. a link or a
   group.
 
@@ -46,6 +48,7 @@ expectation across contexts in the UI.
 * `↑` `k` Move up the current list
 * `→` `l` `⏎` Enter (edit) the current list or item
 * `←` `h` `␛` Exit the current list or item
+* `ctrl` + `⏎` Enter (edit) the current node and all references to it
 
 `` ` `` (backtick) is mapped to `␛` for convenience on some keyboards, e.g.
 iPads. This makes it impossible to use a backtick in a node or label, which is
@@ -57,6 +60,8 @@ considered a reasonable tradeoff.
 * `shift` + `n` Create new node above the current line
 * `g` Create new group below the current line
 * `shift` + `g` Create new group above the current line
+* `t` Create new tag below the current line
+* `shift` + `t` Create new tag above the current line
 * `i` Create new link below the current line
 * `shift` + `i` Create new link above the current line
 * `a` Create new label below the current line
