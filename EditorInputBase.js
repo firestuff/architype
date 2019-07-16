@@ -72,13 +72,11 @@ class EditorInputBase extends EditorEntryBase {
 
       case 'Escape':
       case '`':
+        this.stopEdit();
         e.preventDefault();
         e.stopPropagation();
-        this.stopEdit();
         break;
 
-      case 'ArrowUp':
-      case 'ArrowDown':
       case 'PageUp':
       case 'PageDown':
         this.stopEdit();
@@ -94,6 +92,7 @@ class EditorInputBase extends EditorEntryBase {
     super.onKeyDown(e);
 
     switch (e.key) {
+      case 'ArrowRight':
       case 'Enter':
         this.startEdit();
         e.stopPropagation();
