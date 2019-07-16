@@ -106,36 +106,40 @@ class Editor extends List {
 
   addLinkAfter(...rest) {
     if (this.mayAdd(EditorLink)) {
-      return EditorLink.addAfter(this.container_, this.getSelected(),
-                                 this.queryEntries('.highlight', EditorNode),
-                                 ...rest);
+      return EditorLink.addAfter(
+          this.container_, this.getSelected(),
+          this.queryEntries('.highlight[data-arch-class="EditorNode"]'),
+          ...rest);
     }
     return null;
   }
 
   addLinkBefore(...rest) {
     if (this.mayAdd(EditorLink)) {
-      return EditorLink.addBefore(this.container_, this.getSelected(),
-                                  this.queryEntries('.highlight', EditorNode),
-                                  ...rest);
+      return EditorLink.addBefore(
+          this.container_, this.getSelected(),
+          this.queryEntries('.highlight[data-arch-class="EditorNode"]'),
+          ...rest);
     }
     return null;
   }
 
   addGroupAfter(...rest) {
     if (this.mayAdd(EditorGroup)) {
-      return EditorGroup.addAfter(this.container_, this.getSelected(),
-                                  this.queryEntries('.highlight', EditorNode),
-                                  ...rest);
+      return EditorGroup.addAfter(
+          this.container_, this.getSelected(),
+          this.queryEntries('.highlight[data-arch-class="EditorNode"]'),
+          ...rest);
     }
     return null;
   }
 
   addGroupBefore(...rest) {
     if (this.mayAdd(EditorGroup)) {
-      return EditorGroup.addBefore(this.container_, this.getSelected(),
-                                   this.queryEntries('.highlight', EditorNode),
-                                   ...rest);
+      return EditorGroup.addBefore(
+          this.container_, this.getSelected(),
+          this.queryEntries('.highlight[data-arch-class="EditorNode"]'),
+          ...rest);
     }
     return null;
   }
@@ -149,24 +153,26 @@ class Editor extends List {
 
   addTagAfter(...rest) {
     if (this.mayAdd(EditorTag)) {
-      return EditorTag.addAfter(this.container_, this.getSelected(),
-                                this.queryEntries('.highlight', EditorNode),
-                                ...rest);
+      return EditorTag.addAfter(
+          this.container_, this.getSelected(),
+          this.queryEntries('.highlight[data-arch-class="EditorNode"]'),
+          ...rest);
     }
     return null;
   }
 
   addTagBefore(...rest) {
     if (this.mayAdd(EditorTag)) {
-      return EditorTag.addBefore(this.container_, this.getSelected(),
-                                 this.queryEntries('.highlight', EditorNode),
-                                 ...rest);
+      return EditorTag.addBefore(
+          this.container_, this.getSelected(),
+          this.queryEntries('.highlight[data-arch-class="EditorNode"]'),
+          ...rest);
     }
     return null;
   }
 
   updateNodes(oldLabel, newLabel) {
-    let nodes = this.queryEntries('[data-arch-class="EditorNode"]', EditorNode);
+    let nodes = this.queryEntries('[data-arch-class="EditorNode"]');
     for (let node of nodes) {
       if (node.getLabel() == oldLabel) {
         node.setLabel(newLabel);

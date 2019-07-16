@@ -14,13 +14,10 @@ class List {
     return ret;
   }
 
-  queryEntries(query, type) {
+  queryEntries(query) {
     let ret = [];
     for (let elem of this.container_.querySelectorAll(query)) {
       if (!elem.xArchObj) {
-        continue;
-      }
-      if (type && !(elem.xArchObj instanceof type)) {
         continue;
       }
       ret.push(elem.xArchObj);
