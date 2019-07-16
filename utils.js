@@ -7,15 +7,5 @@ function getOrSet(container, key, newValue) {
   return val;
 }
 
-function asymDifference(set1, set2) {
-  let ret = new Set();
-  for (let item of set1) {
-    if (!set2.has(item)) {
-      ret.add(item);
-    }
-  }
-  return ret;
-}
-
 <!--# include file="MinHeap.js" -->
 <!--# include file="StringMap.js" -->
