@@ -112,7 +112,7 @@ body {
   border-left: 10px solid var(--nonfocus);
   outline: 1px solid var(--outline);
 
-  font-size: 30px;
+  font-size: 26px;
 
   cursor: default;
 }
