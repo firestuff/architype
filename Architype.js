@@ -349,8 +349,12 @@ class Architype {
   toggleFullScreen() {
     if (document.fullscreenElement) {
       document.exitFullscreen();
-    } else {
+    } else if (document.webkitFullscreenElement) {
+      document.webkitExitFullscreen();
+    } else if (this.container_.requestFullscreen) {
       this.container_.requestFullscreen();
+    } else if (this.container_.webkitRequestFullscreen) {
+      this.container_.webkitRequestFullscreen();
     }
   }
 }
