@@ -82,6 +82,7 @@ considered a reasonable tradeoff.
 * `m` Select the next theme (light/dark)
 * `M` Select the previous theme (light/dark)
 * `?` Add a help section below the current line
+* `+` Toggle fullscreen
 
 Note that it is possible to delete the help section with the normal delete
 command `d`.

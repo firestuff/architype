@@ -292,6 +292,12 @@ class Architype {
         e.stopPropagation();
         e.preventDefault();
         return;
+
+      case '+':
+        this.toggleFullScreen();
+        e.stopPropagation();
+        e.preventDefault();
+        return;
     }
 
     let elem = document.activeElement;
@@ -338,6 +344,14 @@ class Architype {
 
     this.renderGeneration_ = this.serialized_.generation;
     render.postMessage(this.serialized_);
+  }
+
+  toggleFullScreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      this.container_.requestFullscreen();
+    }
   }
 }
 
