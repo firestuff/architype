@@ -166,13 +166,10 @@ adjacent grid squares.
 We test and support:
 
 * Chrome
+* Chrome Android (tablet)
 * Firefox
 * Safari
 * Safari iOS (iPad)
-
-We intend to test in future:
-
-* Chrome Android (tablet)
 
 Known broken:
 
