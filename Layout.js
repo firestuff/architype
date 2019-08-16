@@ -173,6 +173,12 @@ class Layout {
   fixOrigin() {
     let min = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
     let max = [Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY];
+    for (let node of this.nodes_) {
+      for (let i of [0, 1]) {
+        min[i] = Math.min(min[i], node.pos[i]);
+        max[i] = Math.max(max[i], node.pos[i]);
+      }
+    }
     for (let group of this.groups_) {
       let [groupMin, groupMax] = group.getMinMax();
       for (let i of [0, 1]) {
